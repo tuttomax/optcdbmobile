@@ -10,18 +10,18 @@ import android.arch.persistence.room.PrimaryKey;
                 parentColumns = {"id"},
                 childColumns = {"location_id"},
                 onDelete = ForeignKey.CASCADE))
-public class TraningLocation {
+public class TrainingForestLocation {
 
     @ColumnInfo(name = "location_id")
     @PrimaryKey
     private int locationId;
     private String slefty;
-    private String condition;
+    private String completion;
 
-    public TraningLocation(int locationId, String slefty, String condition) {
+    public TrainingForestLocation(int locationId, String slefty, String completion) {
         this.locationId = locationId;
         this.slefty = slefty;
-        this.condition = condition;
+        this.completion = completion;
     }
 
     public int getLocationId() {
@@ -32,7 +32,7 @@ public class TraningLocation {
         return slefty;
     }
 
-    public String getCondition() {
-        return condition;
+    public String getCompletion() {
+        return completion;
     }
 }

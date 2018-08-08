@@ -21,8 +21,8 @@ public class Constants {
     public static final byte RAID_TYPE = 3;
     public static final byte COLISEUM_TYPE = 4;
     public static final byte TREASURE_MAP_TYPE = 5;
-    public static final byte SPECIAL_TYPE = 6;
-    public static final byte TRANING_FOREST_TYPE = 7;
+    public static final byte SPECIAL_MAP_TYPE = 6;
+    public static final byte TRAINING_FOREST_TYPE = 7;
 
 
     public static final byte ALL_DIFFICULTIES = 0;
