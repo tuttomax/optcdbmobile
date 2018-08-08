@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Download">
+        <SwitchPreference
+            android:key="@string/pref_wifi_only_key"
+            android:title="@string/pref_wifi_only_title"
+            android:summary="@string/pref_wifi_only_summary_true"
+            android:defaultValue="@string/pref_wifi_only_default_value" />
+
+        <SwitchPreference
+            android:key="@string/pref_auto_download_key"
+            android:title="@string/pref_auto_download_title"
+            android:defaultValue="@string/pref_auto_download_default_value"
+            android:dependency="@string/pref_wifi_only_key" />
+    </PreferenceCategory>
+    <Preference
+        android:key="@string/pref_database_version_key"
+        android:title="@string/pref_database_version_title"
+        android:defaultValue="@string/pref_database_version_default_value"
+        android:summary="@string/pref_database_version_summary"
+        android:layout="@layout/database_version_layout"
+
+        />
+
+</PreferenceScreen>

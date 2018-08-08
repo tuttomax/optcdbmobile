@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/layout_marginEnd"
+    android:layout_marginEnd="@dimen/layout_marginEnd"
+    android:layout_marginLeft="@dimen/layout_marginStart"
+    android:layout_marginRight="@dimen/layout_marginStart"
+    android:layout_marginStart="@dimen/layout_marginStart"
+    android:layout_marginTop="@dimen/layout_marginEnd"
+    android:layout_weight="1"
+    android:background="@color/colorSecondaryLight"
+
+
+    android:baselineAligned="false"
+    android:gravity="center_vertical"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:paddingEnd="?android:attr/scrollbarSize"
+    android:paddingLeft="?android:attr/scrollbarSize"
+    android:paddingRight="?android:attr/scrollbarSize"
+    android:paddingStart="?android:attr/scrollbarSize">
+
+    <TextView
+        android:id="@+android:id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/secondaryTextColor" />
+
+    <TextView
+        android:id="@+android:id/summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/layout_marginStart"
+        android:paddingEnd="@dimen/layout_marginEnd"
+        android:paddingLeft="@dimen/layout_marginStart"
+        android:paddingRight="@dimen/layout_marginEnd"
+        android:maxLines="4"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/primaryTextColor" />
+
+</LinearLayout>

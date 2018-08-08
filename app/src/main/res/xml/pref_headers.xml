@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <header
+        android:title="General"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:fragment="com.optc.optcdbmobile.data.activities.SettingsActivity$GeneralPreferenceFragment"
+
+        />
+
+    <header
+        android:title="Database"
+        android:icon="@drawable/ic_cloud_black_24dp"
+        android:fragment="com.optc.optcdbmobile.data.activities.SettingsActivity$DatabasePreferenceFragment" />
+
+
+</preference-headers>

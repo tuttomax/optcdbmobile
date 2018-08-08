@@ -1,8 +1,12 @@
 package com.optc.optcdbmobile;
 
+import com.optc.optcdbmobile.data.optcdb.API;
+import com.optc.optcdbmobile.data.optcdb.Constants;
+import com.optc.optcdbmobile.data.optcdb.entities.Detail;
+
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.List;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -11,7 +15,10 @@ import static org.junit.Assert.*;
  */
 public class ExampleUnitTest {
     @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
+    public void testAPI() {
+
+        List<Detail> details = (List<Detail>) API.getData(Constants.DROPS_TYPE);
+
+
     }
 }
