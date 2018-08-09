@@ -2,7 +2,6 @@ package com.optc.optcdbmobile;
 
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.optcdb.Constants;
-import com.optc.optcdbmobile.data.optcdb.entities.Detail;
 
 import org.junit.Test;
 
@@ -17,7 +16,7 @@ public class ExampleUnitTest {
     @Test
     public void testAPI() {
 
-        List<Detail> details = (List<Detail>) API.getData(Constants.DROPS_TYPE);
+        List<Object> details = (List<Object>) API.getData(Constants.DROPS_TYPE);
 
 
     }

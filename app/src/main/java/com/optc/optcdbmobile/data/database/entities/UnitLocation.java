@@ -5,7 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 
 
-@Deprecated /*  Use LocationDrops
+@Deprecated /*  Use LocationDropsDAO
                 This exist cause there is a N-N relationship between Unit and Location */
 @Entity(tableName = "unit_location_table",
         primaryKeys = {"location_id", "unit_id"},

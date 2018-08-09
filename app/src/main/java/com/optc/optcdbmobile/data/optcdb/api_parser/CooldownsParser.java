@@ -1,20 +1,18 @@
 package com.optc.optcdbmobile.data.optcdb.api_parser;
 
-import android.util.Pair;
-import android.util.SparseArray;
-
 import com.optc.optcdbmobile.data.optcdb.BaseParser;
+import com.optc.optcdbmobile.data.optcdb.entities.Cooldown;
 
 import org.mozilla.javascript.NativeArray;
 
+import java.util.ArrayList;
 import java.util.List;
 
-// TODO Re-code this
-public class CooldownsParser extends BaseParser<SparseArray<Pair<Byte, Byte>>> {
+public class CooldownsParser extends BaseParser<List<Cooldown>> {
 
     @Override
-    public SparseArray<Pair<Byte, Byte>> parse(Object jsParsed) {
-        SparseArray<Pair<Byte, Byte>> map = new SparseArray<>();
+    public List<Cooldown> parse(Object jsParsed) {
+        List<Cooldown> list = new ArrayList<>();
         List<Object> temp = (List<Object>) jsParsed;
         int index = 1;
         for (Object element : temp) {
@@ -23,16 +21,14 @@ public class CooldownsParser extends BaseParser<SparseArray<Pair<Byte, Byte>>> {
             } else if (element instanceof Double) {
                 Double d = (Double) element;
                 Byte b = d.byteValue();
-                map.put(index++, new Pair<>(b, b));
+                list.add(new Cooldown(index, b, b));
             } else if (element instanceof NativeArray) {
                 NativeArray array = (NativeArray) element;
                 Byte min = toType(array.get(0), Byte.class);
                 Byte max = toType(array.get(1), Byte.class);
-                map.put(index++, new Pair<>(min, max));
+                list.add(new Cooldown(index, min, max));
             }
         }
-
-        return map;
-
+        return list;
     }
 }
