@@ -15,9 +15,6 @@ import java.util.List;
 public class ExampleUnitTest {
     @Test
     public void testAPI() {
-
-        List<Object> details = (List<Object>) API.getData(Constants.DROPS_TYPE);
-
-
+        List<Object> details = (List<Object>) API.getData(Constants.EVOLUTIONS_TYPE);
     }
 }
