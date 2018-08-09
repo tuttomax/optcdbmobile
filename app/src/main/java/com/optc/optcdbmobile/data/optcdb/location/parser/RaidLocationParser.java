@@ -32,13 +32,14 @@ public class RaidLocationParser extends LocationParser {
 
             String slefty = toType(obj.get("slefty"), String.class);
             String condition = toType(obj.get("condition"), String.class);
+            Boolean showManual = toType(obj.get("showManual"), Boolean.class);
 
-            raidLocation = new RaidLocation(startId, slefty, condition);
+            raidLocation = new RaidLocation(startId, slefty, condition, showManual);
             list.add(raidLocation);
 
             list.addAll(parseDataDrops(obj, startId));
 
-            startId++;
+
         }
 
         return list;
@@ -47,6 +48,6 @@ public class RaidLocationParser extends LocationParser {
 
     @Override
     protected List<String> getExclude() {
-        return Arrays.asList("name", "thumb", "global", "nakama", "gamewith", "slefty", "condition");
+        return Arrays.asList("name", "thumb", "global", "nakama", "gamewith", "slefty", "condition", "showManual");
     }
 }

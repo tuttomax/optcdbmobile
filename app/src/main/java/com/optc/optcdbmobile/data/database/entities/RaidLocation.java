@@ -18,12 +18,13 @@ public class RaidLocation {
 
     private String slefty;
     private String condition;
+    private Boolean showManual;
 
-
-    public RaidLocation(int locationId, String slefty, String condition) {
+    public RaidLocation(int locationId, String slefty, String condition, Boolean showManual) {
         this.locationId = locationId;
         this.slefty = slefty;
         this.condition = condition;
+        this.showManual = showManual;
     }
 
     public int getLocationId() {
@@ -36,5 +37,9 @@ public class RaidLocation {
 
     public String getCondition() {
         return condition;
+    }
+
+    public Boolean getShowManual() {
+        return showManual;
     }
 }

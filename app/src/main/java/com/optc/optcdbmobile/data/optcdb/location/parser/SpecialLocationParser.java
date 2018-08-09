@@ -42,7 +42,6 @@ public class SpecialLocationParser extends LocationParser {
             list.addAll(parseDataDrops(obj, startId));
             list.addAll(parseChallengeData(obj, startId));
 
-            startId++;
         }
 
         return list;
@@ -50,6 +49,6 @@ public class SpecialLocationParser extends LocationParser {
 
     @Override
     protected List<String> getExclude() {
-        return Arrays.asList("name", "thumb", "global", "nakama", "gamewith", "condition", "challenge", "showManual");
+        return Arrays.asList("name", "thumb", "global", "nakama", "gamewith", "condition", "challenge", "showManual", "challengeData");
     }
 }

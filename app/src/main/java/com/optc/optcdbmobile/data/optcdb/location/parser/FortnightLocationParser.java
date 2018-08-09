@@ -43,14 +43,12 @@ public class FortnightLocationParser extends LocationParser {
 
             list.addAll(parseDataDrops(obj, startId));
 
-            startId++;
-
         }
         return list;
     }
 
     @Override
     protected List<String> getExclude() {
-        return Arrays.asList("name", "thumb", "global", "gamewith", "nakama", "condition", "challenge");
+        return Arrays.asList("name", "thumb", "global", "gamewith", "nakama", "condition", "challenge", "challengeData");
     }
 }

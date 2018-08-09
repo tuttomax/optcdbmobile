@@ -48,19 +48,22 @@ public abstract class LocationParser extends BaseParser<List<Object>> {
 
     protected List<LocationDrops> parseDataDrops(NativeObject obj, int startId) {
         LocationDrops locationDrops;
-        int incrementalId = startId;
         final List<LocationDrops> list = new ArrayList<>();
         for (Map.Entry<Object, Object> entry : obj.entrySet()) {
             String dropsName = entry.getKey().toString(); //like Master,Global,All Difficulties,01,02,eccc...
 
             if (!getExclude().contains(entry.getKey().toString())) {
-                NativeArray dropsArray = (NativeArray) entry.getValue();
+                Object _obj = entry.getValue();
+                NativeArray dropsArray = (NativeArray) _obj;
                 for (int dropsIndex = 0; dropsIndex < dropsArray.size(); dropsIndex++) {
+
+                    Integer unitId = toType(dropsArray.get(dropsIndex), Integer.class);
+
                     locationDrops = new LocationDrops(
-                            incrementalId++,
+                            startId,
                             dropsName,
                             dropsIndex,
-                            toType(dropsArray.get(dropsIndex), Integer.class));
+                            unitId);
                     list.add(locationDrops);
                 }
             }

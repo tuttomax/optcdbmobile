@@ -35,16 +35,18 @@ public class StoryLocationParser extends LocationParser {
 
             String completion = toType(obj.get("completion"), String.class);
             storyLocation = new StoryLocation(startId, completion);
+            list.add(storyLocation);
 
             list.addAll(parseDataDrops(obj, startId));
 
             startId++;
         }
+
         return list;
     }
 
     @Override
     protected List<String> getExclude() {
-        return Arrays.asList("name", "thumb", "global", "nakama", "gamewith", "completion");
+        return Arrays.asList("name", "thumb", "global", "nakama", "gamewith", "completion", "shortName");
     }
 }
