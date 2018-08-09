@@ -19,7 +19,7 @@ Wrapper mobile of http://optc-db.github.io
   - [x] Detail parser
   - [x] Units parser
   - [x] Cooldown parser
-  - [ ] Evolutions parser
+  - [x] Evolutions parser
   
   
 # Credits
