@@ -24,4 +24,8 @@ public class Tag {
     public String getName() {
         return name;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

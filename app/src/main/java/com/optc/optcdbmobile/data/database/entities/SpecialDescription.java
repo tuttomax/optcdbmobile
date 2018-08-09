@@ -30,11 +30,6 @@ public class SpecialDescription {
         this.maxCooldown = maxCooldown;
     }
 
-    public SpecialDescription(int specialId, int level, String description) {
-        this.specialId = specialId;
-        this.level = level;
-        this.description = description;
-    }
 
     public int getSpecialId() {
         return specialId;

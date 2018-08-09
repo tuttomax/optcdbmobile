@@ -3,13 +3,15 @@ package com.optc.optcdbmobile.data.database.entities;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "evolution_table",
         foreignKeys = @ForeignKey(entity = Unit.class,
                 parentColumns = {"id"},
                 childColumns = {"unit_id"},
-                onDelete = ForeignKey.CASCADE))
+                onDelete = ForeignKey.CASCADE),
+        indices = @Index(value = "unit_id", unique = true))
 public class Evolution {
 
     @PrimaryKey

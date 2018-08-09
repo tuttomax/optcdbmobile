@@ -51,6 +51,7 @@ import com.optc.optcdbmobile.data.database.entities.Potential;
 import com.optc.optcdbmobile.data.database.entities.PotentialDescription;
 import com.optc.optcdbmobile.data.database.entities.RaidLocation;
 import com.optc.optcdbmobile.data.database.entities.Sailor;
+import com.optc.optcdbmobile.data.database.entities.SailorDescription;
 import com.optc.optcdbmobile.data.database.entities.Special;
 import com.optc.optcdbmobile.data.database.entities.SpecialDescription;
 import com.optc.optcdbmobile.data.database.entities.SpecialLocation;
@@ -61,15 +62,19 @@ import com.optc.optcdbmobile.data.database.entities.TreasureLocation;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.database.entities.UnitTag;
 
-@Database(entities = {Alias.class, BoosterEvolverLocation.class, Captain.class, CaptainDescription.class, ColiseumLocation.class,
-        Evolution.class, Family.class, FortnightLocation.class, Limit.class, LocationChallengeData.class, Location.class,
-        LocationDrops.class, Potential.class, PotentialDescription.class, RaidLocation.class, Sailor.class, Special.class,
-        SpecialDescription.class, SpecialLocation.class, StoryLocation.class, Tag.class, TrainingForestLocation.class,
-        TreasureLocation.class, Unit.class, UnitTag.class}, version = 1, exportSchema = false)
+@Database(entities =
+        {Alias.class, BoosterEvolverLocation.class, Captain.class, CaptainDescription.class, ColiseumLocation.class,
+                Evolution.class, Family.class, FortnightLocation.class, Limit.class, LocationChallengeData.class, Location.class,
+                LocationDrops.class, Potential.class, PotentialDescription.class, RaidLocation.class, Sailor.class, SailorDescription.class,
+                Special.class, SpecialDescription.class, SpecialLocation.class, StoryLocation.class, Tag.class,
+                TrainingForestLocation.class, TreasureLocation.class, Unit.class, UnitTag.class},
+        version = 1, exportSchema = false)
 public abstract class OPTCDatabase extends RoomDatabase {
 
     private final static OPTCDatabaseMigrationStrategy MIGRATION_1_2 = new OPTCDatabaseMigrationStrategy(1, 2);
-    private final static String TAG = "OPTCDatabase_OnCreate";
+
+    private static final String TAG = "OPTCDatabase_OnCreate";
+
     private static OPTCDatabase INSTANCE = null;
 
     public static OPTCDatabase getInstance(final Context context) {

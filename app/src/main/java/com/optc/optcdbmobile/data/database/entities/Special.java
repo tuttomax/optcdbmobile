@@ -4,6 +4,7 @@ package com.optc.optcdbmobile.data.database.entities;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "special_table",
@@ -11,7 +12,8 @@ import android.arch.persistence.room.PrimaryKey;
         @ForeignKey(entity = Unit.class,
                 parentColumns = {"id"},
                 childColumns = {"id"},
-                onDelete = ForeignKey.CASCADE))
+                onDelete = ForeignKey.CASCADE),
+        indices = @Index(value = "id", unique = true))
 
 public class Special {
 
@@ -23,8 +25,8 @@ public class Special {
     private String name;
     private String notes;
 
-    public Special(int unitId, String name, String notes) {
-        this.id = unitId;
+    public Special(int id, String name, String notes) {
+        this.id = id;
         this.name = name;
         this.notes = notes;
     }

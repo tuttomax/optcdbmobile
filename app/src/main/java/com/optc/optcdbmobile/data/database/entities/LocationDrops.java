@@ -3,6 +3,8 @@ package com.optc.optcdbmobile.data.database.entities;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
+import android.support.annotation.NonNull;
 
 /*
    This table will contains all information of drops like:
@@ -30,11 +32,13 @@ import android.arch.persistence.room.ForeignKey;
                         parentColumns = {"id"},
                         childColumns = {"unit_id"},
                         onDelete = ForeignKey.SET_NULL)
-        })
+        },
+        indices = @Index(value = "unit_id", unique = true))
 public class LocationDrops {
 
     @ColumnInfo(name = "location_id")
     private int locationId;
+    @NonNull
     private String name;
     private int index;
 
