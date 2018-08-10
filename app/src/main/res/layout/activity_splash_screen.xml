@@ -6,7 +6,7 @@
     android:background="#0099cc"
     android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
 
-    tools:context=".data.activities.SplashScreenActivity">
+    tools:context=".data.ui.activities.SplashScreenActivity">
 
     <TextView
         android:layout_width="wrap_content"

@@ -1,4 +1,4 @@
-package com.optc.optcdbmobile.data.activities;
+package com.optc.optcdbmobile.data.ui.activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

@@ -7,9 +7,6 @@
     <!-- Database -->
     <string name="pref_database_version_key">database_version</string>
     <string name="pref_database_version_title">Database version</string>
-    <string name="pref_database_version_summary"></string>
-    <string name="pref_database_version_default_value"></string>
-
     <string name="pref_database_invalid_key">invalid_database</string>
 
 
@@ -22,5 +19,9 @@
     <string name="pref_auto_download_key">auto_download</string>
     <string name="pref_auto_download_title">Updates database automatically</string>
     <string name="pref_auto_download_default_value">false</string>
+    <string name="pref_database_cat_download">Download</string>
+    <string name="pref_database_cat_version_title">Version</string>
+    <string name="pref_rebuild_database_title">Rebuild database</string>
+    <string name="pref_rebuild_database_key">rebuild_database</string>
 
 </resources>

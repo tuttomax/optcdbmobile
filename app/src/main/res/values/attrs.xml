@@ -1,3 +1,7 @@
 <resources>
-
+    <declare-styleable name="SingleLineTextViewPreference">
+        <attr name="titleColor" format="reference" />
+        <attr name="summaryColor" format="reference" />
+        <attr name="allBackgroundColor" format="reference" />
+    </declare-styleable>
 </resources>

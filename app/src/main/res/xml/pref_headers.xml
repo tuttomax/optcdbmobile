@@ -4,14 +4,14 @@
     <header
         android:title="General"
         android:icon="@drawable/ic_settings_black_24dp"
-        android:fragment="com.optc.optcdbmobile.data.activities.SettingsActivity$GeneralPreferenceFragment"
+        android:fragment="com.optc.optcdbmobile.data.ui.activities.SettingsActivity$GeneralPreferenceFragment"
 
         />
 
     <header
         android:title="Database"
         android:icon="@drawable/ic_cloud_black_24dp"
-        android:fragment="com.optc.optcdbmobile.data.activities.SettingsActivity$DatabasePreferenceFragment" />
+        android:fragment="com.optc.optcdbmobile.data.ui.activities.SettingsActivity$DatabasePreferenceFragment" />
 
 
 </preference-headers>
