@@ -7,7 +7,6 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.optc.optcdbmobile.data.database.data_access_object.AliasDAO;
 import com.optc.optcdbmobile.data.database.data_access_object.BoosterEvolverLocationDAO;
@@ -83,12 +82,12 @@ public abstract class OPTCDatabase extends RoomDatabase {
                 if (INSTANCE == null)
                     INSTANCE = Room.databaseBuilder(context, OPTCDatabase.class, "optc_database")
                             .addMigrations(MIGRATION_1_2)
-                            .addCallback(new Callback() {
+                            /*.addCallback(new Callback() {
                                 @Override
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                     Log.i(TAG, "Database is created for the first time");
                                 }
-                            })
+                            })*/
                             .build();
             }
         }
@@ -96,6 +95,7 @@ public abstract class OPTCDatabase extends RoomDatabase {
     }
 
     //region DATA ACCESS OBJECT
+
     public abstract AliasDAO aliasDAO();
 
     public abstract BoosterEvolverLocationDAO boosterEvolverLocationDAO();

@@ -12,13 +12,13 @@ import java.util.List;
 
 public class BoosterEvolverLocationParser extends LocationParser {
 
+    public BoosterEvolverLocationParser(byte type) {
+        super(type);
+    }
+
     @Override
     protected List<String> getExclude() {
         return Arrays.asList("name", "thumb", "global", "gamewith", "nakama", "day");
-    }
-
-    public BoosterEvolverLocationParser(byte type) {
-        super(type);
     }
 
     @Override

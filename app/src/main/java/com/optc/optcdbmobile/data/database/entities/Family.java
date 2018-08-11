@@ -7,13 +7,14 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = "family_table")
 public class Family {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int id;
 
     @ColumnInfo
     private String name;
 
-    public Family(String name) {
+    public Family(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 
@@ -23,9 +24,5 @@ public class Family {
 
     public String getName() {
         return name;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 }

@@ -6,7 +6,7 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "unity_table",
+@Entity(tableName = "unit_table",
         foreignKeys = {
                 @ForeignKey(
                         entity = Family.class,

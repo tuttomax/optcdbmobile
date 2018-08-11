@@ -23,5 +23,41 @@
     <string name="pref_database_cat_version_title">Version</string>
     <string name="pref_rebuild_database_title">Rebuild database</string>
     <string name="pref_rebuild_database_key">rebuild_database</string>
+    <string name="pref_character_info_key">info_character</string>
+    <string name="pref_character_info_title">Information about character</string>
+    <string name="pref_character_info_dialog_title">Panel available :</string>
 
+
+    <!-- General -->
+    <string-array name="pref_character_info_indexes">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+    <string-array name="pref_character_info_names">
+        <item>Details</item>
+        <item>Stats</item>
+        <item>Abilities</item>
+        <item>Limit Break</item>
+        <item>Potential Abilities</item>
+        <item>Evolutions</item>
+        <item>Evolvs from</item>
+        <item>Units with the same special</item>
+        <item>Aliases</item>
+        <item>Tags</item>
+    </string-array>
+    <string-array name="pref_character_info_defaults">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>6</item>
+    </string-array>
 </resources>

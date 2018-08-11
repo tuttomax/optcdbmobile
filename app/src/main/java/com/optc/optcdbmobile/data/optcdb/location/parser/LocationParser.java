@@ -14,16 +14,15 @@ import java.util.Map;
 
 public abstract class LocationParser extends BaseParser<List<Object>> {
 
-    public abstract List<Object> parse(Object jsParsed, int lastUsedId);
-
-    protected abstract List<String> getExclude();
-
-
     private byte type;
 
     public LocationParser(byte type) {
         this.type = type;
     }
+
+    public abstract List<Object> parse(Object jsParsed, int lastUsedId);
+
+    protected abstract List<String> getExclude();
 
     public byte getType() {
         return type;
