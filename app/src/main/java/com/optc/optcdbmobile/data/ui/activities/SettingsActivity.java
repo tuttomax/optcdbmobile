@@ -114,7 +114,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             rebuild_database.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    new BuildDatabaseAsyncTask(getActivity()).execute();
+                    //TODO move on OPTCDatabaseRepository
+                    new BuildDatabaseAsyncTask(getActivity(), getView()).execute();
                     return true;
                 }
             });

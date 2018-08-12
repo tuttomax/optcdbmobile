@@ -1,15 +1,21 @@
 package com.optc.optcdbmobile;
 
-import com.optc.optcdbmobile.data.database.entities.Evolution;
+import com.optc.optcdbmobile.data.database.entities.BoosterEvolverLocation;
+import com.optc.optcdbmobile.data.database.entities.FortnightLocation;
+import com.optc.optcdbmobile.data.database.entities.Location;
+import com.optc.optcdbmobile.data.database.entities.LocationChallengeData;
+import com.optc.optcdbmobile.data.database.entities.LocationDrops;
+import com.optc.optcdbmobile.data.database.entities.RaidLocation;
+import com.optc.optcdbmobile.data.database.entities.SpecialLocation;
+import com.optc.optcdbmobile.data.database.entities.TrainingForestLocation;
+import com.optc.optcdbmobile.data.database.entities.TreasureLocation;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.optcdb.Constants;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -19,23 +25,153 @@ import java.util.Map;
 
 public class ExampleUnitTest {
 
+    private class Pair<K, V> {
+        private K key;
+        private V value;
+
+        public Pair(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return equals((Pair<K, V>) obj);
+        }
+
+        public boolean equals(Pair<K, V> obj) {
+            return ((key == obj.key) && (value == obj.value));
+        }
+
+        @Override
+        public String toString() {
+            return String.format("[%s, %s]", key, value);
+        }
+    }
+
     @Test
-    public void test() {
+    public void testDuplicate() {
 
-        List<Evolution> evos = (List<Evolution>) API.getData(Constants.EVOLUTIONS_TYPE);
+        List<Object> evos = (List<Object>) API.getData(Constants.DROPS_TYPE);
 
-        List<Integer> evoIds = new ArrayList<>();
-        List<Integer> uniIds = new ArrayList<>();
 
-        Map<Integer, List<Integer>> map = new HashMap<>();
-        for (Evolution evo : evos) {
-            if (!map.containsKey(evo.getEvolutionId())) {
-                map.put(evo.getEvolutionId(), new ArrayList<Integer>());
+        List<Object> checked = new ArrayList<>();
+        List<Object> exclude = new ArrayList<>();
+
+        for (Object o : evos) {
+            if (o instanceof Location) {
+                Integer id = ((Location) o).getId();
+                if (!checked.contains(id)) {
+                    checked.add(o);
+                } else {
+                    exclude.add(o);
+                }
             }
-            map.get(evo.getEvolutionId()).add(evo.getUnitId());
+            if (o instanceof BoosterEvolverLocation) {
+                Integer id = ((BoosterEvolverLocation) o).getLocationId();
+                if (!checked.contains(id)) {
+                    checked.add(o);
+                } else {
+                    exclude.add(o);
+                }
+            }
+            if (o instanceof RaidLocation) {
+                Integer id = ((RaidLocation) o).getLocationId();
+                if (!checked.contains(id)) {
+                    checked.add(o);
+                } else {
+                    exclude.add(o);
+                }
+            }
+            if (o instanceof FortnightLocation) {
+                Integer id = ((FortnightLocation) o).getLocationId();
+                if (!checked.contains(id)) {
+                    checked.add(o);
+                } else {
+                    exclude.add(o);
+                }
+            }
+            if (o instanceof TreasureLocation) {
+                Integer id = ((TreasureLocation) o).getLocationId();
+                if (!checked.contains(id)) {
+                    checked.add(o);
+                } else {
+                    exclude.add(o);
+                }
+            }
+            if (o instanceof TrainingForestLocation) {
+                Integer id = ((TrainingForestLocation) o).getLocationId();
+                if (!checked.contains(id)) {
+                    checked.add(o);
+                } else {
+                    exclude.add(o);
+                }
+            }
+            if (o instanceof SpecialLocation) {
+                Integer id = ((SpecialLocation) o).getLocationId();
+                if (!checked.contains(id)) {
+                    checked.add(o);
+                } else {
+                    exclude.add(o);
+                }
+            }
+            if (o instanceof LocationDrops) {
+                Integer id = ((LocationDrops) o).getLocationId();
+                if (!checked.contains(id)) {
+                    checked.add(o);
+                } else {
+                    exclude.add(o);
+                }
+            }
+            if (o instanceof LocationChallengeData) {
+                Integer id = ((LocationChallengeData) o).getLocationId();
+                if (!checked.contains(id)) {
+                    checked.add(o);
+                } else {
+                    exclude.add(o);
+                }
+            }
+        }
+
+        for (Object o : exclude) {
+
+            System.out.println(o);
 
         }
 
-        System.out.println(map);
+
     }
+
+
+    private class Triplet<A, B, C> {
+        private A a;
+        private B b;
+        private C c;
+
+        public Triplet(A a, B b, C c) {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            Triplet<A, B, C> t = (Triplet<A, B, C>) obj;
+            return ((a == t.a) && (b == t.b) && (c == t.c));
+        }
+
+        @Override
+        public String toString() {
+            return String.format("[%s, %s, %s]", a, b, c);
+        }
+    }
+
 }

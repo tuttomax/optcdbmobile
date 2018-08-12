@@ -3,6 +3,8 @@ package com.optc.optcdbmobile.data.ui.activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.entities.BoosterEvolverLocation;
@@ -34,16 +36,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Void> {
+public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Integer> {
     private WeakReference<Context> refContext;
+    private WeakReference<View> refView;
 
-    BuildDatabaseAsyncTask(Context context) {
+    BuildDatabaseAsyncTask(Context context, View view) {
         refContext = new WeakReference<>(context);
+        refView = new WeakReference<>(view);
     }
 
 
     private ProgressDialog dialog;
-    //TODO Create ProgressDialogDelegate
 
     @Override
     protected void onPreExecute() {
@@ -84,13 +87,25 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void a) {
-        super.onPostExecute(a);
+    protected void onPostExecute(Integer result) {
         dialog.dismiss();
+        if (result == 1) {
+            Snackbar.make(refView.get(), "Database building complete", Snackbar.LENGTH_LONG).show();
+        } else if (result == -1) {
+            Snackbar.make(refView.get(), "Error building database", Snackbar.LENGTH_LONG)
+                    .setActionTextColor(255 & 0xffffff)
+                    .setAction("REDO", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (!refContext.isEnqueued() && !refView.isEnqueued())
+                                new BuildDatabaseAsyncTask(refContext.get(), refView.get()).execute();
+                        }
+                    });
+        }
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected Integer doInBackground(Void... voids) {
 
         ExecutorService service = Executors.newFixedThreadPool(6);
 
@@ -102,6 +117,7 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Void> {
         List<FamilyContainer> familyList = null;
 
         publishProgress(new State("Downloading data...\nPlease wait"));
+
 
         final Future<List<Unit>> futureUnits = service.submit(new Callable<List<Unit>>() {
             @Override
@@ -182,10 +198,13 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Void> {
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
+            return -1;
         } catch (ExecutionException e) {
             e.printStackTrace();
+            return -1;
         } catch (Exception ex) {
             ex.printStackTrace();
+            return -1;
         }
 
 
@@ -320,9 +339,10 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Void> {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+            return -1;
         }
 
-        return null;
+        return 1;
     }
 }
 
