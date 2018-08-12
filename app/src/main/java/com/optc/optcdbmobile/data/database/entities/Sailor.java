@@ -15,18 +15,12 @@ public class Sailor {
     @PrimaryKey
     //id equals unit_id
     private int id;
-    private String name;
 
-    public Sailor(int id, String name) {
+    public Sailor(int id) {
         this.id = id;
-        this.name = name;
     }
 
     public int getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
     }
 }

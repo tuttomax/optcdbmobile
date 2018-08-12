@@ -1,21 +1,9 @@
 package com.optc.optcdbmobile.data.database.entities;
 
-import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "unit_table",
-        foreignKeys = {
-                @ForeignKey(
-                        entity = Family.class,
-                        parentColumns = {"id"},
-                        childColumns = {"family_id"},
-                        onDelete = ForeignKey.SET_NULL)
-        },
-        indices = @Index(value = "family_id"))
-
+@Entity(tableName = "unit_table")
 public class Unit {
 
     @PrimaryKey
@@ -47,11 +35,7 @@ public class Unit {
 
     private Float stars;
 
-    @ColumnInfo(name = "family_id")
-    private int familiyId;
-
-
-    public Unit(int id, String name, String class1, String class2, String type1, String type2, Integer expToMax, Byte levelMax, Integer atkLevel1, Integer maxAtk, Integer hpLevel1, Integer maxHp, Integer rcvLevel1, Integer maxRcv, Byte cost, Byte combo, Byte socket, Float stars, int familiyId) {
+    public Unit(int id, String name, String class1, String class2, String type1, String type2, Integer expToMax, Byte levelMax, Integer atkLevel1, Integer maxAtk, Integer hpLevel1, Integer maxHp, Integer rcvLevel1, Integer maxRcv, Byte cost, Byte combo, Byte socket, Float stars) {
         this.id = id;
         this.name = name;
         this.class1 = class1;
@@ -70,7 +54,6 @@ public class Unit {
         this.combo = combo;
         this.socket = socket;
         this.stars = stars;
-        this.familiyId = familiyId;
     }
 
     public int getId() {
@@ -145,7 +128,4 @@ public class Unit {
         return stars;
     }
 
-    public int getFamiliyId() {
-        return familiyId;
-    }
 }

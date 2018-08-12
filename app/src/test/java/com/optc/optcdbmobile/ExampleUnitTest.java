@@ -1,9 +1,15 @@
 package com.optc.optcdbmobile;
 
+import com.optc.optcdbmobile.data.database.entities.Evolution;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.optcdb.Constants;
 
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -14,9 +20,22 @@ import org.junit.Test;
 public class ExampleUnitTest {
 
     @Test
-    public void testAPI_unit() {
-        long start = System.currentTimeMillis();
-        API.getData(Constants.UNITS_TYPE);
+    public void test() {
 
+        List<Evolution> evos = (List<Evolution>) API.getData(Constants.EVOLUTIONS_TYPE);
+
+        List<Integer> evoIds = new ArrayList<>();
+        List<Integer> uniIds = new ArrayList<>();
+
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (Evolution evo : evos) {
+            if (!map.containsKey(evo.getEvolutionId())) {
+                map.put(evo.getEvolutionId(), new ArrayList<Integer>());
+            }
+            map.get(evo.getEvolutionId()).add(evo.getUnitId());
+
+        }
+
+        System.out.println(map);
     }
 }

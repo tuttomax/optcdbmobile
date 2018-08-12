@@ -17,6 +17,7 @@ public abstract class BaseParser<T> {
 
     public abstract T parse(Object jsParsed);
 
+
     protected <K> K toType(Object o, Class<K> type) {
         if (o == null) {
             return null;
@@ -35,7 +36,6 @@ public abstract class BaseParser<T> {
                 String s = (String) o;
                 if (idType == INTEGER_TYPE) {
                     s = s.substring(7);                    //HACK Fix for resolving bug caused by Clash! Bellamy
-
                     return type.cast(Integer.parseInt(s));
                 } else {
                     return type.cast(s);

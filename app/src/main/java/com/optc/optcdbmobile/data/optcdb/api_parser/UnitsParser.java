@@ -56,8 +56,8 @@ public class UnitsParser extends BaseParser<List<Unit>> {
 
             unit = new Unit(id, name, classes[0], classes[1], types[0], types[1], expToMax, maxLevel,
                     level1ATK, maxATK, level1HP, maxHP, level1RCV, maxRCV,
-                    cost, combo, socket, stars,
-                    -1 /* INFO: familyId will be update during database building */);
+                    cost, combo, socket, stars);
+
 
             list.add(unit);
         }

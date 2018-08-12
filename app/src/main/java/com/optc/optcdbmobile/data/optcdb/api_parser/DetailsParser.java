@@ -78,12 +78,13 @@ public class DetailsParser extends BaseParser<List<Detail>> {
             } else if (captain instanceof NativeObject) {
                 NativeObject captainObj = (NativeObject) captain;
 
+                captainAbility = new Captain(id, notes);
+                detail.getCaptainList().add(captainAbility);
+
                 for (Map.Entry<Object, Object> entry : captainObj.entrySet()) {
                     description = (entry.getValue().toString());
-                    captainAbility = new Captain(id, notes);
                     captainDescription = new CaptainDescription(id, level++, description);
 
-                    detail.getCaptainList().add(captainAbility);
                     detail.getCaptainDescriptionList().add(captainDescription);
 
                 }
@@ -110,11 +111,13 @@ public class DetailsParser extends BaseParser<List<Detail>> {
                 NativeObject potentialObj = (NativeObject) potentialArray.get(index);
                 String potentialName = toType(potentialObj.get("Name"), String.class);
                 NativeArray potentialElements = (NativeArray) potentialObj.get("description");
+
+                Potential potential = new Potential(id, index, potentialName);
+                detail.getPotentialList().add(potential);
+
                 for (int arrayIndex = 0; arrayIndex < potentialElements.size(); arrayIndex++) {
                     String potentialDescr = toType(potentialElements.get(arrayIndex), String.class);
-                    Potential potential = new Potential(id, potentialName);
-                    PotentialDescription potentialDescription = new PotentialDescription(id, arrayIndex, potentialDescr);
-                    detail.getPotentialList().add(potential);
+                    PotentialDescription potentialDescription = new PotentialDescription(id, index, arrayIndex, potentialDescr);
                     detail.getPotentialDescriptionList().add(potentialDescription);
                 }
             }
@@ -143,12 +146,14 @@ public class DetailsParser extends BaseParser<List<Detail>> {
             } else if (specialObj instanceof NativeArray) {
                 NativeArray specialArray = (NativeArray) specialObj;
 
+                special = new Special(id, specialName, specialNotes);
+                detail.getSpecialList().add(special);
+
                 for (int index = 0; index < specialArray.size(); index++) {
 
                     NativeObject specialElement = (NativeObject) specialArray.get(index);
                     String specialDesc = toType(specialElement.get("description"), String.class);
-                    NativeArray cooldownsArray = (NativeArray) specialArray.get("cooldown");
-                    special = new Special(id, specialName, specialNotes);
+                    NativeArray cooldownsArray = (NativeArray) specialElement.get("cooldown");
 
                     if (cooldownsArray != null) {
                         min = toType(cooldownsArray.get(0), Integer.class);
@@ -156,7 +161,7 @@ public class DetailsParser extends BaseParser<List<Detail>> {
                     }
 
                     specialDescription = new SpecialDescription(id, index, specialDesc, min, max);
-                    detail.getSpecialList().add(special);
+
                     detail.getSpecialDescriptionList().add(specialDescription);
                 }
             }
@@ -171,19 +176,18 @@ public class DetailsParser extends BaseParser<List<Detail>> {
         if (sailorObj != null) {
             if (sailorObj instanceof String) {
                 String sailorDescr = toType(sailorObj, String.class);
-                sailor = new Sailor(id, "Base");
+                sailor = new Sailor(id);
                 sailorDescription = new SailorDescription(id, 0, sailorDescr);
                 detail.getSailorList().add(sailor);
                 detail.getSailorDescriptionList().add(sailorDescription);
             } else if (sailorObj instanceof NativeObject) {
                 NativeObject sailorElement = (NativeObject) sailorObj;
                 int sailorLevel = 0;
+                sailor = new Sailor(id);
+                detail.getSailorList().add(sailor);
                 for (Map.Entry<Object, Object> entry : sailorElement.entrySet()) {
                     String sailorDescr = toType(entry.getValue(), String.class);
-
-                    sailor = new Sailor(id, sailorLevel == 0 ? "Base" : String.format("Level%d", sailorLevel));
                     sailorDescription = new SailorDescription(id, sailorLevel++, sailorDescr);
-                    detail.getSailorList().add(sailor);
                     detail.getSailorDescriptionList().add(sailorDescription);
                 }
             }

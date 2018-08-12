@@ -5,6 +5,7 @@ import com.optc.optcdbmobile.data.optcdb.api_parser.CooldownsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.DetailsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.DropsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.EvolutionsParser;
+import com.optc.optcdbmobile.data.optcdb.api_parser.FamilyParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.UnitsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.VersionParser;
 
@@ -25,6 +26,7 @@ public class API {
         put(Constants.DROPS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/drops.js");
         put(Constants.DETAILS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/details.js");
         put(Constants.COOLDOWNS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/cooldowns.js");
+        put(Constants.FAMILIES_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/families.js");
     }};
     private final static HashMap<Byte, String> name_table = new HashMap<Byte, String>(6) {{
         put(Constants.VERSION_TYPE, "dbVersion");
@@ -33,6 +35,7 @@ public class API {
         put(Constants.DROPS_TYPE, "drops");
         put(Constants.DETAILS_TYPE, "details");
         put(Constants.COOLDOWNS_TYPE, "cooldowns");
+        put(Constants.FAMILIES_TYPE, "families");
     }};
 
     private final static HashMap<Byte, BaseParser> parser_table = new HashMap<Byte, BaseParser>(6) {{
@@ -42,6 +45,7 @@ public class API {
         put(Constants.DROPS_TYPE, new DropsParser());
         put(Constants.DETAILS_TYPE, new DetailsParser());
         put(Constants.COOLDOWNS_TYPE, new CooldownsParser());
+        put(Constants.FAMILIES_TYPE, new FamilyParser());
     }};
 
 
@@ -51,7 +55,19 @@ public class API {
         return String.format(fmt, id);
     }
 
+    /*
+    public synchronized static String getName(byte type){
+        return name_table.get(type);
+    }
+    public synchronized static BaseParser getParser(byte type){
+        return parser_table.get(type);
+    }
+    public synchronized static String getUrl(byte type){
+        return url_table.get(type);
+    }
+    */
 
+    /* Take too much time*/
     public static Object getData(byte type) {
         Object parsed = simple_parsing(url_table.get(type), name_table.get(type));
         BaseParser parser = parser_table.get(type);
@@ -79,6 +95,12 @@ public class API {
      */
     private static Object simple_parsing(String url, String objName) {
         String dump = simple_download(url);
+        return parsing(dump, objName);
+    }
+
+
+    private static Object parsing(String dump, String objName) {
+
 
         // Every Rhino VM begins with the enter()
         // This Context is not Android's Context

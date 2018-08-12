@@ -1,6 +1,5 @@
 package com.optc.optcdbmobile.data.database.entities;
 
-import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -10,8 +9,8 @@ public class Family {
     @PrimaryKey
     private int id;
 
-    @ColumnInfo
     private String name;
+
 
     public Family(int id, String name) {
         this.id = id;
@@ -25,4 +24,5 @@ public class Family {
     public String getName() {
         return name;
     }
+
 }

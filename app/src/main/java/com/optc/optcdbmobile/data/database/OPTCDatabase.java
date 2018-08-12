@@ -15,6 +15,7 @@ import com.optc.optcdbmobile.data.database.data_access_object.CaptainDescription
 import com.optc.optcdbmobile.data.database.data_access_object.ColiseumLocationDAO;
 import com.optc.optcdbmobile.data.database.data_access_object.EvolutionDAO;
 import com.optc.optcdbmobile.data.database.data_access_object.FamilyDAO;
+import com.optc.optcdbmobile.data.database.data_access_object.FamilyUnitDAO;
 import com.optc.optcdbmobile.data.database.data_access_object.FortnightLocationDAO;
 import com.optc.optcdbmobile.data.database.data_access_object.LimitDAO;
 import com.optc.optcdbmobile.data.database.data_access_object.LocationChallengeDataDAO;
@@ -41,6 +42,7 @@ import com.optc.optcdbmobile.data.database.entities.CaptainDescription;
 import com.optc.optcdbmobile.data.database.entities.ColiseumLocation;
 import com.optc.optcdbmobile.data.database.entities.Evolution;
 import com.optc.optcdbmobile.data.database.entities.Family;
+import com.optc.optcdbmobile.data.database.entities.FamilyUnit;
 import com.optc.optcdbmobile.data.database.entities.FortnightLocation;
 import com.optc.optcdbmobile.data.database.entities.Limit;
 import com.optc.optcdbmobile.data.database.entities.Location;
@@ -63,7 +65,7 @@ import com.optc.optcdbmobile.data.database.entities.UnitTag;
 
 @Database(entities =
         {Alias.class, BoosterEvolverLocation.class, Captain.class, CaptainDescription.class, ColiseumLocation.class,
-                Evolution.class, Family.class, FortnightLocation.class, Limit.class, LocationChallengeData.class, Location.class,
+                Evolution.class, Family.class, FamilyUnit.class, FortnightLocation.class, Limit.class, LocationChallengeData.class, Location.class,
                 LocationDrops.class, Potential.class, PotentialDescription.class, RaidLocation.class, Sailor.class, SailorDescription.class,
                 Special.class, SpecialDescription.class, SpecialLocation.class, StoryLocation.class, Tag.class,
                 TrainingForestLocation.class, TreasureLocation.class, Unit.class, UnitTag.class},
@@ -72,8 +74,6 @@ public abstract class OPTCDatabase extends RoomDatabase {
 
     private final static OPTCDatabaseMigrationStrategy MIGRATION_1_2 = new OPTCDatabaseMigrationStrategy(1, 2);
 
-    private static final String TAG = "OPTCDatabase_OnCreate";
-
     private static OPTCDatabase INSTANCE = null;
 
     public static OPTCDatabase getInstance(final Context context) {
@@ -81,13 +81,6 @@ public abstract class OPTCDatabase extends RoomDatabase {
             synchronized (OPTCDatabase.class) {
                 if (INSTANCE == null)
                     INSTANCE = Room.databaseBuilder(context, OPTCDatabase.class, "optc_database")
-                            .addMigrations(MIGRATION_1_2)
-                            /*.addCallback(new Callback() {
-                                @Override
-                                public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                                    Log.i(TAG, "Database is created for the first time");
-                                }
-                            })*/
                             .build();
             }
         }
@@ -109,6 +102,8 @@ public abstract class OPTCDatabase extends RoomDatabase {
     public abstract EvolutionDAO evolutionDAO();
 
     public abstract FamilyDAO familyDAO();
+
+    public abstract FamilyUnitDAO familyUnitDAO();
 
     public abstract FortnightLocationDAO fortnightLocationDAO();
 

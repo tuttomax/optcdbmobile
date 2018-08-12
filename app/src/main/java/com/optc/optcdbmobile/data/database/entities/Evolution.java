@@ -4,17 +4,16 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "evolution_table",
+        primaryKeys = {"evolution_id", "unit_id"},
         foreignKeys = @ForeignKey(entity = Unit.class,
                 parentColumns = {"id"},
                 childColumns = {"unit_id"},
                 onDelete = ForeignKey.CASCADE),
-        indices = @Index(value = "unit_id", unique = true))
+        indices = @Index(value = "unit_id"))
 public class Evolution {
 
-    @PrimaryKey
     @ColumnInfo(name = "evolution_id")
     private int evolutionId;
 

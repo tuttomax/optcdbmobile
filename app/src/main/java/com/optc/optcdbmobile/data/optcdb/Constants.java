@@ -9,6 +9,9 @@ public class Constants {
     public final static byte DROPS_TYPE = 3;
     public final static byte DETAILS_TYPE = 4;
     public final static byte COOLDOWNS_TYPE = 5;
+    public final static byte FAMILIES_TYPE = 6;
+    public final static byte ALIASES_TYPE = 7;
+    public final static byte TAGS_TYPE = 8;
 
     public final static byte GENERAL = 0;
     public final static byte GLOBAL = 1;
