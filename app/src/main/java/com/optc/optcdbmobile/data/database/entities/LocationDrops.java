@@ -28,12 +28,20 @@ import android.support.annotation.NonNull;
                         parentColumns = {"id"},
                         childColumns = {"location_id"},
                         onDelete = ForeignKey.CASCADE),
-                @ForeignKey(entity = Unit.class,
+
+                // I deleted this because drops_table should contains
+                //      - skull id
+                //      - manual id (negative number)
+                /* @ForeignKey(entity = Unit.class,
                         parentColumns = {"id"},
                         childColumns = {"unit_id"},
-                        onDelete = ForeignKey.SET_NULL)
+                        onDelete = ForeignKey.SET_NULL) */
         },
-        indices = @Index(value = "unit_id", unique = true))
+
+        indices = {
+                @Index(value = "location_id"),
+                @Index(value = {"location_id", "name", "index"}, unique = true)
+        })
 public class LocationDrops {
 
     @ColumnInfo(name = "location_id")

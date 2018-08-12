@@ -69,7 +69,7 @@ public class DropsParser extends BaseParser<List<Object>> {
 
         List<Object> list = new ArrayList<>();
 
-        int lastIndex = 0;
+        int lastIndex = 0; //used for generating unique id
 
         for (Map.Entry<Object, Object> entry : root.entrySet()) {
             String locationType = (String) entry.getKey();

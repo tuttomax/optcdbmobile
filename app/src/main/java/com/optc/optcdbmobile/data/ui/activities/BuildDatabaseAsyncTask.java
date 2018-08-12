@@ -50,15 +50,12 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Void> {
         super.onPreExecute();
         dialog = new ProgressDialog(refContext.get());
         dialog.setCancelable(false);
-        dialog.setIndeterminate(true);
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setMessage("Ready");
         dialog.show();
+
     }
 
     @Override
     protected void onProgressUpdate(State... values) {
-        super.onProgressUpdate(values);
 
         State state = values[0];
 
@@ -197,13 +194,29 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Void> {
             OPTCDatabase database = OPTCDatabase.getInstance(refContext.get());
             database.clearAllTables();
 
-            publishProgress(new State("Populating units table..."));
+/*            publishProgress(new State("Populating units table..."));
             database.unitDAO().insert(unitList);
+*/
 
+            String msg = "Populating units table...";
+            int count = 0;
+            int max = unitList.size();
+            publishProgress(new State(msg));
+            for (Unit unit : unitList) {
+                synchronized (unit) {
+                    System.out.println(unit.getId());
+                }
+                database.unitDAO().insert(unit);
+                count++;
+                publishProgress(State.buildProgress(msg, max, count));
+            }
 
-            publishProgress(new State("Populating family table and updating unit's family...",
-                    "+max", familyList.size()));
+            msg = "Populating family table and updating unit's family...";
+            count = 0;
+            max = familyList.size();
+            publishProgress(new State(msg));
             for (int index = 0; index < familyList.size(); index++) {
+
                 FamilyContainer familyContainer = familyList.get(index);
                 Family family = familyContainer.getFamily();
                 List<Integer> listIds = familyContainer.getUnitIds();
@@ -213,12 +226,17 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Void> {
                 for (int familyIndex = 0; familyIndex < listIds.size(); familyIndex++) {
                     database.familyUnitDAO().insert(new FamilyUnit(family.getId(), listIds.get(familyIndex)));
                 }
-                publishProgress(new State("increment", 0));
+
+                count++;
+                publishProgress(State.buildProgress(msg, max, count));
             }
-            publishProgress(new State("-max", 0));
 
 
-            publishProgress(new State("Inserting all units details", "+max", detailList.size()));
+            msg = "Inserting all units details";
+            count = 0;
+            max = detailList.size();
+            publishProgress(new State(msg));
+
             for (Detail detail : detailList) {
 
                 database.captainDAO().insert(detail.getCaptainList());
@@ -235,24 +253,49 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Void> {
                 database.potentialDAO().insert(detail.getPotentialList());
                 database.potentialDescriptionDAO().insert(detail.getPotentialDescriptionList());
 
-                publishProgress(new State("increment", 0));
+                count++;
+                publishProgress(State.buildProgress(msg, max, count));
             }
-            publishProgress(new State("-max", 0));
 
 
-            publishProgress(new State("Populating cooldowns for special..."));
+            count = 0;
+            max = cooldownList.size();
+            msg = "Updating cooldowns for special...";
+            publishProgress(new State(msg));
             for (Cooldown cooldown : cooldownList) {
                 database.specialDescriptionDAO().updateCooldown(cooldown.getId(), cooldown.getMin(), cooldown.getMax());
+                count++;
+                publishProgress(State.buildProgress(msg, max, count));
             }
 
-            publishProgress(new State("Populating evolutions table..."));
-            database.evolutionDAO().insert(evolutionList);
 
-            publishProgress(new State("Populating drops table...", "+max", dropsList.size()));
+            count = 0;
+            max = evolutionList.size();
+            msg = "Populating evolutions table...";
+            publishProgress(new State(msg));
+            //database.evolutionDAO().insert(evolutionList);
+            for (Evolution evolution : evolutionList) {
+                database.evolutionDAO().insert(evolution);
+                count++;
+                publishProgress(State.buildProgress(msg, max, count));
+            }
+
+            msg = "Populating drops table...";
+            count = 0;
+            max = dropsList.size();
+            publishProgress(new State(msg));
+
+
             for (Object obj : dropsList) {
                 if (obj instanceof Location) {
+                    System.out.println(((Location) obj).getId());
                     database.locationDAO().insert((Location) obj);
                 } else if (obj instanceof LocationDrops) {
+
+                    System.out.println("--- Location drops: ---");
+                    System.out.println(((LocationDrops) obj).getLocationId());
+                    System.out.println(((LocationDrops) obj).getUnitId());
+
                     database.locationDropsDAO().insert((LocationDrops) obj);
                 } else if (obj instanceof LocationChallengeData) {
                     database.locationChallengeDataDAO().insert((LocationChallengeData) obj);
@@ -271,9 +314,10 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Void> {
                 } else if (obj instanceof TreasureLocation) {
                     database.treasureLocationDAO().insert((TreasureLocation) obj);
                 }
-                publishProgress(new State("increment", 0));
+
+                count++;
+                publishProgress(State.buildProgress(msg, max, count));
             }
-            publishProgress(new State("-min", 0));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

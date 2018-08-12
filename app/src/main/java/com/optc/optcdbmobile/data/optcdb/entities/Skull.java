@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Skull {
+    public final static int MIN = 9001;
+    public final static int MAX = 9020;
 
     //General
     private static final int STR = 9010;
@@ -60,6 +62,32 @@ public class Skull {
         put("skullDoffy", DOFFY);
     }};
 
+    private static final Map<Integer, String> idName = new HashMap<Integer, String>() {{
+        put(STR, "skullSTR");
+        put(QCK, "skullQCK");
+        put(DEX, "skullDEX");
+        put(INT, "skullINT");
+        put(PSY, "skullPSY");
+
+        put(LUFFY, "skullLuffy");
+        put(ZORO, "skullZoro");
+        put(NAMI, "skullNami");
+        put(USOPP, "skullUsopp");
+        put(SANJI, "skullSanji");
+        put(CHOPPER, "skullChopper");
+        put(ROBIN, "skullRobin");
+        put(FRANKY, "skullFranky");
+        put(BROOK, "skullBrook");
+
+        put(JUDGE, "skullJudge");
+        put(REIJU, "skullReiju");
+        put(NIJI, "skullNiji");
+        put(ICHIJI, "skullIchiji");
+        put(YONJI, "skullYonji");
+
+        put(DOFFY, "skullDoffy");
+    }};
+
     private static final Map<Integer, String> imageUrlMap = new HashMap<Integer, String>() {{
         put(STR, "https://onepiece-treasurecruise.com/wp-content/uploads/red_skull_f.png");
         put(QCK, "https://onepiece-treasurecruise.com/wp-content/uploads/blue_skull_f.png");
@@ -90,4 +118,9 @@ public class Skull {
     public static int getId(String name) {
         return idMap.get(name);
     }
+
+    public static String getName(int id) {
+        return idName.get(id);
+    }
+
 }

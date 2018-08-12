@@ -30,7 +30,7 @@ public class EvolutionsParser extends BaseParser<List<Evolution>> {
             Object evolversObj = internalObj.get("evolvers");
 
             if (evolutionObj instanceof Double) {
-                list.add(parseSingleEvolution(unitId, evolutionObj, evolversObj));
+                list.add(parseSingleEvolution(unitId, 0, evolutionObj, evolversObj));
             } else if (evolutionObj instanceof NativeArray) {
                 NativeArray evolutionArray = (NativeArray) evolutionObj;
                 NativeArray evolversArray = (NativeArray) evolversObj;
@@ -38,7 +38,7 @@ public class EvolutionsParser extends BaseParser<List<Evolution>> {
                 for (int index = 0; index < evolutionArray.size(); index++) {
                     Object evolutionInternalObj = evolutionArray.get(index);
                     Object evolversInternalObj = evolversArray.get(index);
-                    list.add(parseSingleEvolution(unitId, evolutionInternalObj, evolversInternalObj));
+                    list.add(parseSingleEvolution(unitId, index, evolutionInternalObj, evolversInternalObj));
                 }
 
             }
@@ -49,10 +49,10 @@ public class EvolutionsParser extends BaseParser<List<Evolution>> {
     }
 
 
-    private Evolution parseSingleEvolution(int unitId, Object evolutionObj, Object evolversObj) {
+    private Evolution parseSingleEvolution(int unitId, int index, Object evolutionObj, Object evolversObj) {
         Integer[] mats = parseEvolvers(toType(evolversObj, NativeArray.class));
         Integer evolutionId = toType(evolutionObj, Integer.class);
-        return new Evolution(evolutionId, unitId, mats[0], mats[1], mats[2], mats[3], mats[4]);
+        return new Evolution(evolutionId, unitId, index, mats[0], mats[1], mats[2], mats[3], mats[4]);
     }
 
 

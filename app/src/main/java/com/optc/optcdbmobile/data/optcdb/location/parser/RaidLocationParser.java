@@ -39,7 +39,7 @@ public class RaidLocationParser extends LocationParser {
 
             list.addAll(parseDataDrops(obj, startId));
 
-
+            startId++;
         }
 
         return list;

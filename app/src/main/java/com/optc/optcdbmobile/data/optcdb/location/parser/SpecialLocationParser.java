@@ -42,6 +42,7 @@ public class SpecialLocationParser extends LocationParser {
             list.addAll(parseDataDrops(obj, startId));
             list.addAll(parseChallengeData(obj, startId));
 
+            startId++;
         }
 
         return list;

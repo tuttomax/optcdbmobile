@@ -6,12 +6,12 @@ import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Index;
 
 @Entity(tableName = "evolution_table",
-        primaryKeys = {"evolution_id", "unit_id"},
+        primaryKeys = {"evolution_id", "unit_id", "index"},
         foreignKeys = @ForeignKey(entity = Unit.class,
                 parentColumns = {"id"},
                 childColumns = {"unit_id"},
                 onDelete = ForeignKey.CASCADE),
-        indices = @Index(value = "unit_id"))
+        indices = @Index(value = {"unit_id", "evolution_id", "index"}, unique = true))
 public class Evolution {
 
     @ColumnInfo(name = "evolution_id")
@@ -20,15 +20,19 @@ public class Evolution {
     @ColumnInfo(name = "unit_id")
     private int unitId;
 
+    private int index; //Inserted because some unit have same evolutionId and same unitId :(
+
     private Integer material1;
     private Integer material2;
     private Integer material3;
     private Integer material4;
     private Integer material5;
 
-    public Evolution(int evolutionId, int unitId, Integer material1, Integer material2, Integer material3, Integer material4, Integer material5) {
+
+    public Evolution(int evolutionId, int unitId, int index, Integer material1, Integer material2, Integer material3, Integer material4, Integer material5) {
         this.evolutionId = evolutionId;
         this.unitId = unitId;
+        this.index = index;
         this.material1 = material1;
         this.material2 = material2;
         this.material3 = material3;
@@ -42,6 +46,10 @@ public class Evolution {
 
     public int getUnitId() {
         return unitId;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public Integer getMaterial1() {
