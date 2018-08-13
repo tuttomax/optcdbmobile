@@ -1,5 +1,6 @@
 package com.optc.optcdbmobile.data.optcdb.api_parser;
 
+import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.entities.BoosterEvolverLocation;
 import com.optc.optcdbmobile.data.database.entities.ColiseumLocation;
 import com.optc.optcdbmobile.data.database.entities.FortnightLocation;
@@ -9,7 +10,6 @@ import com.optc.optcdbmobile.data.database.entities.StoryLocation;
 import com.optc.optcdbmobile.data.database.entities.TrainingForestLocation;
 import com.optc.optcdbmobile.data.database.entities.TreasureLocation;
 import com.optc.optcdbmobile.data.optcdb.BaseParser;
-import com.optc.optcdbmobile.data.optcdb.Constants;
 import com.optc.optcdbmobile.data.optcdb.location.parser.BoosterEvolverLocationParser;
 import com.optc.optcdbmobile.data.optcdb.location.parser.ColiseumLocationParser;
 import com.optc.optcdbmobile.data.optcdb.location.parser.FortnightLocationParser;
@@ -31,36 +31,36 @@ import java.util.Map;
 public class DropsParser extends BaseParser<List<Object>> {
 
     private final static Map<String, Byte> stringTable = new HashMap<String, Byte>() {{
-        put("Story Island", Constants.STORY_TYPE);
-        put("Booster and Evolver Island", Constants.BOOSTER_EVOLVER_TYPE);
-        put("Fortnight", Constants.FORTNIGHT_TYPE);
-        put("Raid", Constants.RAID_TYPE);
-        put("Coliseum", Constants.COLISEUM_TYPE);
-        put("Treasure Map", Constants.TREASURE_MAP_TYPE);
-        put("Special", Constants.SPECIAL_MAP_TYPE);
-        put("Training Forest", Constants.TRAINING_FOREST_TYPE);
+        put("Story Island", Constants.DropsType.STORY_TYPE);
+        put("Booster and Evolver Island", Constants.DropsType.BOOSTER_EVOLVER_TYPE);
+        put("Fortnight", Constants.DropsType.FORTNIGHT_TYPE);
+        put("Raid", Constants.DropsType.RAID_TYPE);
+        put("Coliseum", Constants.DropsType.COLISEUM_TYPE);
+        put("Treasure Map", Constants.DropsType.TREASURE_MAP_TYPE);
+        put("Special", Constants.DropsType.SPECIAL_MAP_TYPE);
+        put("Training Forest", Constants.DropsType.TRAINING_FOREST_TYPE);
     }};
     private final static Map<Byte, LocationParser> parserTable = new HashMap<Byte, LocationParser>() {{
-        put(Constants.STORY_TYPE, new StoryLocationParser(Constants.STORY_TYPE));
-        put(Constants.BOOSTER_EVOLVER_TYPE, new BoosterEvolverLocationParser(Constants.BOOSTER_EVOLVER_TYPE));
-        put(Constants.FORTNIGHT_TYPE, new FortnightLocationParser(Constants.FORTNIGHT_TYPE));
-        put(Constants.RAID_TYPE, new RaidLocationParser(Constants.RAID_TYPE));
-        put(Constants.COLISEUM_TYPE, new ColiseumLocationParser(Constants.COLISEUM_TYPE));
-        put(Constants.TREASURE_MAP_TYPE, new TreasureMapLocationParser(Constants.TREASURE_MAP_TYPE));
-        put(Constants.SPECIAL_MAP_TYPE, new SpecialLocationParser(Constants.SPECIAL_MAP_TYPE));
-        put(Constants.TRAINING_FOREST_TYPE, new TrainingForestLocationParser(Constants.TRAINING_FOREST_TYPE));
+        put(Constants.DropsType.STORY_TYPE, new StoryLocationParser(Constants.DropsType.STORY_TYPE));
+        put(Constants.DropsType.BOOSTER_EVOLVER_TYPE, new BoosterEvolverLocationParser(Constants.DropsType.BOOSTER_EVOLVER_TYPE));
+        put(Constants.DropsType.FORTNIGHT_TYPE, new FortnightLocationParser(Constants.DropsType.FORTNIGHT_TYPE));
+        put(Constants.DropsType.RAID_TYPE, new RaidLocationParser(Constants.DropsType.RAID_TYPE));
+        put(Constants.DropsType.COLISEUM_TYPE, new ColiseumLocationParser(Constants.DropsType.COLISEUM_TYPE));
+        put(Constants.DropsType.TREASURE_MAP_TYPE, new TreasureMapLocationParser(Constants.DropsType.TREASURE_MAP_TYPE));
+        put(Constants.DropsType.SPECIAL_MAP_TYPE, new SpecialLocationParser(Constants.DropsType.SPECIAL_MAP_TYPE));
+        put(Constants.DropsType.TRAINING_FOREST_TYPE, new TrainingForestLocationParser(Constants.DropsType.TRAINING_FOREST_TYPE));
     }};
 
     /* Will be used when will be populate database */
     private final static Map<Byte, Class> classTable = new HashMap<Byte, Class>() {{
-        put(Constants.STORY_TYPE, StoryLocation.class);
-        put(Constants.BOOSTER_EVOLVER_TYPE, BoosterEvolverLocation.class);
-        put(Constants.FORTNIGHT_TYPE, FortnightLocation.class);
-        put(Constants.RAID_TYPE, RaidLocation.class);
-        put(Constants.COLISEUM_TYPE, ColiseumLocation.class);
-        put(Constants.TREASURE_MAP_TYPE, TreasureLocation.class);
-        put(Constants.SPECIAL_MAP_TYPE, SpecialLocation.class);
-        put(Constants.TRAINING_FOREST_TYPE, TrainingForestLocation.class);
+        put(Constants.DropsType.STORY_TYPE, StoryLocation.class);
+        put(Constants.DropsType.BOOSTER_EVOLVER_TYPE, BoosterEvolverLocation.class);
+        put(Constants.DropsType.FORTNIGHT_TYPE, FortnightLocation.class);
+        put(Constants.DropsType.RAID_TYPE, RaidLocation.class);
+        put(Constants.DropsType.COLISEUM_TYPE, ColiseumLocation.class);
+        put(Constants.DropsType.TREASURE_MAP_TYPE, TreasureLocation.class);
+        put(Constants.DropsType.SPECIAL_MAP_TYPE, SpecialLocation.class);
+        put(Constants.DropsType.TRAINING_FOREST_TYPE, TrainingForestLocation.class);
     }};
 
     @Override

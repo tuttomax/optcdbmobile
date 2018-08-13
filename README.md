@@ -2,6 +2,11 @@
 Wrapper mobile of http://optc-db.github.io
 
 ### TODO
+
+- [ ] Parallel DatabaseBuildingAsyncTask
+
+---
+
 - [ ] Character Table
 - [ ] Drop table
 - [ ] Evolution Helper
@@ -22,7 +27,7 @@ Wrapper mobile of http://optc-db.github.io
   - [x] Evolutions parser
   - [ ] Aliases parser
   - [ ] Tag parser
-  - [ ] Family parser
+  - [x] Family parser
   
   
 # Credits

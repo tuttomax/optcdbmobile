@@ -1,11 +1,13 @@
-package com.optc.optcdbmobile.data.ui.activities;
+package com.optc.optcdbmobile.data.tasks;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.entities.BoosterEvolverLocation;
 import com.optc.optcdbmobile.data.database.entities.ColiseumLocation;
@@ -22,7 +24,6 @@ import com.optc.optcdbmobile.data.database.entities.TrainingForestLocation;
 import com.optc.optcdbmobile.data.database.entities.TreasureLocation;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.optcdb.API;
-import com.optc.optcdbmobile.data.optcdb.Constants;
 import com.optc.optcdbmobile.data.optcdb.entities.Cooldown;
 import com.optc.optcdbmobile.data.optcdb.entities.Detail;
 import com.optc.optcdbmobile.data.optcdb.entities.FamilyContainer;
@@ -36,12 +37,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Integer> {
+public class BuildDatabaseAsyncTask extends AsyncTask<Void, String, Integer> {
     private WeakReference<Context> refContext;
     private WeakReference<View> refView;
 
-    BuildDatabaseAsyncTask(Context context, View view) {
-        refContext = new WeakReference<>(context);
+    public BuildDatabaseAsyncTask(View view) {
+        refContext = new WeakReference<>(view.getContext());
         refView = new WeakReference<>(view);
     }
 
@@ -58,30 +59,12 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Integer> {
     }
 
     @Override
-    protected void onProgressUpdate(State... values) {
+    protected void onProgressUpdate(String... values) {
 
-        State state = values[0];
+        String state = values[0];
 
-        /*
-        if (state.isCommandValid()) {
-            if (state.getCommand().equals("+max")) {
-                dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                dialog.setMax(state.getValue());
-            }
-
-            if (state.getCommand().equals("-max")) {
-                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                dialog.setMax(0);
-            }
-
-            if (state.getCommand().equals("increment")) {
-                dialog.incrementProgressBy(1);
-            }
-        }
-        */
-
-        if (state.isMessageValid()) {
-            dialog.setMessage(state.getMessage());
+        if (!state.isEmpty()) {
+            dialog.setMessage(state);
         }
 
     }
@@ -93,12 +76,12 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Integer> {
             Snackbar.make(refView.get(), "Database building complete", Snackbar.LENGTH_LONG).show();
         } else if (result == -1) {
             Snackbar.make(refView.get(), "Error building database", Snackbar.LENGTH_LONG)
-                    .setActionTextColor(255 & 0xffffff)
+                    .setActionTextColor(Color.RED)
                     .setAction("REDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             if (!refContext.isEnqueued() && !refView.isEnqueued())
-                                new BuildDatabaseAsyncTask(refContext.get(), refView.get()).execute();
+                                new BuildDatabaseAsyncTask(refView.get()).execute();
                         }
                     });
         }
@@ -116,47 +99,47 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Integer> {
         List<Object> dropsList = null;
         List<FamilyContainer> familyList = null;
 
-        publishProgress(new State("Downloading data...\nPlease wait"));
+        publishProgress(("Downloading data...\nPlease wait"));
 
 
         final Future<List<Unit>> futureUnits = service.submit(new Callable<List<Unit>>() {
             @Override
             public List<Unit> call() throws Exception {
-                return (List<Unit>) API.getData(Constants.UNITS_TYPE);
+                return (List<Unit>) API.getData(Constants.APIType.UNITS_TYPE);
             }
         });
 
         final Future<List<Detail>> futureDetails = service.submit(new Callable<List<Detail>>() {
             @Override
             public List<Detail> call() throws Exception {
-                return (List<Detail>) API.getData(Constants.DETAILS_TYPE);
+                return (List<Detail>) API.getData(Constants.APIType.DETAILS_TYPE);
             }
         });
 
         final Future<List<Cooldown>> futureCooldown = service.submit(new Callable<List<Cooldown>>() {
             @Override
             public List<Cooldown> call() throws Exception {
-                return (List<Cooldown>) API.getData(Constants.COOLDOWNS_TYPE);
+                return (List<Cooldown>) API.getData(Constants.APIType.COOLDOWNS_TYPE);
             }
         });
 
         final Future<List<Evolution>> futureEvolution = service.submit(new Callable<List<Evolution>>() {
             @Override
             public List<Evolution> call() throws Exception {
-                return (List<Evolution>) API.getData(Constants.EVOLUTIONS_TYPE);
+                return (List<Evolution>) API.getData(Constants.APIType.EVOLUTIONS_TYPE);
             }
         });
 
         final Future<List<Object>> futureDrops = service.submit(new Callable<List<Object>>() {
             @Override
             public List<Object> call() throws Exception {
-                return (List<Object>) API.getData(Constants.DROPS_TYPE);
+                return (List<Object>) API.getData(Constants.APIType.DROPS_TYPE);
             }
         });
         final Future<List<FamilyContainer>> futureFamily = service.submit(new Callable<List<FamilyContainer>>() {
             @Override
             public List<FamilyContainer> call() throws Exception {
-                return (List<FamilyContainer>) API.getData(Constants.FAMILIES_TYPE);
+                return (List<FamilyContainer>) API.getData(Constants.APIType.FAMILIES_TYPE);
             }
         });
 
@@ -165,27 +148,27 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Integer> {
             boolean result = service.awaitTermination(10, TimeUnit.SECONDS);
             if (!result) {
                 if (!futureUnits.isDone()) {
-                    publishProgress(new State("Downloading remains units data"));
+                    publishProgress(("Downloading remains units data"));
                     unitList = futureUnits.get();
                 }
                 if (!futureEvolution.isDone()) {
-                    publishProgress(new State("Downloading reminas evolutions data"));
+                    publishProgress(("Downloading reminas evolutions data"));
                     evolutionList = futureEvolution.get();
                 }
                 if (!futureCooldown.isDone()) {
-                    publishProgress(new State("Downloading remains cooldowns data"));
+                    publishProgress(("Downloading remains cooldowns data"));
                     cooldownList = futureCooldown.get();
                 }
                 if (!futureDrops.isDone()) {
-                    publishProgress(new State("Downloading remains drops data"));
+                    publishProgress(("Downloading remains drops data"));
                     dropsList = futureDrops.get();
                 }
                 if (!futureDetails.isDone()) {
-                    publishProgress(new State("Downloading remains details data"));
+                    publishProgress(("Downloading remains details data"));
                     detailList = futureDetails.get();
                 }
                 if (!futureFamily.isDone()) {
-                    publishProgress(new State("Downloading remains families data"));
+                    publishProgress(("Downloading remains families data"));
                     familyList = futureFamily.get();
                 }
 
@@ -213,27 +196,27 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Integer> {
             OPTCDatabase database = OPTCDatabase.getInstance(refContext.get());
             database.clearAllTables();
 
-/*            publishProgress(new State("Populating units table..."));
+/*            publishProgress( ("Populating units table..."));
             database.unitDAO().insert(unitList);
 */
 
             String msg = "Populating units table...";
             int count = 0;
             int max = unitList.size();
-            publishProgress(new State(msg));
+            publishProgress((msg));
             for (Unit unit : unitList) {
                 synchronized (unit) {
                     System.out.println(unit.getId());
                 }
                 database.unitDAO().insert(unit);
                 count++;
-                publishProgress(State.buildProgress(msg, max, count));
+                publishProgress(buildProgress(msg, max, count));
             }
 
             msg = "Populating family table and updating unit's family...";
             count = 0;
             max = familyList.size();
-            publishProgress(new State(msg));
+            publishProgress((msg));
             for (int index = 0; index < familyList.size(); index++) {
 
                 FamilyContainer familyContainer = familyList.get(index);
@@ -247,14 +230,14 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Integer> {
                 }
 
                 count++;
-                publishProgress(State.buildProgress(msg, max, count));
+                publishProgress(buildProgress(msg, max, count));
             }
 
 
             msg = "Inserting all units details";
             count = 0;
             max = detailList.size();
-            publishProgress(new State(msg));
+            publishProgress((msg));
 
             for (Detail detail : detailList) {
 
@@ -273,36 +256,36 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Integer> {
                 database.potentialDescriptionDAO().insert(detail.getPotentialDescriptionList());
 
                 count++;
-                publishProgress(State.buildProgress(msg, max, count));
+                publishProgress(buildProgress(msg, max, count));
             }
 
 
             count = 0;
             max = cooldownList.size();
             msg = "Updating cooldowns for special...";
-            publishProgress(new State(msg));
+            publishProgress((msg));
             for (Cooldown cooldown : cooldownList) {
                 database.specialDescriptionDAO().updateCooldown(cooldown.getId(), cooldown.getMin(), cooldown.getMax());
                 count++;
-                publishProgress(State.buildProgress(msg, max, count));
+                publishProgress(buildProgress(msg, max, count));
             }
 
 
             count = 0;
             max = evolutionList.size();
             msg = "Populating evolutions table...";
-            publishProgress(new State(msg));
+            publishProgress((msg));
             //database.evolutionDAO().insert(evolutionList);
             for (Evolution evolution : evolutionList) {
                 database.evolutionDAO().insert(evolution);
                 count++;
-                publishProgress(State.buildProgress(msg, max, count));
+                publishProgress(buildProgress(msg, max, count));
             }
 
             msg = "Populating drops table...";
             count = 0;
             max = dropsList.size();
-            publishProgress(new State(msg));
+            publishProgress((msg));
 
 
             for (Object obj : dropsList) {
@@ -335,7 +318,7 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Integer> {
                 }
 
                 count++;
-                publishProgress(State.buildProgress(msg, max, count));
+                publishProgress(buildProgress(msg, max, count));
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -343,6 +326,11 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, State, Integer> {
         }
 
         return 1;
+    }
+
+
+    private String buildProgress(String msg, int max, int count) {
+        return String.format("%s\n%d/%d", msg, count, max);
     }
 }
 

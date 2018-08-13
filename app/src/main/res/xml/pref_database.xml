@@ -24,6 +24,7 @@
         <com.optc.optcdbmobile.data.ui.settings.SingleLineTextViewPreference
             android:key="@string/pref_database_version_key"
             android:title="@string/pref_database_version_title"
+            android:defaultValue="-1"
             app:allBackgroundColor="@color/colorPrimary"
             app:titleColor="@color/textColorPrimary"
             app:summaryColor="@color/textColorPrimary" />

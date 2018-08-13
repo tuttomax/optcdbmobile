@@ -1,5 +1,6 @@
 package com.optc.optcdbmobile;
 
+import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.entities.BoosterEvolverLocation;
 import com.optc.optcdbmobile.data.database.entities.FortnightLocation;
 import com.optc.optcdbmobile.data.database.entities.Location;
@@ -10,7 +11,6 @@ import com.optc.optcdbmobile.data.database.entities.SpecialLocation;
 import com.optc.optcdbmobile.data.database.entities.TrainingForestLocation;
 import com.optc.optcdbmobile.data.database.entities.TreasureLocation;
 import com.optc.optcdbmobile.data.optcdb.API;
-import com.optc.optcdbmobile.data.optcdb.Constants;
 
 import org.junit.Test;
 
@@ -25,6 +25,16 @@ import java.util.List;
 
 public class ExampleUnitTest {
 
+    @Test
+    public void getVersion() {
+        try {
+            String v = (String) API.getData(Constants.APIType.VERSION_TYPE);
+            Double d = Double.valueOf(v);
+            Integer i = Integer.valueOf(v);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     private class Pair<K, V> {
         private K key;
         private V value;
@@ -60,7 +70,7 @@ public class ExampleUnitTest {
     @Test
     public void testDuplicate() {
 
-        List<Object> evos = (List<Object>) API.getData(Constants.DROPS_TYPE);
+        List<Object> evos = (List<Object>) API.getData(Constants.APIType.DROPS_TYPE);
 
 
         List<Object> checked = new ArrayList<>();

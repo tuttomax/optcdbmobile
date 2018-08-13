@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import com.optc.optcdbmobile.R;
+import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 findPreference(key)
                         .setSummary(
                                 PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this)
-                                        .getString(key, ""));
+                                        .getInt(key, -1));
             }
         }
     };
@@ -33,12 +34,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
-
-        /**
-         * catch unexpected error
-         */
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
-
 
     }
 
@@ -114,8 +109,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             rebuild_database.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    //TODO move on OPTCDatabaseRepository
-                    new BuildDatabaseAsyncTask(getActivity(), getView()).execute();
+                    OPTCDatabaseRepository.getInstance(getActivity().getApplication()).BuildDatabase(getView());
                     return true;
                 }
             });

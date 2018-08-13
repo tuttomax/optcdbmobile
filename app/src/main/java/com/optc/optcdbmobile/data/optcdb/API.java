@@ -1,6 +1,7 @@
 package com.optc.optcdbmobile.data.optcdb;
 
 import com.google.common.base.Charsets;
+import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.optcdb.api_parser.CooldownsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.DetailsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.DropsParser;
@@ -20,32 +21,32 @@ import java.util.Map;
 public class API {
 
     private final static HashMap<Byte, String> url_table = new HashMap<Byte, String>(6) {{
-        put(Constants.VERSION_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/version.js");
-        put(Constants.UNITS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/units.js");
-        put(Constants.EVOLUTIONS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/evolutions.js");
-        put(Constants.DROPS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/drops.js");
-        put(Constants.DETAILS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/details.js");
-        put(Constants.COOLDOWNS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/cooldowns.js");
-        put(Constants.FAMILIES_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/families.js");
+        put(Constants.APIType.VERSION_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/version.js");
+        put(Constants.APIType.UNITS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/units.js");
+        put(Constants.APIType.EVOLUTIONS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/evolutions.js");
+        put(Constants.APIType.DROPS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/drops.js");
+        put(Constants.APIType.DETAILS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/details.js");
+        put(Constants.APIType.COOLDOWNS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/cooldowns.js");
+        put(Constants.APIType.FAMILIES_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/families.js");
     }};
     private final static HashMap<Byte, String> name_table = new HashMap<Byte, String>(6) {{
-        put(Constants.VERSION_TYPE, "dbVersion");
-        put(Constants.UNITS_TYPE, "units");
-        put(Constants.EVOLUTIONS_TYPE, "evolutions");
-        put(Constants.DROPS_TYPE, "drops");
-        put(Constants.DETAILS_TYPE, "details");
-        put(Constants.COOLDOWNS_TYPE, "cooldowns");
-        put(Constants.FAMILIES_TYPE, "families");
+        put(Constants.APIType.VERSION_TYPE, "dbVersion");
+        put(Constants.APIType.UNITS_TYPE, "units");
+        put(Constants.APIType.EVOLUTIONS_TYPE, "evolutions");
+        put(Constants.APIType.DROPS_TYPE, "drops");
+        put(Constants.APIType.DETAILS_TYPE, "details");
+        put(Constants.APIType.COOLDOWNS_TYPE, "cooldowns");
+        put(Constants.APIType.FAMILIES_TYPE, "families");
     }};
 
     private final static HashMap<Byte, BaseParser> parser_table = new HashMap<Byte, BaseParser>(6) {{
-        put(Constants.VERSION_TYPE, new VersionParser());
-        put(Constants.UNITS_TYPE, new UnitsParser());
-        put(Constants.EVOLUTIONS_TYPE, new EvolutionsParser());
-        put(Constants.DROPS_TYPE, new DropsParser());
-        put(Constants.DETAILS_TYPE, new DetailsParser());
-        put(Constants.COOLDOWNS_TYPE, new CooldownsParser());
-        put(Constants.FAMILIES_TYPE, new FamilyParser());
+        put(Constants.APIType.VERSION_TYPE, new VersionParser());
+        put(Constants.APIType.UNITS_TYPE, new UnitsParser());
+        put(Constants.APIType.EVOLUTIONS_TYPE, new EvolutionsParser());
+        put(Constants.APIType.DROPS_TYPE, new DropsParser());
+        put(Constants.APIType.DETAILS_TYPE, new DetailsParser());
+        put(Constants.APIType.COOLDOWNS_TYPE, new CooldownsParser());
+        put(Constants.APIType.FAMILIES_TYPE, new FamilyParser());
     }};
 
 
