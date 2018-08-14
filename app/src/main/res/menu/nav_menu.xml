@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <!-- TODO Extract resource -->
+        <item
+            android:id="@+id/nav_menu_character_table"
+            android:title="Character table" />
+
+        <item
+            android:id="@+id/nav_menu_damage_calculator"
+            android:title="Damage calculator" />
+
+        <item
+            android:id="@+id/nav_menu_drop_table"
+            android:title="Drop table" />
+
+        <item
+            android:id="@+id/nav_menu_evolution_helper"
+            android:title="Evolution helper" />
+
+        <item
+            android:id="@+id/nav_menu_slot_planner"
+            android:title="Slot planner" />
+        <item
+            android:id="@+id/nav_menu_probability_calculator"
+            android:title="Propability calculator" />
+
+    </group>
+</menu>

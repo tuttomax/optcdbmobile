@@ -29,8 +29,8 @@ public class OPTCDatabaseRepository {
         return INSTANCE;
     }
 
-
     private final OPTCDatabase database;
+
     private final ConnectivityManager connectivityManager;
     private final SharedPreferences sharedPreferences;
 

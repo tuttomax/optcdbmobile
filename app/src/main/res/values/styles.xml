@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- base set of styles that apply to all versions -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorSecondary</item>
 
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+    </style>
+
+    <style name="BaseAppTheme.NoActionBar" parent="BaseAppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="BaseAppTheme.ActionBar.Dark" parent="BaseAppTheme">
         <item name="actionBarStyle">@style/ActionBarStyle</item>
-
     </style>
 
-
-    <style name="ActionBarStyle" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@color/colorPrimary</item>
+    <style name="ActionBarStyle" parent="">
+        <item name="android:background">@color/primaryColor</item>
+        <item name="android:titleTextStyle">@style/ActionBarStyle.TitleTextStyle</item>\
     </style>
+
+    <style name="ActionBarStyle.TitleTextStyle">
+        <item name="android:color">@color/secondaryTextColor</item>
+        <item name="colorControlNormal">@color/secondaryTextColor</item>
+    </style>
+
+    <style name="MainTheme" parent="BaseAppTheme.NoActionBar" />
+
+    <style name="SettingsTheme" parent="BaseAppTheme.ActionBar.Dark" />
+
 </resources>

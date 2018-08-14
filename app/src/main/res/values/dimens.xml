@@ -2,4 +2,6 @@
 <resources>
     <dimen name="layout_marginStart">15dp</dimen>
     <dimen name="layout_marginEnd">6dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
 </resources>

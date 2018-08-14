@@ -7,11 +7,13 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
+import com.optc.optcdbmobile.data.tasks.CheckDatabaseVersionAsyncTask;
 
 import java.util.List;
 
@@ -37,6 +39,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -58,6 +66,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
     @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }
+        return super.onMenuItemSelected(featureId, item);
+    }
+
+    @Override
     protected boolean isValidFragment(String fragmentName) {
         return fragmentName.equals(GeneralPreferenceFragment.class.getName()) ||
                 fragmentName.equals(DatabasePreferenceFragment.class.getName());
@@ -73,11 +90,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
 
             PreferenceManager.setDefaultValues(getActivity(), R.xml.pref_general, false);
             addPreferencesFromResource(R.xml.pref_general);
 
-            setHasOptionsMenu(true);
         }
 
         @Override
@@ -103,6 +120,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.pref_database);
             setHasOptionsMenu(true);
 
+            Integer version = PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt(getString(R.string.pref_database_version_key), -1);
+            findPreference(getString(R.string.pref_database_version_key)).setSummary(String.valueOf(version));
 
             final Preference rebuild_database = findPreference(getString(R.string.pref_rebuild_database_key));
 
@@ -126,5 +145,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
 
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            new CheckDatabaseVersionAsyncTask(PreferenceManager.getDefaultSharedPreferences(getActivity()), getView());
+        }
     }
 }

@@ -2,11 +2,12 @@ package com.optc.optcdbmobile.data.tasks;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.entities.BoosterEvolverLocation;
@@ -41,13 +42,14 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, String, Integer> {
     private WeakReference<Context> refContext;
     private WeakReference<View> refView;
 
+    private ProgressDialog dialog;
+    private Integer newVersion;
+
     public BuildDatabaseAsyncTask(View view) {
         refContext = new WeakReference<>(view.getContext());
         refView = new WeakReference<>(view);
     }
 
-
-    private ProgressDialog dialog;
 
     @Override
     protected void onPreExecute() {
@@ -73,10 +75,11 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, String, Integer> {
     protected void onPostExecute(Integer result) {
         dialog.dismiss();
         if (result == 1) {
+            PreferenceManager.getDefaultSharedPreferences(refContext.get()).edit().putInt(Constants.Settings.pref_database_version_key, newVersion).commit();
             Snackbar.make(refView.get(), "Database building complete", Snackbar.LENGTH_LONG).show();
         } else if (result == -1) {
             Snackbar.make(refView.get(), "Error building database", Snackbar.LENGTH_LONG)
-                    .setActionTextColor(Color.RED)
+                    .setActionTextColor(refView.get().getResources().getColor(R.color.secondaryLightColor))
                     .setAction("REDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -324,7 +327,7 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, String, Integer> {
             ex.printStackTrace();
             return -1;
         }
-
+        newVersion = (Integer) API.getData(Constants.APIType.VERSION_TYPE);
         return 1;
     }
 

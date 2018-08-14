@@ -1,4 +1,4 @@
-package com.optc.optcdbmobile.data.ui.settings;
+package com.optc.optcdbmobile.data.ui.controls.settings;
 
 import android.annotation.TargetApi;
 import android.content.Context;

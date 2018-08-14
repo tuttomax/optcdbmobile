@@ -1,11 +1,11 @@
 package com.optc.optcdbmobile.data.tasks;
 
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.optcdb.API;
 
@@ -53,7 +53,7 @@ public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte>
             if (!refView.isEnqueued()) {
                 if (action == ACTION_SHOW_UPDATE) {
                     Snackbar.make(refView.get(), "New database version available", Snackbar.LENGTH_LONG)
-                            .setActionTextColor(Color.BLUE)
+                            .setActionTextColor(refView.get().getResources().getColor(R.color.secondaryLightColor))
                             .setAction("UPDATE", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {

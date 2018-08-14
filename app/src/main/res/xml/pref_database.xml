@@ -21,13 +21,13 @@
             android:key="@string/pref_rebuild_database_key"
             android:persistent="false" />
 
-        <com.optc.optcdbmobile.data.ui.settings.SingleLineTextViewPreference
+        <com.optc.optcdbmobile.data.ui.controls.settings.SingleLineTextViewPreference
             android:key="@string/pref_database_version_key"
             android:title="@string/pref_database_version_title"
             android:defaultValue="-1"
-            app:allBackgroundColor="@color/colorPrimary"
-            app:titleColor="@color/textColorPrimary"
-            app:summaryColor="@color/textColorPrimary" />
+            app:allBackgroundColor="@color/primaryDarkColor"
+            app:titleColor="@color/primaryTextColor"
+            app:summaryColor="@color/primaryTextColor" />
     </PreferenceCategory>
 
 </PreferenceScreen>
