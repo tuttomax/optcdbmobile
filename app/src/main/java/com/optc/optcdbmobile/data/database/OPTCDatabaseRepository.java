@@ -1,6 +1,7 @@
 package com.optc.optcdbmobile.data.database;
 
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +15,8 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.optc.optcdbmobile.data.Constants;
-import com.optc.optcdbmobile.data.tasks.BuildDatabaseAsyncTask;
 import com.optc.optcdbmobile.data.tasks.CheckDatabaseVersionAsyncTask;
+import com.optc.optcdbmobile.data.tasks.ParallelBuildingDatabaseAsyncTask;
 
 
 public class OPTCDatabaseRepository {
@@ -80,18 +81,19 @@ public class OPTCDatabaseRepository {
     }
 
 
-    public void BuildDatabase(View view) {
+    public void BuildDatabase(Activity activity) {
+        View view = activity.findViewById(android.R.id.content);
         if (thereIsValidConnection(view)) {
-            new BuildDatabaseAsyncTask(view).execute();
-
-            new CheckDatabaseVersionAsyncTask(sharedPreferences, view).execute();
+            //new BuildDatabaseAsyncTask(view).execute();
+            new ParallelBuildingDatabaseAsyncTask(activity).execute();
+            new CheckDatabaseVersionAsyncTask(activity).execute();
         }
     }
 
-    public void CheckVersion(View view) {
-
+    public void CheckVersion(Activity activity) {
+        View view = activity.findViewById(android.R.id.content);
         if (thereIsConnection(view)) {
-            new CheckDatabaseVersionAsyncTask(sharedPreferences, view).execute();
+            new CheckDatabaseVersionAsyncTask(activity).execute();
         }
     }
 

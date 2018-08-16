@@ -1,7 +1,9 @@
 package com.optc.optcdbmobile.data.tasks;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
@@ -16,17 +18,19 @@ public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte>
     private static byte ACTION_SHOW_UPDATE = 1;
     private static byte ACTION_AUTOMATIC_UPDATE = 2;
 
-
-    private final WeakReference<View> refView;
+    private WeakReference<Activity> refActivity;
+    private WeakReference<View> refView;
     private final SharedPreferences preferences;
 
     private Integer currentVersion;
     private boolean autoDownload;
 
-    public CheckDatabaseVersionAsyncTask(SharedPreferences preferences, View view) {
-        this.preferences = preferences;
-        this.refView = new WeakReference<>(view);
+    public CheckDatabaseVersionAsyncTask(Activity activity) {
+        refActivity = new WeakReference<>(activity);
+        refView = new WeakReference<>(activity.findViewById(android.R.id.content));
+        preferences = PreferenceManager.getDefaultSharedPreferences(activity);
     }
+
 
     @Override
     protected void onPreExecute() {
@@ -44,25 +48,30 @@ public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte>
         if (updateAvailable) {
             return autoDownload ? ACTION_AUTOMATIC_UPDATE : ACTION_SHOW_UPDATE;
         }
+
         return null;
     }
 
     @Override
     protected void onPostExecute(Byte action) {
         if (action != null) {
-            if (!refView.isEnqueued()) {
+            if (!refActivity.isEnqueued()) {
                 if (action == ACTION_SHOW_UPDATE) {
+                    PreferenceManager.getDefaultSharedPreferences(refActivity.get()).edit().putBoolean(Constants.Settings.pref_update_available, true).commit();
+
                     Snackbar.make(refView.get(), "New database version available", Snackbar.LENGTH_LONG)
                             .setActionTextColor(refView.get().getResources().getColor(R.color.secondaryLightColor))
                             .setAction("UPDATE", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    new BuildDatabaseAsyncTask(refView.get()).execute();
+                                    //new BuildDatabaseAsyncTask(refView.get()).execute();
+                                    new ParallelBuildingDatabaseAsyncTask(refActivity.get()).execute();
                                 }
                             }).show();
                 } else if (action == ACTION_AUTOMATIC_UPDATE) {
                     Snackbar.make(refView.get(), "Updating database...", Snackbar.LENGTH_SHORT).show();
-                    new BuildDatabaseAsyncTask(refView.get()).execute();
+                    //new BuildDatabaseAsyncTask(refView.get()).execute();
+                    new ParallelBuildingDatabaseAsyncTask(refActivity.get()).execute();
                 }
             }
         }

@@ -38,6 +38,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+@Deprecated
+/*
+    @deprecated: Use ParallelBuildingDatabaseAsyncTask.
+    Don't delete in case of BUGS in ParallelBuildingDatabaseAsyncTask
+*/
 public class BuildDatabaseAsyncTask extends AsyncTask<Void, String, Integer> {
     private WeakReference<Context> refContext;
     private WeakReference<View> refView;
@@ -208,9 +213,6 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, String, Integer> {
             int max = unitList.size();
             publishProgress((msg));
             for (Unit unit : unitList) {
-                synchronized (unit) {
-                    System.out.println(unit.getId());
-                }
                 database.unitDAO().insert(unit);
                 count++;
                 publishProgress(buildProgress(msg, max, count));
@@ -293,14 +295,8 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, String, Integer> {
 
             for (Object obj : dropsList) {
                 if (obj instanceof Location) {
-                    System.out.println(((Location) obj).getId());
                     database.locationDAO().insert((Location) obj);
                 } else if (obj instanceof LocationDrops) {
-
-                    System.out.println("--- Location drops: ---");
-                    System.out.println(((LocationDrops) obj).getLocationId());
-                    System.out.println(((LocationDrops) obj).getUnitId());
-
                     database.locationDropsDAO().insert((LocationDrops) obj);
                 } else if (obj instanceof LocationChallengeData) {
                     database.locationChallengeDataDAO().insert((LocationChallengeData) obj);

@@ -61,8 +61,6 @@
         <item>6</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="main_label">OnePieceTC - Companion</string>
     <string name="nav_menu_settings_title">Settings</string>
 </resources>

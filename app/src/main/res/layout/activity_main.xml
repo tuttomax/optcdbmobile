@@ -12,6 +12,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include layout="@layout/toolbar" />
+
+        <!--
         <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/toolbar"
@@ -19,6 +22,7 @@
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             android:minHeight="?attr/actionBarSize" />
+        -->
 
         <FrameLayout
             android:id="@+id/content_frame"
@@ -43,11 +47,11 @@
             android:id="@+id/nav_menu_settings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/nav_menu_settings_title"
-            android:padding="10dp"
+            android:layout_gravity="bottom"
             android:background="@color/secondaryLightColor"
-            android:textColor="@color/primaryTextColor"
-            android:layout_gravity="bottom" />
+            android:padding="10dp"
+            android:text="@string/nav_menu_settings_title"
+            android:textColor="@color/primaryTextColor" />
 
     </android.support.design.widget.NavigationView>
 

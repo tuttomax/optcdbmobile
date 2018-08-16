@@ -7,13 +7,17 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.optc.optcdbmobile.R;
+import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
-import com.optc.optcdbmobile.data.tasks.CheckDatabaseVersionAsyncTask;
 
 import java.util.List;
 
@@ -29,6 +33,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                                 PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this)
                                         .getInt(key, -1));
             }
+
+            if (key.equals(Constants.Settings.pref_update_available)) {
+                //TODO: BUG cause crash
+                findPreference(getString(R.string.pref_rebuild_database_key)).setSummary("Update database");
+            }
         }
     };
 
@@ -37,6 +46,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onCreate(savedInstanceState);
         setupActionBar();
 
+        //Setting default value for available_update
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_update_available, false).commit();
+
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
     }
 
 
@@ -58,6 +71,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
     private void setupActionBar() {
+        LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
+
+        AppBarLayout bar = (AppBarLayout) LayoutInflater.from(this).inflate(R.layout.toolbar, root, false);
+        root.addView(bar, 0); // insert at top
+        setSupportActionBar((Toolbar) bar.findViewById(R.id.toolbar));
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             // Show the Up button in the action bar.
@@ -128,7 +146,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             rebuild_database.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    OPTCDatabaseRepository.getInstance(getActivity().getApplication()).BuildDatabase(getView());
+                    OPTCDatabaseRepository.getInstance(getActivity().getApplication()).BuildDatabase(getActivity());
                     return true;
                 }
             });
@@ -149,7 +167,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onResume() {
             super.onResume();
-            new CheckDatabaseVersionAsyncTask(PreferenceManager.getDefaultSharedPreferences(getActivity()), getView());
+            OPTCDatabaseRepository.getInstance(getActivity().getApplication()).CheckVersion(getActivity());
         }
     }
 }

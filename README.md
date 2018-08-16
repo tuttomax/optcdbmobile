@@ -3,7 +3,7 @@ Wrapper mobile of http://optc-db.github.io
 
 ### TODO
 
-- [ ] Parallel DatabaseBuildingAsyncTask
+- [X] Parallel DatabaseBuildingAsyncTask
 
 ---
 

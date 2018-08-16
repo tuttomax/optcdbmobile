@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.optc.optcdbmobile">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,8 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/BaseAppTheme">
-
-
         <activity
             android:name=".data.ui.activities.MainActivity"
             android:label="@string/main_label"
@@ -28,7 +27,8 @@
             android:label="@string/title_activity_settings"
             android:theme="@style/SettingsTheme"
 
-            android:parentActivityName=".data.ui.activities.MainActivity">
+            android:parentActivityName=".data.ui.activities.MainActivity"
+            tools:targetApi="jelly_bean">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".data.ui.activities.MainActivity" />

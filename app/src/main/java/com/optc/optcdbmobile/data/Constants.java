@@ -46,5 +46,6 @@ public class Constants {
         public final static String pref_wifi_download_key = "wifi_download";
         public final static String pref_auto_download_key = "auto_download";
         public final static String pref_database_version_key = "database_version";
+        public final static String pref_update_available = "update_available";
     }
 }

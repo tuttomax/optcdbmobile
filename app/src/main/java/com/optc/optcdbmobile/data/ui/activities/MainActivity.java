@@ -18,6 +18,9 @@ import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.MainViewModel;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 
+
+// TODO Avoid activity in async task
+
 public class MainActivity extends AppCompatActivity {
 
     private MainViewModel mainViewModel;
@@ -26,9 +29,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //TODO Remove this - DEBUG ONLY
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         View view = findViewById(android.R.id.content);
         if (view == null) throw new RuntimeException("Container view is null");
 
-        databaseRepository.CheckVersion(view);
+        databaseRepository.CheckVersion(this);
     }
 
 

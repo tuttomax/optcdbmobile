@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="BaseAppTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/primaryColor</item>
@@ -10,24 +10,43 @@
     <style name="BaseAppTheme.NoActionBar" parent="BaseAppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+        <item name="android:toolbarStyle" tools:targetApi="lollipop">
+            @style/BaseAppTheme.ToolBar.Light
+        </item>
+        <item name="toolbarStyle">@style/BaseAppTheme.ToolBar.Light</item>
     </style>
 
-    <style name="BaseAppTheme.ActionBar.Dark" parent="BaseAppTheme">
-        <item name="actionBarStyle">@style/ActionBarStyle</item>
+    <style name="BaseAppTheme.ToolBar.Light" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/primaryLightLightColor</item>
+        <item name="android:titleTextStyle">@style/BaseAppTheme.Toolbar.Light.Title</item>
     </style>
 
-    <style name="ActionBarStyle" parent="">
-        <item name="android:background">@color/primaryColor</item>
-        <item name="android:titleTextStyle">@style/ActionBarStyle.TitleTextStyle</item>\
-    </style>
-
-    <style name="ActionBarStyle.TitleTextStyle">
-        <item name="android:color">@color/secondaryTextColor</item>
-        <item name="colorControlNormal">@color/secondaryTextColor</item>
+    <style name="BaseAppTheme.Toolbar.Light.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center_horizontal|center_vertical</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 
     <style name="MainTheme" parent="BaseAppTheme.NoActionBar" />
 
-    <style name="SettingsTheme" parent="BaseAppTheme.ActionBar.Dark" />
+    <style name="SettingsTheme" parent="BaseAppTheme.NoActionBar" />
 
+
+    <style name="BaseAppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Define color properties as desired -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="android:textColorHighlight">@color/secondaryLightColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="colorControlNormal">@color/primaryTextColor</item>
+        <!-- Define window properties as desired -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+    </style>
 </resources>
