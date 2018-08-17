@@ -20,7 +20,6 @@ public class ListTaskDialog extends DialogFragment {
     public final static String TAG = "ListTaskDialog";
     private final ListTaskAdapter adapter = new ListTaskAdapter();
 
-
     public static ListTaskDialog newInstance(String title) {
 
         Bundle args = new Bundle();
@@ -66,13 +65,17 @@ public class ListTaskDialog extends DialogFragment {
         view.setAdapter(adapter);
     }
 
-    public TaskDelegate getAdapterDelegate() {
-        return adapter;
-    }
 
     @Override
     public void dismiss() {
         adapter.termination();
         super.dismiss();
     }
+
+    public ListTaskAdapter getAdapter() {
+        return adapter;
+    }
+
+
+
 }

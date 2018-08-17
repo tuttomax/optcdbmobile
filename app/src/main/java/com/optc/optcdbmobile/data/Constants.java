@@ -42,10 +42,19 @@ public class Constants {
     }
 
 
-    public class Settings {
+    public static class Settings {
         public final static String pref_wifi_download_key = "wifi_download";
         public final static String pref_auto_download_key = "auto_download";
         public final static String pref_database_version_key = "database_version";
-        public final static String pref_update_available = "update_available";
+        /**
+         * little trick used inside CheckVersionAsyncTask for updating UI
+         */
+        public volatile static boolean there_is_update = false;
+
+    }
+
+    public class DatabaseVerionTask {
+        public final static byte ACTION_SHOW_UPDATE = 1;
+        public final static byte ACTION_AUTOMATIC_UPDATE = 2;
     }
 }

@@ -29,7 +29,7 @@ public class CooldownsPopulateTask extends DatabaseTask {
                 increment();
             }
         } catch (Exception ex) {
-            setState(ERROR);
+            setError(ex);
             ex.printStackTrace();
             return;
         }

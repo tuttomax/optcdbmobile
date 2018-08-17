@@ -4,7 +4,6 @@ import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.database.threading.DatabaseTask;
-import com.optc.optcdbmobile.data.database.threading.Task;
 import com.optc.optcdbmobile.data.database.threading.TaskCallback;
 import com.optc.optcdbmobile.data.optcdb.API;
 
@@ -34,8 +33,8 @@ public class UnitsPopulateTask extends DatabaseTask {
             }
 
         } catch (Exception ex) {
+            setError(ex);
             ex.printStackTrace();
-            setState(Task.ERROR);
             return;
         }
 

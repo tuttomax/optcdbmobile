@@ -45,7 +45,7 @@ public class DetailsPopulatorTask extends DatabaseTask {
             }
 
         } catch (Exception ex) {
-            setState(ERROR);
+            setError(ex);
             ex.printStackTrace();
             return;
         }

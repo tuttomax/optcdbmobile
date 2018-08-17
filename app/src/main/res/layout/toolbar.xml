@@ -15,5 +15,6 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/BaseAppTheme.ToolBar.Light" />
+        android:background="@color/secondaryLightLightColor"
+        app:titleTextColor="@color/secondaryTextColor" />
 </android.support.design.widget.AppBarLayout>

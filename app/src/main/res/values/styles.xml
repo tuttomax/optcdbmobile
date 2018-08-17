@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="BaseAppTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/primaryColor</item>
@@ -10,29 +10,14 @@
     <style name="BaseAppTheme.NoActionBar" parent="BaseAppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
-        <item name="android:toolbarStyle" tools:targetApi="lollipop">
-            @style/BaseAppTheme.ToolBar.Light
-        </item>
-        <item name="toolbarStyle">@style/BaseAppTheme.ToolBar.Light</item>
     </style>
 
-    <style name="BaseAppTheme.ToolBar.Light" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">@color/primaryLightLightColor</item>
-        <item name="android:titleTextStyle">@style/BaseAppTheme.Toolbar.Light.Title</item>
+
+    <style name="MainTheme" parent="BaseAppTheme.NoActionBar">
+
+        <item name="android:dialogPreferenceStyle">@style/BaseAppTheme.Dialog</item>
+        <item name="android:preferenceStyle">@style/BaseAppTheme.Preference</item>
     </style>
-
-    <style name="BaseAppTheme.Toolbar.Light.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:gravity">center_horizontal|center_vertical</item>
-        <item name="android:layout_gravity">center</item>
-    </style>
-
-    <style name="MainTheme" parent="BaseAppTheme.NoActionBar" />
-
-    <style name="SettingsTheme" parent="BaseAppTheme.NoActionBar" />
-
 
     <style name="BaseAppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
         <!-- Define color properties as desired -->
@@ -43,10 +28,18 @@
         <item name="colorControlNormal">@color/primaryTextColor</item>
         <!-- Define window properties as desired -->
         <item name="android:windowNoTitle">true</item>
-        <item name="android:layout_gravity">center</item>
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
+    </style>
+
+    <style name="BaseAppTheme.Preference" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="preferenceFragmentListStyle">@style/BaseAppTheme.Preference.List</item>
+    </style>
+
+    <style name="BaseAppTheme.Preference.List" parent="@style/PreferenceFragmentList">
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
     </style>
 </resources>

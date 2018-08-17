@@ -74,5 +74,9 @@ public abstract class Task implements Runnable {
         this.index = index;
     }
 
+    public void setError(Exception ex) {
+        setState(ERROR);
+        callback.onError(ex);
+    }
 
 }

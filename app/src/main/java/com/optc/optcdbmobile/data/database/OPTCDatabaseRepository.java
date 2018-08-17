@@ -1,8 +1,6 @@
 package com.optc.optcdbmobile.data.database;
 
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,19 +13,21 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.optc.optcdbmobile.data.Constants;
+import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
 import com.optc.optcdbmobile.data.tasks.CheckDatabaseVersionAsyncTask;
+import com.optc.optcdbmobile.data.tasks.CheckDatabaseVersionAsyncTaskListner;
 import com.optc.optcdbmobile.data.tasks.ParallelBuildingDatabaseAsyncTask;
+import com.optc.optcdbmobile.data.tasks.ParallelBuildingDatabaseAsyncTaskListner;
 
 
 public class OPTCDatabaseRepository {
     /* SINGLETON */
     private static OPTCDatabaseRepository INSTANCE;
 
-    public static OPTCDatabaseRepository getInstance(Application application) {
-        if (INSTANCE == null) {
-            INSTANCE = new OPTCDatabaseRepository(application);
-        }
-        return INSTANCE;
+    public OPTCDatabaseRepository(Context context) {
+        connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        database = OPTCDatabase.getInstance(context);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     private final OPTCDatabase database;
@@ -35,10 +35,11 @@ public class OPTCDatabaseRepository {
     private final ConnectivityManager connectivityManager;
     private final SharedPreferences sharedPreferences;
 
-    public OPTCDatabaseRepository(Application application) {
-        connectivityManager = (ConnectivityManager) application.getSystemService(Context.CONNECTIVITY_SERVICE);
-        database = OPTCDatabase.getInstance(application);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application);
+    public static OPTCDatabaseRepository getInstance(Context context) {
+        if (INSTANCE == null) {
+            INSTANCE = new OPTCDatabaseRepository(context);
+        }
+        return INSTANCE;
     }
 
 
@@ -80,20 +81,25 @@ public class OPTCDatabaseRepository {
         return false;
     }
 
+    public void BuildDatabase(AsyncTaskContext context) {
+        if (thereIsValidConnection(context.getView())) {
+            ParallelBuildingDatabaseAsyncTaskListner listner = new ParallelBuildingDatabaseAsyncTaskListner(context);
+            ParallelBuildingDatabaseAsyncTask databaseTask = new ParallelBuildingDatabaseAsyncTask(listner);
+            databaseTask.setDatabase(database);
+            databaseTask.setDelegate(listner.getDelegate());
+            databaseTask.execute();
 
-    public void BuildDatabase(Activity activity) {
-        View view = activity.findViewById(android.R.id.content);
-        if (thereIsValidConnection(view)) {
-            //new BuildDatabaseAsyncTask(view).execute();
-            new ParallelBuildingDatabaseAsyncTask(activity).execute();
-            new CheckDatabaseVersionAsyncTask(activity).execute();
+            CheckDatabaseVersionAsyncTask versionTask = new CheckDatabaseVersionAsyncTask(new CheckDatabaseVersionAsyncTaskListner(context));
+            versionTask.setPreferences(sharedPreferences);
+            versionTask.execute();
         }
     }
 
-    public void CheckVersion(Activity activity) {
-        View view = activity.findViewById(android.R.id.content);
-        if (thereIsConnection(view)) {
-            new CheckDatabaseVersionAsyncTask(activity).execute();
+    public void CheckVersion(AsyncTaskContext context) {
+        if (thereIsConnection(context.getView())) {
+            CheckDatabaseVersionAsyncTask task = new CheckDatabaseVersionAsyncTask(new CheckDatabaseVersionAsyncTaskListner(context));
+            task.setPreferences(sharedPreferences);
+            task.execute();
         }
     }
 

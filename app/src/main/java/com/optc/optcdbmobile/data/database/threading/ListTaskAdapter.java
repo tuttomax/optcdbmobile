@@ -196,6 +196,15 @@ public class ListTaskAdapter extends RecyclerView.Adapter<ListTaskAdapter.TaskVi
         });
     }
 
+    @Override
+    public void onError(Exception ex) {
+        executorService.shutdownNow();
+        if (!executorService.isTerminated()) {
+            termination();
+        }
+        Thread.currentThread().interrupt();
+    }
+
 
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
 

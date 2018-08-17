@@ -59,8 +59,8 @@ public class DropsPopulateTask extends DatabaseTask {
                 increment();
             }
         } catch (Exception ex) {
+            setError(ex);
             ex.printStackTrace();
-            setState(ERROR);
             return;
         }
 

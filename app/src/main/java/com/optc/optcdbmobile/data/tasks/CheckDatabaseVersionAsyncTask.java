@@ -1,39 +1,31 @@
 package com.optc.optcdbmobile.data.tasks;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 
-import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.optcdb.API;
 
-import java.lang.ref.WeakReference;
-
 public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte> {
 
-    private static byte ACTION_SHOW_UPDATE = 1;
-    private static byte ACTION_AUTOMATIC_UPDATE = 2;
-
-    private WeakReference<Activity> refActivity;
-    private WeakReference<View> refView;
-    private final SharedPreferences preferences;
+    private SharedPreferences preferences;
 
     private Integer currentVersion;
     private boolean autoDownload;
 
-    public CheckDatabaseVersionAsyncTask(Activity activity) {
-        refActivity = new WeakReference<>(activity);
-        refView = new WeakReference<>(activity.findViewById(android.R.id.content));
-        preferences = PreferenceManager.getDefaultSharedPreferences(activity);
+    private AsyncTaskListner<Byte> listener;
+
+    public CheckDatabaseVersionAsyncTask(AsyncTaskListner<Byte> listener) {
+        this.listener = listener;
     }
 
 
     @Override
     protected void onPreExecute() {
+        if (listener != null) {
+            listener.onPreExecute();
+        }
+
         currentVersion = preferences.getInt(Constants.Settings.pref_database_version_key, -1);
         autoDownload = preferences.getBoolean(Constants.Settings.pref_auto_download_key, false);
     }
@@ -45,8 +37,12 @@ public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte>
 
         boolean updateAvailable = currentVersion < newVersion;
 
+        Constants.Settings.there_is_update = updateAvailable;
+
         if (updateAvailable) {
-            return autoDownload ? ACTION_AUTOMATIC_UPDATE : ACTION_SHOW_UPDATE;
+            return autoDownload
+                    ? Constants.DatabaseVerionTask.ACTION_AUTOMATIC_UPDATE
+                    : Constants.DatabaseVerionTask.ACTION_SHOW_UPDATE;
         }
 
         return null;
@@ -54,26 +50,12 @@ public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte>
 
     @Override
     protected void onPostExecute(Byte action) {
-        if (action != null) {
-            if (!refActivity.isEnqueued()) {
-                if (action == ACTION_SHOW_UPDATE) {
-                    PreferenceManager.getDefaultSharedPreferences(refActivity.get()).edit().putBoolean(Constants.Settings.pref_update_available, true).commit();
-
-                    Snackbar.make(refView.get(), "New database version available", Snackbar.LENGTH_LONG)
-                            .setActionTextColor(refView.get().getResources().getColor(R.color.secondaryLightColor))
-                            .setAction("UPDATE", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    //new BuildDatabaseAsyncTask(refView.get()).execute();
-                                    new ParallelBuildingDatabaseAsyncTask(refActivity.get()).execute();
-                                }
-                            }).show();
-                } else if (action == ACTION_AUTOMATIC_UPDATE) {
-                    Snackbar.make(refView.get(), "Updating database...", Snackbar.LENGTH_SHORT).show();
-                    //new BuildDatabaseAsyncTask(refView.get()).execute();
-                    new ParallelBuildingDatabaseAsyncTask(refActivity.get()).execute();
-                }
-            }
+        if (listener != null) {
+            listener.onPostExecute(action);
         }
+    }
+
+    public void setPreferences(SharedPreferences preferences) {
+        this.preferences = preferences;
     }
 }

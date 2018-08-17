@@ -1,7 +1,7 @@
 package com.optc.optcdbmobile.data.ui.activities;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -17,11 +17,13 @@ import android.widget.Button;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.MainViewModel;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
+import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
+import com.optc.optcdbmobile.data.ui.activities.fragments.SettingsFragment;
 
 
 // TODO Avoid activity in async task
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AsyncTaskContext {
 
     private MainViewModel mainViewModel;
     private OPTCDatabaseRepository databaseRepository;
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -45,7 +49,10 @@ public class MainActivity extends AppCompatActivity {
         nav_menu_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                drawer.closeDrawer(Gravity.START);
+                getSupportFragmentManager()
+                        .beginTransaction().add(R.id.content_frame, new SettingsFragment())
+                        .commit();
             }
         });
 
@@ -98,6 +105,18 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public View getView() {
+        return findViewById(android.R.id.content);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+
 }
 
 

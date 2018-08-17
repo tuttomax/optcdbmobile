@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory android:title="Character Table">
+
+        <MultiSelectListPreference
+            android:defaultValue="@array/pref_character_info_defaults"
+            android:dialogTitle="@string/pref_character_info_dialog_title"
+            android:entries="@array/pref_character_info_names"
+            android:entryValues="@array/pref_character_info_indexes"
+            android:icon="@null"
+            android:iconSpaceReserved="false"
+            android:key="@string/pref_character_info_key"
+            android:title="@string/pref_character_info_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_database_cat_download">
+        <SwitchPreference
+            android:defaultValue="@string/pref_wifi_only_default_value"
+            android:icon="@null"
+            android:iconSpaceReserved="false"
+            android:key="@string/pref_wifi_only_key"
+            android:summary="@string/pref_wifi_only_summary_true"
+            android:title="@string/pref_wifi_only_title" />
+
+
+        <SwitchPreference
+            android:defaultValue="@string/pref_auto_download_default_value"
+            android:dependency="@string/pref_wifi_only_key"
+            android:icon="@null"
+            android:iconSpaceReserved="false"
+            android:key="@string/pref_auto_download_key"
+            android:title="@string/pref_auto_download_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_database_cat_version_title">
+        <com.optc.optcdbmobile.data.ui.controls.settings.SingleLinePreference
+
+            android:icon="@null"
+            android:iconSpaceReserved="false"
+            android:key="@string/pref_rebuild_database_key"
+            android:persistent="false"
+            android:title="@string/pref_rebuild_database_title"
+            app:summaryColor="@color/secondaryTextColor"
+            app:titleColor="@color/secondaryTextColor" />
+
+        <com.optc.optcdbmobile.data.ui.controls.settings.SingleLinePreference
+            android:defaultValue="-1"
+            android:enabled="false"
+            android:icon="@null"
+            android:iconSpaceReserved="false"
+            android:key="@string/pref_database_version_key"
+            android:selectable="false"
+            android:title="@string/pref_database_version_title"
+            app:backgroundColor="@color/primaryDarkColor"
+            app:summaryColor="@color/primaryTextColor"
+            app:titleColor="@color/primaryTextColor" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
