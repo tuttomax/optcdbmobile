@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 alessandro
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.optc.optcdbmobile.data.tasks;
 
 import android.content.SharedPreferences;
@@ -13,9 +29,9 @@ public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte>
     private Integer currentVersion;
     private boolean autoDownload;
 
-    private AsyncTaskListner<Byte> listener;
+    private AsyncTaskListener<Byte> listener;
 
-    public CheckDatabaseVersionAsyncTask(AsyncTaskListner<Byte> listener) {
+    public CheckDatabaseVersionAsyncTask(AsyncTaskListener<Byte> listener) {
         this.listener = listener;
     }
 
@@ -37,12 +53,10 @@ public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte>
 
         boolean updateAvailable = currentVersion < newVersion;
 
-        Constants.Settings.there_is_update = updateAvailable;
-
         if (updateAvailable) {
             return autoDownload
-                    ? Constants.DatabaseVerionTask.ACTION_AUTOMATIC_UPDATE
-                    : Constants.DatabaseVerionTask.ACTION_SHOW_UPDATE;
+                    ? Constants.DatabaseVersionTask.ACTION_AUTOMATIC_UPDATE
+                    : Constants.DatabaseVersionTask.ACTION_SHOW_UPDATE;
         }
 
         return null;

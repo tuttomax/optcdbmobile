@@ -1,25 +1,42 @@
+/*
+ * Copyright 2018 alessandro
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.optc.optcdbmobile.data.tasks;
 
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
-import com.optc.optcdbmobile.R;
+import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 
-import static com.optc.optcdbmobile.data.Constants.DatabaseVerionTask.ACTION_AUTOMATIC_UPDATE;
-import static com.optc.optcdbmobile.data.Constants.DatabaseVerionTask.ACTION_SHOW_UPDATE;
+import static com.optc.optcdbmobile.data.Constants.DatabaseVersionTask.ACTION_AUTOMATIC_UPDATE;
+import static com.optc.optcdbmobile.data.Constants.DatabaseVersionTask.ACTION_SHOW_UPDATE;
 
-public class CheckDatabaseVersionAsyncTaskListner implements AsyncTaskListner<Byte> {
+public class CheckDatabaseVersionAsyncTaskListener implements AsyncTaskListener<Byte> {
 
     private AsyncTaskContext context;
 
-    public CheckDatabaseVersionAsyncTaskListner(AsyncTaskContext supporter) {
+    public CheckDatabaseVersionAsyncTaskListener(AsyncTaskContext supporter) {
         context = supporter;
     }
 
     @Override
     public void onPreExecute() {
-
+        Snackbar.make(context.getView(), "Checking database update...", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -27,9 +44,7 @@ public class CheckDatabaseVersionAsyncTaskListner implements AsyncTaskListner<By
         if (action != null) {
             switch (action) {
                 case ACTION_SHOW_UPDATE:
-
                     Snackbar.make(context.getView(), "New database version available", Snackbar.LENGTH_LONG)
-                            .setActionTextColor(context.getView().getResources().getColor(R.color.secondaryLightColor))
                             .setAction("UPDATE", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -44,6 +59,9 @@ public class CheckDatabaseVersionAsyncTaskListner implements AsyncTaskListner<By
                     OPTCDatabaseRepository.getInstance(context.getView().getContext()).BuildDatabase(context);
                     break;
             }
+        } else {
+            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
+                    .putBoolean(Constants.Settings.pref_update_available, false);
         }
 
     }

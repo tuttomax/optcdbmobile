@@ -3,19 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:gravity="center"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="15dp">
 
     <TextView
         android:id="@android:id/title"
-        android:layout_marginLeft="6dp"
-        android:layout_marginStart="6dp"
-        android:padding="3dp"
-        android:paddingBottom="6dp"
+        android:layout_gravity="start"
+        android:layout_marginBottom="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.Large"
+        android:textAppearance="?attr/textAppearanceLargePopupMenu"
         android:textStyle="bold" />
 
     <android.support.v7.widget.RecyclerView

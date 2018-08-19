@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 alessandro
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.optc.optcdbmobile.data;
 
 public class Constants {
@@ -43,17 +59,18 @@ public class Constants {
 
 
     public static class Settings {
+        //UI preference
         public final static String pref_wifi_download_key = "wifi_download";
         public final static String pref_auto_download_key = "auto_download";
         public final static String pref_database_version_key = "database_version";
-        /**
-         * little trick used inside CheckVersionAsyncTask for updating UI
-         */
-        public volatile static boolean there_is_update = false;
+        public final static String pref_card_layout_key = "card_layout";
+        // non-UI preference
+        public final static String pref_check_done_key = "check_done";
+        public static final String pref_update_available = "update_available";
 
     }
 
-    public class DatabaseVerionTask {
+    public class DatabaseVersionTask {
         public final static byte ACTION_SHOW_UPDATE = 1;
         public final static byte ACTION_AUTOMATIC_UPDATE = 2;
     }

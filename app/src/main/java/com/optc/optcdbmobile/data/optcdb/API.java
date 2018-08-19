@@ -1,3 +1,19 @@
+/*
+ * Copyright 2018 alessandro
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.optc.optcdbmobile.data.optcdb;
 
 import com.google.common.base.Charsets;
@@ -9,6 +25,7 @@ import com.optc.optcdbmobile.data.optcdb.api_parser.EvolutionsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.FamilyParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.UnitsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.VersionParser;
+import com.optc.optcdbmobile.data.optcdb.entities.Skull;
 
 import org.mozilla.javascript.Scriptable;
 
@@ -19,6 +36,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class API {
+
+    private final static int ID_MAX_WIDTH = 4;
+    private final static String urlThumb = "https://onepiece-treasurecruise.com/wp-content/uploads/f%s.png";
+    private final static String specialThumb = "https://github.com/optc-db/optc-db.github.io/raw/master/res/%s.png";
+    private final static String nullThumb = "https://onepiece-treasurecruise.com/wp-content/themes/onepiece-treasurecruise/images/noimage.png";
 
     private final static HashMap<Byte, String> url_table = new HashMap<Byte, String>(6) {{
         put(Constants.APIType.VERSION_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/version.js");
@@ -54,6 +76,61 @@ public class API {
         // %04d
         final String fmt = "%" + '0' + width + 'd';
         return String.format(fmt, id);
+    }
+
+    public static String getId(int id) {
+        return getId(id, ID_MAX_WIDTH);
+    }
+
+    public static String getThumb(int id) {
+        if (id >= Skull.MIN && id <= Skull.MAX) {
+            return Skull.getThumb(id);
+        }
+
+        switch (id) {
+            case 742:
+                return "https://onepiece-treasurecruise.com/wp-content/uploads/f0742-2.png";
+            case 2200:
+                return "http://onepiece-treasurecruise.com/en/wp-content/uploads/sites/2/f5011.png";
+            case 2201:
+                return "http://onepiece-treasurecruise.com/en/wp-content/uploads/sites/2/f5012.png";
+            case 5000:
+                return String.format(specialThumb, "character_10185_t1");
+            case 5001:
+                return String.format(specialThumb, "character_10186_t1");
+            case 5002:
+                return String.format(specialThumb, "character_10187_t1_int");
+            case 5003:
+                return String.format(specialThumb, "character_10187_t1_psy");
+            case 5004:
+                return String.format(specialThumb, "character_10173_t1");
+            case 5005:
+                return String.format(specialThumb, "character_10175_t1");
+            case 5006:
+                return String.format(specialThumb, "character_10174_t1");
+            case 5007:
+                return String.format(specialThumb, "character_10176_t1");
+            case 5008:
+                return String.format(specialThumb, "character_10177_t1_qck");
+            case 5009:
+                return String.format(specialThumb, "character_10177_t1_str");
+            case 5010:
+                return String.format(specialThumb, "character_10178_t1_qck");
+            case 5011:
+                return String.format(specialThumb, "character_10178_t1_str");
+            case 5012:
+                return String.format(specialThumb, "character_10181_t1");
+            case 5013:
+                return String.format(specialThumb, "character_10182_t1");
+            case 5014:
+                return String.format(specialThumb, "character_10183_t1_psy");
+            case 5015:
+                return String.format(specialThumb, "character_10183_t1_dex");
+
+            default:
+                String sId = getId(id);
+                return String.format(urlThumb, sId);
+        }
     }
 
     /*

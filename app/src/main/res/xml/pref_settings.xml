@@ -3,13 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory android:title="Character Table">
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:icon="@drawable/ic_collections_black_24dp"
+            android:key="@string/pref_card_layout_key"
+            android:title="@string/pref_card_layout_title" />
+
         <MultiSelectListPreference
             android:defaultValue="@array/pref_character_info_defaults"
             android:dialogTitle="@string/pref_character_info_dialog_title"
             android:entries="@array/pref_character_info_names"
             android:entryValues="@array/pref_character_info_indexes"
-            android:icon="@null"
-            android:iconSpaceReserved="false"
+            android:icon="@drawable/ic_person_black_24dp"
             android:key="@string/pref_character_info_key"
             android:title="@string/pref_character_info_title" />
 
@@ -18,8 +23,7 @@
     <PreferenceCategory android:title="@string/pref_database_cat_download">
         <SwitchPreference
             android:defaultValue="@string/pref_wifi_only_default_value"
-            android:icon="@null"
-            android:iconSpaceReserved="false"
+            android:icon="@drawable/ic_wifi_black_24dp"
             android:key="@string/pref_wifi_only_key"
             android:summary="@string/pref_wifi_only_summary_true"
             android:title="@string/pref_wifi_only_title" />
@@ -28,35 +32,42 @@
         <SwitchPreference
             android:defaultValue="@string/pref_auto_download_default_value"
             android:dependency="@string/pref_wifi_only_key"
-            android:icon="@null"
-            android:iconSpaceReserved="false"
+            android:icon="@drawable/ic_file_download_black_24dp"
             android:key="@string/pref_auto_download_key"
             android:title="@string/pref_auto_download_title" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_database_cat_version_title">
-        <com.optc.optcdbmobile.data.ui.controls.settings.SingleLinePreference
+        <com.optc.optcdbmobile.data.ui.activities.fragments.Settings.SingleLinePreference
 
-            android:icon="@null"
-            android:iconSpaceReserved="false"
+
+            android:icon="@drawable/ic_sync_black_24dp"
             android:key="@string/pref_rebuild_database_key"
-            android:persistent="false"
+            android:persistent="true"
             android:title="@string/pref_rebuild_database_title"
-            app:summaryColor="@color/secondaryTextColor"
-            app:titleColor="@color/secondaryTextColor" />
+            app:backgroundColor="@android:color/transparent"
+            app:summaryColor="@color/primaryLightTextColor"
+            app:titleColor="@color/primaryLightTextColor" />
 
-        <com.optc.optcdbmobile.data.ui.controls.settings.SingleLinePreference
+        <com.optc.optcdbmobile.data.ui.activities.fragments.Settings.SingleLinePreference
             android:defaultValue="-1"
             android:enabled="false"
-            android:icon="@null"
-            android:iconSpaceReserved="false"
             android:key="@string/pref_database_version_key"
+            android:persistent="false"
             android:selectable="false"
             android:title="@string/pref_database_version_title"
-            app:backgroundColor="@color/primaryDarkColor"
-            app:summaryColor="@color/primaryTextColor"
-            app:titleColor="@color/primaryTextColor" />
+            app:backgroundColor="@color/secondaryDarkColor"
+            app:summaryColor="@color/infoColor"
+            app:titleColor="@color/secondaryDarkTextColor" />
 
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="Licenses">
+        <Preference
+            android:key="@string/pref_open_source_key"
+            android:persistent="false"
+            android:title="Open Source" />
+    </PreferenceCategory>
+
 
 </PreferenceScreen>

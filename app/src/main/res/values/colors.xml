@@ -1,16 +1,25 @@
 <!--?xml version="1.0" encoding="UTF-8"?-->
 <resources>
-    <color name="primaryColor">#395c68</color>
-    <color name="primaryLightColor">#668996</color>
-    <color name="primaryLightLightColor">#afbdc4</color>
-    <color name="primaryDarkColor">#0b333d</color>
-    <color name="background">#e6e8f5</color>
+    <!-- WINTER THEME -->
+    <color name="primaryColor">#fafafa</color>
+    <color name="primaryLightColor">#ffffff</color>
+    <color name="primaryDarkColor">#c7c7c7</color>
+    <color name="secondaryColor">#546e7a</color>
+    <color name="secondaryLightColor">#819ca9</color>
+    <color name="secondaryDarkColor">#29434e</color>
+    <color name="primaryTextColor">#000000</color>
+    <color name="primaryLightTextColor">@color/primaryTextColor</color>
+    <color name="primaryDarkTextColor">@color/primaryTextColor</color>
+    <color name="secondaryTextColor">#ffffff</color>
+    <color name="secondaryLightTextColor">@color/secondaryTextColor</color>
+    <color name="secondaryDarkTextColor">@color/secondaryTextColor</color>
+    <!-- color used for highlight information -->
+    <color name="infoColor">#ffd64f</color>
 
-    <color name="secondaryColor">#ff6e40</color>
-    <color name="secondaryLightColor">#ffa06d</color>
-    <color name="secondaryLightLightColor">#ffcc80</color>
-    <color name="secondaryDarkColor">#c53d13</color>
-    <color name="primaryTextColor">#ffffff</color>
-    <color name="secondaryTextColor">#000000</color>
+    <color name="colorSTR">#e53935</color>
+    <color name="colorQCK">#3f51b5</color>
+    <color name="colorDEX">#43a047</color>
+    <color name="colorPSY">#fdd835</color>
+    <color name="colorINT">#9c27b0</color>
 
 </resources>

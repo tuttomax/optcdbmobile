@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:alignmentMode="alignMargins"
+    android:columnCount="8"
+    android:columnOrderPreserved="true"
+    android:orientation="horizontal"
+    android:rowCount="1"
+
+    >
+
+    <TextView
+        android:id="@+id/unit_id"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp" />
+
+    <TextView
+        android:id="@+id/unit_thumb"
+        android:layout_width="96px"
+        android:layout_height="96px"
+        android:layout_margin="4dp"
+
+        />
+
+    <TextView
+        android:id="@+id/unit_name"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp" />
+
+    <!-- layout_with in header = 35 + 25 -->
+    <TextView
+        android:id="@+id/unit_colors"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp" />
+
+    <TextView
+        android:id="@+id/unit_stars"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp" />
+
+    <TextView
+        android:id="@+id/unit_hp"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp" />
+
+    <TextView
+        android:id="@+id/unit_atk"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp" />
+
+    <TextView
+        android:id="@+id/unit_rcv"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp" />
+</GridLayout>

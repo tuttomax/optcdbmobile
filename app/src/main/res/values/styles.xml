@@ -4,7 +4,7 @@
     <style name="BaseAppTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="colorAccent">@color/infoColor</item>
     </style>
 
     <style name="BaseAppTheme.NoActionBar" parent="BaseAppTheme">
@@ -14,32 +14,33 @@
 
 
     <style name="MainTheme" parent="BaseAppTheme.NoActionBar">
+        <item name="dialogTheme">@style/BaseAppTheme.Dialog</item>
 
-        <item name="android:dialogPreferenceStyle">@style/BaseAppTheme.Dialog</item>
-        <item name="android:preferenceStyle">@style/BaseAppTheme.Preference</item>
+        <item name="android:actionBarStyle">@style/BaseAppTheme.Toolbar</item>
+        <item name="buttonStyle">@style/BaseAppTheme.Button</item>
     </style>
 
-    <style name="BaseAppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
-        <!-- Define color properties as desired -->
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="android:textColorHighlight">@color/secondaryLightColor</item>
-        <item name="colorAccent">@color/secondaryColor</item>
-        <item name="colorControlNormal">@color/primaryTextColor</item>
-        <!-- Define window properties as desired -->
+    <style name="BaseAppTheme.Button">
+        <item name="android:background">@color/secondaryLightColor</item>
+        <item name="android:textColor">@color/secondaryLightTextColor</item>
+    </style>
+
+    <style name="BaseAppTheme.Toolbar" parent="BaseAppTheme">
+        <item name="android:background">@color/secondaryLightColor</item>
+        <item name="android:titleTextStyle">@style/BaseAppTheme.Toolbar.Title</item>
+        <item name="actionMenuTextColor">@color/secondaryLightTextColor</item>
+    </style>
+
+    <style name="BaseAppTheme.Toolbar.Title" parent="Base.TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/secondaryLightTextColor</item>
+    </style>
+
+    <style name="BaseAppTheme.Dialog" parent="BaseAppTheme.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">false</item>
-        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowBackground">@drawable/rounded_background</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
     </style>
 
-    <style name="BaseAppTheme.Preference" parent="PreferenceThemeOverlay.v14.Material">
-        <item name="preferenceFragmentListStyle">@style/BaseAppTheme.Preference.List</item>
-    </style>
-
-    <style name="BaseAppTheme.Preference.List" parent="@style/PreferenceFragmentList">
-        <item name="android:paddingLeft">0dp</item>
-        <item name="android:paddingRight">0dp</item>
-    </style>
 </resources>

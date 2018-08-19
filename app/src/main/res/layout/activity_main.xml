@@ -7,22 +7,33 @@
     android:fitsSystemWindows="true">
 
 
-    <android.support.v7.widget.LinearLayoutCompat
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar" />
 
         <FrameLayout
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    </android.support.v7.widget.LinearLayoutCompat>
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways" />
+
+        </android.support.design.widget.AppBarLayout>
 
 
-    <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
+    </android.support.design.widget.CoordinatorLayout>
+
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
@@ -32,16 +43,6 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_layout"
         app:menu="@menu/nav_menu">
-
-        <Button
-            android:id="@+id/nav_menu_settings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/secondaryLightColor"
-            android:padding="10dp"
-            android:text="@string/nav_menu_settings_title"
-            android:textColor="@color/primaryTextColor" />
 
     </android.support.design.widget.NavigationView>
 
