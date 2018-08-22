@@ -1,5 +1,6 @@
 package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,16 +22,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
+import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 
 public class UnitDialog extends DialogFragment {
 
-    private FragmentPagerAdapter adapter;
+    private DynamicViewPagerAdapter adapter;
     private UnitProxy unit;
 
     public static UnitDialog newInstance(UnitProxy unit) {
@@ -45,11 +48,30 @@ public class UnitDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
 
+        OPTCDatabaseRepository repo = OPTCDatabaseRepository.getInstance(getContext());
+        Bundle args = getArguments();
         unit = args.getParcelable(UnitHelper.UNIT_PARCELLABLE);
 
+        UnitDialogViewModel viewModel = ViewModelProviders.of(this).get(UnitDialogViewModel.class);
+
         adapter = new DynamicViewPagerAdapter(getChildFragmentManager(), unit);
+
+
+        try {
+            adapter.setHasCaptain(viewModel.unitHasCaptain(unit.getDatabaseId()));
+            adapter.setHasCaptain(viewModel.unitHasSpecial(unit.getDatabaseId()));
+            adapter.setHasCaptain(viewModel.unitHasSailor(unit.getDatabaseId()));
+            adapter.setHasCaptain(viewModel.unitHasPotential(unit.getDatabaseId()));
+            adapter.setHasCaptain(viewModel.unitHasLimit(unit.getDatabaseId()));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        adapter.buildTabs();
+
     }
 
     @Nullable
@@ -88,6 +110,7 @@ public class UnitDialog extends DialogFragment {
                 .with(this)
                 .load(API.getBigImage(unit.getDatabaseId()))
                 .apply(new RequestOptions()
+                        .override(580)
                         .centerInside()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .error(new ColorDrawable(UnitHelper.getTypeColor(unit.getType1(), getResources()))))
@@ -131,6 +154,12 @@ public class UnitDialog extends DialogFragment {
 
 
     private class DynamicViewPagerAdapter extends FragmentPagerAdapter {
+        private boolean hasSpecial;
+        private boolean hasCaptain;
+        private boolean hasSailor;
+        private boolean hasLimit;
+        private boolean hasPotential;
+
 
         private final List<Fragment> fragments;
         private final List<String> titles;
@@ -150,10 +179,23 @@ public class UnitDialog extends DialogFragment {
             fragments = new ArrayList<>();
             titles = new ArrayList<>();
 
-            //if (unit.hasPotential)
+
+        }
+
+        public void buildTabs() {
 
             add(GeneralFragment.newInstance(unit), "General");
 
+            if (hasCaptain || hasSpecial || hasSailor) {
+                add(SpecialFragment.newInstance(unit.getDatabaseId()), "Abilities");
+            }
+
+            if (hasPotential) {
+
+            }
+            if (hasLimit) {
+
+            }
         }
 
         @Override
@@ -178,6 +220,26 @@ public class UnitDialog extends DialogFragment {
         private void add(Fragment fragment, String title) {
             fragments.add(fragment);
             titles.add(title);
+        }
+
+        public void setHasSpecial(boolean hasSpecial) {
+            this.hasSpecial = hasSpecial;
+        }
+
+        public void setHasCaptain(boolean hasCaptain) {
+            this.hasCaptain = hasCaptain;
+        }
+
+        public void setHasSailor(boolean hasSailor) {
+            this.hasSailor = hasSailor;
+        }
+
+        public void setHasLimit(boolean hasLimit) {
+            this.hasLimit = hasLimit;
+        }
+
+        public void setHasPotential(boolean hasPotential) {
+            this.hasPotential = hasPotential;
         }
     }
 

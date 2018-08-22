@@ -12,6 +12,7 @@ import java.util.Map;
 public class UnitHelper {
 
     public static final String UNIT_PARCELLABLE = "__UNIT__";
+    public static final String UNIT_ID = "__id__";
     private final static Map<String, Integer> colorsId = new HashMap<String, Integer>() {{
         put("STR", R.color.colorSTR);
         put("QCK", R.color.colorQCK);

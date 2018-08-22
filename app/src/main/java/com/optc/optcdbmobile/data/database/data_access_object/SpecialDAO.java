@@ -17,10 +17,13 @@
 package com.optc.optcdbmobile.data.database.data_access_object;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Query;
 
 import com.optc.optcdbmobile.data.database.entities.Special;
 
 @Dao
 public abstract class SpecialDAO implements BaseDAO<Special> {
 
+    @Query("SELECT COUNT(id) FROM special_table WHERE id=:id")
+    public abstract int getCount(int id);
 }

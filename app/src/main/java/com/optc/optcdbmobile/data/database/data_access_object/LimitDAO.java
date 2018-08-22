@@ -18,9 +18,13 @@ package com.optc.optcdbmobile.data.database.data_access_object;
 
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Query;
 
 import com.optc.optcdbmobile.data.database.entities.Limit;
 
 @Dao
 public abstract class LimitDAO implements BaseDAO<Limit> {
+
+    @Query("SELECT COUNT(id) FROM limit_table WHERE id=:id")
+    public abstract int getCount(int id);
 }

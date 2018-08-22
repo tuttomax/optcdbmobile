@@ -43,17 +43,15 @@ import java.util.List;
 public class OPTCDatabaseRepository {
     /* SINGLETON */
     private static OPTCDatabaseRepository INSTANCE;
+    private final OPTCDatabase database;
+    private final ConnectivityManager connectivityManager;
+    private final SharedPreferences sharedPreferences;
 
     public OPTCDatabaseRepository(Context context) {
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         database = OPTCDatabase.getInstance(context);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
-
-    private final OPTCDatabase database;
-
-    private final ConnectivityManager connectivityManager;
-    private final SharedPreferences sharedPreferences;
 
     public static OPTCDatabaseRepository getInstance(Context context) {
         if (INSTANCE == null) {
@@ -135,6 +133,33 @@ public class OPTCDatabaseRepository {
 
     public LiveData<List<Unit>> getUnits() {
         return database.unitDAO().getUnits();
+    }
+
+
+    public boolean unitHasCaptain(int id) {
+
+        int count = database.captainDAO().getCount(id);
+        return count > 0;
+    }
+
+    public boolean unitHasSpecial(int id) {
+        int count = database.specialDAO().getCount(id);
+        return count > 0;
+    }
+
+    public boolean unitHasSailor(int id) {
+        int count = database.sailorDAO().getCount(id);
+        return count > 0;
+    }
+
+    public boolean unitHasPotential(int id) {
+        int count = database.potentialDAO().getCount(id);
+        return count > 0;
+    }
+
+    public boolean unitHasLimit(int id) {
+        int count = database.limitDAO().getCount(id);
+        return count > 0;
     }
 
 
