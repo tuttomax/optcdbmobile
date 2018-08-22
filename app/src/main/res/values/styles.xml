@@ -4,7 +4,7 @@
     <style name="BaseAppTheme" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorAccent">@color/infoColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
     </style>
 
     <style name="BaseAppTheme.NoActionBar" parent="BaseAppTheme">
@@ -14,7 +14,7 @@
 
 
     <style name="MainTheme" parent="BaseAppTheme.NoActionBar">
-        <item name="dialogTheme">@style/BaseAppTheme.Dialog</item>
+        <item name="dialogTheme">@style/BaseAppTheme.TaskDialog</item>
 
         <item name="android:actionBarStyle">@style/BaseAppTheme.Toolbar</item>
         <item name="buttonStyle">@style/BaseAppTheme.Button</item>
@@ -37,10 +37,18 @@
 
     <style name="BaseAppTheme.Dialog" parent="BaseAppTheme.NoActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowFullscreen">false</item>
         <item name="android:windowBackground">@drawable/rounded_background</item>
         <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="BaseAppTheme.TaskDialog" parent="BaseAppTheme.Dialog">
+        <item name="android:windowFullscreen">false</item>
         <item name="android:windowCloseOnTouchOutside">false</item>
+    </style>
+
+    <style name="BaseAppTheme.UnitDialog" parent="BaseAppTheme.Dialog">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
 </resources>

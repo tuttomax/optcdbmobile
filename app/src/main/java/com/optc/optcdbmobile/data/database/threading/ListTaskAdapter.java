@@ -44,7 +44,6 @@ public class ListTaskAdapter extends RecyclerView.Adapter<ListTaskAdapter.TaskVi
     private static final byte PAYLOAD_MAX = 4;
 
 
-    private static final String TAG = "ListTaskAdapter";
     private final List<Task> list;
 
     private final android.os.Handler notifyHandler = new android.os.Handler(Looper.getMainLooper());
@@ -60,7 +59,7 @@ public class ListTaskAdapter extends RecyclerView.Adapter<ListTaskAdapter.TaskVi
     @NonNull
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tasks_dialog_item_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_task, parent, false);
         return new TaskViewHolder(v);
     }
 

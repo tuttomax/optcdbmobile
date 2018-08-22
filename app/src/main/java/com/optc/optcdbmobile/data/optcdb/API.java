@@ -18,11 +18,13 @@ package com.optc.optcdbmobile.data.optcdb;
 
 import com.google.common.base.Charsets;
 import com.optc.optcdbmobile.data.Constants;
+import com.optc.optcdbmobile.data.optcdb.api_parser.AliasParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.CooldownsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.DetailsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.DropsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.EvolutionsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.FamilyParser;
+import com.optc.optcdbmobile.data.optcdb.api_parser.TagParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.UnitsParser;
 import com.optc.optcdbmobile.data.optcdb.api_parser.VersionParser;
 import com.optc.optcdbmobile.data.optcdb.entities.Skull;
@@ -41,6 +43,7 @@ public class API {
     private final static String urlThumb = "https://onepiece-treasurecruise.com/wp-content/uploads/f%s.png";
     private final static String specialThumb = "https://github.com/optc-db/optc-db.github.io/raw/master/res/%s.png";
     private final static String nullThumb = "https://onepiece-treasurecruise.com/wp-content/themes/onepiece-treasurecruise/images/noimage.png";
+    private final static String urlBigImage = "https://onepiece-treasurecruise.com/wp-content/uploads/c%s.png";
 
     private final static HashMap<Byte, String> url_table = new HashMap<Byte, String>(6) {{
         put(Constants.APIType.VERSION_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/version.js");
@@ -50,7 +53,10 @@ public class API {
         put(Constants.APIType.DETAILS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/details.js");
         put(Constants.APIType.COOLDOWNS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/cooldowns.js");
         put(Constants.APIType.FAMILIES_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/families.js");
+        put(Constants.APIType.TAGS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/flags.js");
+        put(Constants.APIType.ALIASES_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/aliases.js");
     }};
+
     private final static HashMap<Byte, String> name_table = new HashMap<Byte, String>(6) {{
         put(Constants.APIType.VERSION_TYPE, "dbVersion");
         put(Constants.APIType.UNITS_TYPE, "units");
@@ -59,6 +65,8 @@ public class API {
         put(Constants.APIType.DETAILS_TYPE, "details");
         put(Constants.APIType.COOLDOWNS_TYPE, "cooldowns");
         put(Constants.APIType.FAMILIES_TYPE, "families");
+        put(Constants.APIType.TAGS_TYPE, "flags");
+        put(Constants.APIType.ALIASES_TYPE, "aliases");
     }};
 
     private final static HashMap<Byte, BaseParser> parser_table = new HashMap<Byte, BaseParser>(6) {{
@@ -69,6 +77,8 @@ public class API {
         put(Constants.APIType.DETAILS_TYPE, new DetailsParser());
         put(Constants.APIType.COOLDOWNS_TYPE, new CooldownsParser());
         put(Constants.APIType.FAMILIES_TYPE, new FamilyParser());
+        put(Constants.APIType.TAGS_TYPE, new TagParser());
+        put(Constants.APIType.ALIASES_TYPE, new AliasParser());
     }};
 
 
@@ -90,10 +100,16 @@ public class API {
         switch (id) {
             case 742:
                 return "https://onepiece-treasurecruise.com/wp-content/uploads/f0742-2.png";
-            case 2200:
+            case 2500:
                 return "http://onepiece-treasurecruise.com/en/wp-content/uploads/sites/2/f5011.png";
-            case 2201:
+            case 2501:
                 return "http://onepiece-treasurecruise.com/en/wp-content/uploads/sites/2/f5012.png";
+            case 2502:
+                return "http://onepiece-treasurecruise.com/en/wp-content/uploads/sites/2/f5013.png";
+            case 2503:
+                return "http://onepiece-treasurecruise.com/en/wp-content/uploads/sites/2/f5013.png\"";
+            case 2504:
+                return "http://onepiece-treasurecruise.com/en/wp-content/uploads/sites/2/f5013.png\"";
             case 5000:
                 return String.format(specialThumb, "character_10185_t1");
             case 5001:
@@ -127,25 +143,44 @@ public class API {
             case 5015:
                 return String.format(specialThumb, "character_10183_t1_dex");
 
+            case 5016:
+                return String.format(specialThumb, "character_10344_t1");
+            case 5017:
+                return String.format(specialThumb, "character_10346_t1");
+            case 5018:
+                return String.format(specialThumb, "character_10345_t1");
+            case 5019:
+                return String.format(specialThumb, "character_10347_t1");
+            case 5020:
+                return String.format(specialThumb, "character_10348_t1_psy");
+            case 5021:
+                return String.format(specialThumb, "character_10348_t1_int");
+            case 5022:
+                return String.format(specialThumb, "character_10349_t1_psy");
+            case 5023:
+                return String.format(specialThumb, "character_10349_t1_int");
+            case 5024:
+                return String.format(specialThumb, "character_10496_t1");
+            case 5025:
+                return String.format(specialThumb, "character_10497_t1");
+            case 5026:
+                return String.format(specialThumb, "character_10498_t1_dex");
+            case 5027:
+                return String.format(specialThumb, "character_10498_t1_str");
+            //TODO Update this manually
+
             default:
                 String sId = getId(id);
                 return String.format(urlThumb, sId);
         }
     }
 
-    /*
-    public synchronized static String getName(byte type){
-        return name_table.get(type);
+    public static String getBigImage(int id) {
+        String sId = getId(id);
+        return String.format(urlBigImage, sId);
     }
-    public synchronized static BaseParser getParser(byte type){
-        return parser_table.get(type);
-    }
-    public synchronized static String getUrl(byte type){
-        return url_table.get(type);
-    }
-    */
 
-    /* Take too much time*/
+
     public static Object getData(byte type) {
         Object parsed = simple_parsing(url_table.get(type), name_table.get(type));
         BaseParser parser = parser_table.get(type);

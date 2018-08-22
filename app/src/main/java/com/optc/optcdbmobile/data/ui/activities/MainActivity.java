@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -36,10 +37,9 @@ import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.Charact
 import com.optc.optcdbmobile.data.ui.activities.fragments.Settings.SettingsFragment;
 
 
-// TODO Avoid activity in async task
-
 public class MainActivity extends AppCompatActivity implements AsyncTaskContext {
-    private static final String SETTINGS_TAG_FRAGMENT = "SETTINGS_TAG";
+    public static final String CHARACTER_TABLE_FRAGMENT = CharacterTableFragment.class.getSimpleName();
+    private static final String SETTINGS_TAG_FRAGMENT = SettingsFragment.class.getSimpleName();
 
     private OPTCDatabaseRepository databaseRepository;
     private DrawerLayout drawer;
@@ -50,12 +50,14 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
 
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 
+        databaseRepository = OPTCDatabaseRepository.getInstance(getApplication());
+
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_home);
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView nav = findViewById(R.id.nav_view);
@@ -67,9 +69,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
                 drawer.closeDrawer(Gravity.START);
 
                 if (item.getItemId() == R.id.nav_menu_character_table) {
-                    getSupportFragmentManager()
-                            .beginTransaction().replace(R.id.content_frame, new CharacterTableFragment())
-                            .commit();
+                    initFragment(CHARACTER_TABLE_FRAGMENT);
 
                 } else if (item.getItemId() == R.id.nav_menu_damage_calculator) {
 
@@ -82,17 +82,14 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
                 } else if (item.getItemId() == R.id.nav_menu_slot_planner) {
 
                 } else if (item.getItemId() == R.id.nav_menu_settings) {
-                    getSupportFragmentManager()
-                            .beginTransaction().replace(R.id.content_frame, new SettingsFragment(), SETTINGS_TAG_FRAGMENT)
-                            .commit();
-
+                    initFragment(SETTINGS_TAG_FRAGMENT);
                 }
                 return true;
             }
         });
 
-
-        databaseRepository = OPTCDatabaseRepository.getInstance(getApplication());
+        nav.setCheckedItem(R.id.nav_menu_character_table);
+        initFragment(CHARACTER_TABLE_FRAGMENT);
     }
 
     @Override
@@ -123,16 +120,25 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
 
     @Override
     public void onBackPressed() {
-        Fragment settings_fragment = getSupportFragmentManager().findFragmentByTag(SETTINGS_TAG_FRAGMENT);
-        if (settings_fragment != null && settings_fragment.isVisible()) {
-            if (drawer.isDrawerOpen(Gravity.START)) {
-                drawer.closeDrawer(Gravity.START);
-            } else {
-                drawer.openDrawer(Gravity.START);
+        finish();
+    }
+
+    private void initFragment(String TAG) {
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragmentToInit = getSupportFragmentManager().findFragmentByTag(TAG);
+        if (fragmentToInit == null) {
+            if (TAG.equals(CHARACTER_TABLE_FRAGMENT)) {
+                fragmentToInit = new CharacterTableFragment();
+            } else if (TAG.equals(SETTINGS_TAG_FRAGMENT)) {
+                fragmentToInit = new SettingsFragment();
             }
-        } else {
-            super.onBackPressed();
         }
+
+        transaction
+                .replace(R.id.content_frame, fragmentToInit)
+                .commit();
+
     }
 
 

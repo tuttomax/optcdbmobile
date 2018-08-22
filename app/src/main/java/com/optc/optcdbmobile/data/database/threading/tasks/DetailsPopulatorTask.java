@@ -63,7 +63,8 @@ public class DetailsPopulatorTask extends DatabaseTask {
         } catch (Exception ex) {
             setError(ex);
             ex.printStackTrace();
-            return;
+            Thread.currentThread().interrupt();
+
         }
 
         setState(COMPLETED);

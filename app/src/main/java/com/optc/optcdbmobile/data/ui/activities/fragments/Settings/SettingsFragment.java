@@ -27,7 +27,6 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.optc.optcdbmobile.R;
@@ -35,13 +34,16 @@ import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
 
+import java.util.logging.Logger;
+
 public class SettingsFragment extends PreferenceFragmentCompat implements AsyncTaskContext {
     private final static String TAG = SettingsFragment.class.getSimpleName();
     SettingsViewModel model;
     SharedPreferences.OnSharedPreferenceChangeListener listner = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            Log.i(TAG, "Preference changed: " + key);
+
+            Logger.getLogger(TAG).info(key);
 
             if (key.equals(getString(R.string.pref_database_version_key))) {
                 model.setDatabaseVersion(sharedPreferences.getInt(key, -1));
@@ -91,7 +93,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
             return true;
         }
 
-
         return super.onPreferenceTreeClick(preference);
     }
 
@@ -108,12 +109,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
     @Override
     public void onResume() {
         super.onResume();
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(listner);
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(listner);
     }
 
     @Override
     public void onStop() {
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).registerOnSharedPreferenceChangeListener(listner);
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(listner);
         super.onStop();
     }
 

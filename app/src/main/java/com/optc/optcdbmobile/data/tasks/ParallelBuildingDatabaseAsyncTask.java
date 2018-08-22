@@ -28,6 +28,7 @@ import com.optc.optcdbmobile.data.database.threading.tasks.DetailsPopulatorTask;
 import com.optc.optcdbmobile.data.database.threading.tasks.DropsPopulateTask;
 import com.optc.optcdbmobile.data.database.threading.tasks.EvolutionsPopulateTask;
 import com.optc.optcdbmobile.data.database.threading.tasks.FamiliesPopulateTask;
+import com.optc.optcdbmobile.data.database.threading.tasks.TagsPopulateTask;
 import com.optc.optcdbmobile.data.database.threading.tasks.UnitsPopulateTask;
 import com.optc.optcdbmobile.data.optcdb.API;
 
@@ -70,9 +71,10 @@ public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, I
             Task evolutionsTask = new EvolutionsPopulateTask(database, (TaskCallback) delegate);
             Task familyTask = new FamiliesPopulateTask(database, (TaskCallback) delegate);
             Task cooldownsTask = new CooldownsPopulateTask(database, (TaskCallback) delegate);
+            Task tagsTask = new TagsPopulateTask(database, (TaskCallback) delegate);
 
-            delegate.addTasks(evolutionsTask, familyTask, cooldownsTask);
-            delegate.awaitTermination(20);
+            delegate.addTasks(evolutionsTask, familyTask, cooldownsTask, tagsTask);
+            delegate.awaitTermination(25);
 
         } catch (Exception ex) {
             return -1;

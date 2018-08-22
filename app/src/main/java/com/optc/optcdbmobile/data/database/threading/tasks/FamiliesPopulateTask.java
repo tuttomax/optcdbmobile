@@ -61,7 +61,8 @@ public class FamiliesPopulateTask extends DatabaseTask {
             setError(ex);
 
             ex.printStackTrace();
-            return;
+            Thread.currentThread().interrupt();
+
         }
 
         setState(COMPLETED);

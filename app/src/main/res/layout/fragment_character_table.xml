@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/character_table_recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </HorizontalScrollView>
+
+
+    <!--
+        Not working. The thumb deoends on item number; greater the number thiner the thumb.
+    app:fastScrollEnabled="true"
+    app:fastScrollHorizontalThumbDrawable="@drawable/scrollbar_thumb_state"
+    app:fastScrollHorizontalTrackDrawable="@drawable/scrollbar_line_state"
+    app:fastScrollVerticalThumbDrawable="@drawable/scrollbar_line_state"
+    app:fastScrollVerticalTrackDrawable="@drawable/scrollbar_thumb_state" /> -->
+
+
+</android.support.constraint.ConstraintLayout>

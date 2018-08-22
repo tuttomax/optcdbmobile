@@ -3,10 +3,6 @@ Wrapper mobile of http://optc-db.github.io
 
 ### TODO
 
-- [X] Parallel DatabaseBuildingAsyncTask
-
----
-
 - [ ] Character Table
 - [ ] Drop table
 - [ ] Evolution Helper

@@ -16,6 +16,15 @@
 
 package com.optc.optcdbmobile.data.optcdb.api_parser;
 
-//TODO Implement me
-public class AliasParser {
+
+import com.optc.optcdbmobile.data.database.entities.Alias;
+import com.optc.optcdbmobile.data.optcdb.BaseParser;
+
+import java.util.List;
+
+public class AliasParser extends BaseParser<List<Alias>> {
+    @Override
+    public List<Alias> parse(Object jsParsed) {
+        return null;
+    }
 }

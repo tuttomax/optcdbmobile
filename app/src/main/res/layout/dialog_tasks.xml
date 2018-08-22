@@ -12,7 +12,7 @@
         android:layout_marginBottom="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?attr/textAppearanceLargePopupMenu"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold" />
 
     <android.support.v7.widget.RecyclerView

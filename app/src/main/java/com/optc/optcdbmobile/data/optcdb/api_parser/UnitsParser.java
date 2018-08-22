@@ -16,6 +16,8 @@
 
 package com.optc.optcdbmobile.data.optcdb.api_parser;
 
+import android.text.TextUtils;
+
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.optcdb.BaseParser;
 
@@ -44,9 +46,12 @@ public class UnitsParser extends BaseParser<List<Unit>> {
         for (NativeArray array : temp) {
 
             int index = 0;
-            ++id;
 
             String name = toType(array.get(index++), String.class);
+
+            if (name == null || TextUtils.isEmpty(name)) continue;
+
+            ++id;
 
             Object obj = array.get(index++);
             types = parseTypes(obj);

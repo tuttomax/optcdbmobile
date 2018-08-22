@@ -3,18 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory android:title="Character Table">
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:icon="@drawable/ic_collections_black_24dp"
-            android:key="@string/pref_card_layout_key"
-            android:title="@string/pref_card_layout_title" />
-
         <MultiSelectListPreference
             android:defaultValue="@array/pref_character_info_defaults"
             android:dialogTitle="@string/pref_character_info_dialog_title"
             android:entries="@array/pref_character_info_names"
             android:entryValues="@array/pref_character_info_indexes"
-            android:icon="@drawable/ic_person_black_24dp"
+            android:icon="@drawable/ic_person"
             android:key="@string/pref_character_info_key"
             android:title="@string/pref_character_info_title" />
 
@@ -23,7 +17,7 @@
     <PreferenceCategory android:title="@string/pref_database_cat_download">
         <SwitchPreference
             android:defaultValue="@string/pref_wifi_only_default_value"
-            android:icon="@drawable/ic_wifi_black_24dp"
+            android:icon="@drawable/ic_wifi"
             android:key="@string/pref_wifi_only_key"
             android:summary="@string/pref_wifi_only_summary_true"
             android:title="@string/pref_wifi_only_title" />
@@ -32,7 +26,7 @@
         <SwitchPreference
             android:defaultValue="@string/pref_auto_download_default_value"
             android:dependency="@string/pref_wifi_only_key"
-            android:icon="@drawable/ic_file_download_black_24dp"
+            android:icon="@drawable/ic_download"
             android:key="@string/pref_auto_download_key"
             android:title="@string/pref_auto_download_title" />
     </PreferenceCategory>
@@ -41,7 +35,7 @@
         <com.optc.optcdbmobile.data.ui.activities.fragments.Settings.SingleLinePreference
 
 
-            android:icon="@drawable/ic_sync_black_24dp"
+            android:icon="@drawable/ic_sync"
             android:key="@string/pref_rebuild_database_key"
             android:persistent="true"
             android:title="@string/pref_rebuild_database_title"

@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-
+<?xml version="1.0" encoding="utf-8"?><!-- TODO After you have edited this file copy-cut its contents inside
+    header_character_tabled change:
+        1. ImageView -> TextView
+        2. layout_width's unit_color with the sum of layout_width and layout_marginEnd in this file
+            deleting margin_end and margin_start
+-->
 
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
@@ -16,7 +20,11 @@
         android:id="@+id/unit_id"
         android:layout_width="45dp"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp" />
+        android:layout_margin="4dp"
+        android:gravity="center" />
+
+    <!-- TODO Change Adapter THUMB_WIDTH and THUMB_HEIGHT
+              if you change layout_width and layout_height -->
 
     <TextView
         android:id="@+id/unit_thumb"
@@ -30,36 +38,42 @@
         android:id="@+id/unit_name"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp" />
+        android:layout_margin="4dp"
+        android:gravity="start" />
 
     <!-- layout_with in header = 35 + 25 -->
     <TextView
         android:id="@+id/unit_colors"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp" />
+        android:layout_margin="4dp"
+        android:gravity="start" />
 
     <TextView
         android:id="@+id/unit_stars"
         android:layout_width="45dp"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp" />
+        android:layout_margin="4dp"
+        android:gravity="start" />
 
     <TextView
         android:id="@+id/unit_hp"
         android:layout_width="45dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:layout_margin="4dp" />
 
     <TextView
         android:id="@+id/unit_atk"
         android:layout_width="45dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:layout_margin="4dp" />
 
     <TextView
         android:id="@+id/unit_rcv"
         android:layout_width="45dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:layout_margin="4dp" />
 </GridLayout>

@@ -42,6 +42,10 @@ public class CheckDatabaseVersionAsyncTaskListener implements AsyncTaskListener<
     @Override
     public void onPostExecute(Byte action) {
         if (action != null) {
+            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
+                    .putBoolean(Constants.Settings.pref_update_available, true)
+                    .apply();
+
             switch (action) {
                 case ACTION_SHOW_UPDATE:
                     Snackbar.make(context.getView(), "New database version available", Snackbar.LENGTH_LONG)
@@ -61,8 +65,12 @@ public class CheckDatabaseVersionAsyncTaskListener implements AsyncTaskListener<
             }
         } else {
             PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                    .putBoolean(Constants.Settings.pref_update_available, false);
+                    .putBoolean(Constants.Settings.pref_update_available, false)
+                    .apply();
         }
 
+        PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
+                .putBoolean(Constants.Settings.pref_check_done_key, true)
+                .apply();
     }
 }

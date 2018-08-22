@@ -55,11 +55,12 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @Deprecated
-/*
-    @deprecated: Use ParallelBuildingDatabaseAsyncTask.
-    Don't delete in case of BUGS in ParallelBuildingDatabaseAsyncTask
-*/
+/**
+ * @deprecated: Use @see ParallelBuildingDatabaseAsyncTask.
+ * Don't delete in case of BUGS in ParallelBuildingDatabaseAsyncTask
+ */
 public class BuildDatabaseAsyncTask extends AsyncTask<Void, String, Integer> {
+
     private WeakReference<Context> refContext;
     private WeakReference<View> refView;
 
@@ -96,7 +97,7 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, String, Integer> {
     protected void onPostExecute(Integer result) {
         dialog.dismiss();
         if (result == 1) {
-            PreferenceManager.getDefaultSharedPreferences(refContext.get()).edit().putInt(Constants.Settings.pref_database_version_key, newVersion).commit();
+            PreferenceManager.getDefaultSharedPreferences(refContext.get()).edit().putInt(Constants.Settings.pref_database_version_key, newVersion).apply();
             Snackbar.make(refView.get(), "Database building complete", Snackbar.LENGTH_LONG).show();
         } else if (result == -1) {
             Snackbar.make(refView.get(), "Error building database", Snackbar.LENGTH_LONG)
