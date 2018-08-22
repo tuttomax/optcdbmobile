@@ -18,6 +18,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.Constants;
+import com.optc.optcdbmobile.data.GlideApp;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
@@ -46,7 +47,7 @@ public class CharacterTableAdapter extends RecyclerView.Adapter<CharacterTableAd
         this.list = list;
 
         //HACK: Fake unit
-        list.add(0, new Unit(-1, "", "", "", "", "", -1,
+        list.add(0, new Unit(-1, -1, "", "", "", "", "", -1,
                 (byte) -1, -1, -1, -1, -1, -1, -1,
                 (byte) -1, (byte) -1, (byte) -1, 0.0f));
 
@@ -90,7 +91,7 @@ public class CharacterTableAdapter extends RecyclerView.Adapter<CharacterTableAd
             UnitHolder unitHolder = (UnitHolder) holder;
             final Unit unit = list.get(unitHolder.getAdapterPosition());
 
-            unitHolder.idTextView.setText(String.valueOf(unit.getId()));
+            unitHolder.idTextView.setText(String.valueOf(unit.getUnitId()));
 
             String url = API.getThumb(unit.getId());
 

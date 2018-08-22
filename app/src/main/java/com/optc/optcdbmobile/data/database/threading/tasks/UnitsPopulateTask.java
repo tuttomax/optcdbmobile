@@ -23,6 +23,7 @@ import com.optc.optcdbmobile.data.database.threading.DatabaseTask;
 import com.optc.optcdbmobile.data.database.threading.TaskCallback;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class UnitsPopulateTask extends DatabaseTask {
 
@@ -43,6 +44,11 @@ public class UnitsPopulateTask extends DatabaseTask {
             setMax(unitsData.size());
             setOperation("Populating units table");
             for (Unit unit : unitsData) {
+
+                Logger.getLogger(UnitsPopulateTask.class.getSimpleName()).info(String.format(
+                        "[%d, %d]",
+                        unit.getId(), unit.getUnitId()));
+
                 getDatabase().unitDAO().insert(unit);
                 increment();
             }

@@ -18,7 +18,8 @@ public class UnitProxy implements Parcelable {
             return new UnitProxy[size];
         }
     };
-    private int id;
+    private int databaseId;
+    private int unitId;
     private String name;
     private String class1;
     private String class2;
@@ -38,7 +39,8 @@ public class UnitProxy implements Parcelable {
     private Float stars;
 
     UnitProxy(Unit unit) {
-        id = unit.getId();
+        databaseId = unit.getId();
+        unitId = unit.getUnitId();
         name = unit.getName();
         class1 = unit.getClass1();
         class2 = unit.getClass2();
@@ -59,7 +61,8 @@ public class UnitProxy implements Parcelable {
     }
 
     protected UnitProxy(Parcel in) {
-        id = in.readInt();
+        databaseId = in.readInt();
+        unitId = in.readInt();
         name = in.readString();
         class1 = in.readString();
         class2 = in.readString();
@@ -135,7 +138,8 @@ public class UnitProxy implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
 
-        parcel.writeInt(id);
+        parcel.writeInt(databaseId);
+        parcel.writeInt(unitId);
         parcel.writeString(name);
         parcel.writeString(class1);
         parcel.writeString(class2);
@@ -215,8 +219,13 @@ public class UnitProxy implements Parcelable {
         }
     }
 
-    public int getId() {
-        return id;
+
+    public int getDatabaseId() {
+        return databaseId;
+    }
+
+    public int getUnitId() {
+        return unitId;
     }
 
     public String getName() {

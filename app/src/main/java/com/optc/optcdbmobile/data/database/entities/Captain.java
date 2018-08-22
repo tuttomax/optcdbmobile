@@ -29,7 +29,7 @@ import android.arch.persistence.room.PrimaryKey;
 public class Captain {
 
     @PrimaryKey
-    //id equals unit_id
+    //id equals unit index
     private int id;
 
     private String notes;

@@ -86,7 +86,7 @@ public class UnitDialog extends DialogFragment {
         ImageView unitImage = root.findViewById(R.id.unit_image);
         Glide
                 .with(this)
-                .load(API.getBigImage(unit.getId()))
+                .load(API.getBigImage(unit.getDatabaseId()))
                 .apply(new RequestOptions()
                         .centerInside()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)

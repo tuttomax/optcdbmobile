@@ -19,12 +19,14 @@ package com.optc.optcdbmobile.data.optcdb.api_parser;
 import android.text.TextUtils;
 
 import com.optc.optcdbmobile.data.database.entities.Unit;
+import com.optc.optcdbmobile.data.database.threading.tasks.UnitsPopulateTask;
 import com.optc.optcdbmobile.data.optcdb.BaseParser;
 
 import org.mozilla.javascript.NativeArray;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class UnitsParser extends BaseParser<List<Unit>> {
     @Override
@@ -42,8 +44,12 @@ public class UnitsParser extends BaseParser<List<Unit>> {
         Integer expToMax, level1HP, maxHP, level1ATK, maxATK, level1RCV, maxRCV;
 
         Unit unit;
+        //id used for foreign key constraint
+        int reference_id = 0;
 
         for (NativeArray array : temp) {
+
+            reference_id++;
 
             int index = 0;
 
@@ -75,7 +81,7 @@ public class UnitsParser extends BaseParser<List<Unit>> {
             maxRCV = toType(array.get(index++), Integer.class);
             //int growth = array.get(index);
 
-            unit = new Unit(id, name, classes[0], classes[1], types[0], types[1], expToMax, maxLevel,
+            unit = new Unit(reference_id, id, name, classes[0], classes[1], types[0], types[1], expToMax, maxLevel,
                     level1ATK, maxATK, level1HP, maxHP, level1RCV, maxRCV,
                     cost, combo, socket, stars);
 

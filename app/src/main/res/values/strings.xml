@@ -66,4 +66,9 @@
     <string name="pref_open_source_key">open_source</string>
     <string name="pref_card_layout_title">Use card layout</string>
     <string name="pref_card_layout_key">card_layout</string>
+    <string name="atk">ATK</string>
+    <string name="hp">HP</string>
+    <string name="level">Level</string>
+    <string name="lvl_1">1</string>
+    <string name="rcv">RCV</string>
 </resources>

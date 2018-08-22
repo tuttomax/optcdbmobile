@@ -121,14 +121,15 @@ public class OPTCDatabaseRepository {
     }
 
     public void CheckVersion(AsyncTaskContext context) {
-        if (sharedPreferences.getBoolean(Constants.Settings.pref_check_done_key, false)) return;
+        if (sharedPreferences.getBoolean(Constants.Settings.pref_update_available, true)) {
+            if (sharedPreferences.getBoolean(Constants.Settings.pref_check_done_key, false)) return;
 
-        if (thereIsConnection(context.getView())) {
-            CheckDatabaseVersionAsyncTask task = new CheckDatabaseVersionAsyncTask(new CheckDatabaseVersionAsyncTaskListener(context));
-            task.setPreferences(sharedPreferences);
-            task.execute();
+            if (thereIsConnection(context.getView())) {
+                CheckDatabaseVersionAsyncTask task = new CheckDatabaseVersionAsyncTask(new CheckDatabaseVersionAsyncTaskListener(context));
+                task.setPreferences(sharedPreferences);
+                task.execute();
+            }
         }
-
     }
 
 

@@ -56,7 +56,7 @@ public class ParallelBuildingDatabaseAsyncTaskListener implements AsyncTaskListe
             PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
                     .putInt(Constants.Settings.pref_database_version_key, -1).apply();
 
-            Snackbar.make(view, "Error building database", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Error building database", Snackbar.LENGTH_INDEFINITE)
                     .setActionTextColor(Color.RED)
                     .setAction("REDO", new View.OnClickListener() {
                         @Override

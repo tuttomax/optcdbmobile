@@ -107,9 +107,9 @@ public class API {
             case 2502:
                 return "http://onepiece-treasurecruise.com/en/wp-content/uploads/sites/2/f5013.png";
             case 2503:
-                return "http://onepiece-treasurecruise.com/en/wp-content/uploads/sites/2/f5013.png\"";
+                return "http://onepiece-treasurecruise.com/en/wp-content/uploads/sites/2/f5013.png";
             case 2504:
-                return "http://onepiece-treasurecruise.com/en/wp-content/uploads/sites/2/f5013.png\"";
+                return "http://onepiece-treasurecruise.com/en/wp-content/uploads/sites/2/f5014.png";
             case 5000:
                 return String.format(specialThumb, "character_10185_t1");
             case 5001:
@@ -142,7 +142,6 @@ public class API {
                 return String.format(specialThumb, "character_10183_t1_psy");
             case 5015:
                 return String.format(specialThumb, "character_10183_t1_dex");
-
             case 5016:
                 return String.format(specialThumb, "character_10344_t1");
             case 5017:

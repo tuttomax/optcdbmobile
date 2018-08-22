@@ -41,22 +41,41 @@ public class GeneralFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_general_info, container, false);
+        View root = inflater.inflate(R.layout.fragment_unit_general, container, false);
 
-        TextView class1TextView, class2TextView, socketsTextView, comboTextView, maxlvlTextView, maxexpTextView;
-        class1TextView = root.findViewById(R.id.class1);
-        class2TextView = root.findViewById(R.id.class2);
-        socketsTextView = root.findViewById(R.id.sockets);
+        TextView comboTextView, maxlvlTextView, maxexpTextView,
+                levelmaxTextView,
+                hplvl1TextView,
+                hpmaxTextView,
+                atklvl1TextView,
+                atkmaxTextView,
+                rcvvl1TextView,
+                rcvmaxTextView;
+
         comboTextView = root.findViewById(R.id.combo);
         maxlvlTextView = root.findViewById(R.id.maxlevel);
         maxexpTextView = root.findViewById(R.id.maxexp);
 
-        class1TextView.setText(String.format("Class1: %s", unit.getClass1()));
-        class2TextView.setText(String.format("Class2: %s", unit.getClass2()));
-        socketsTextView.setText(String.format("Socket: %d", unit.getSocket()));
+        levelmaxTextView = root.findViewById(R.id.lvlmax);
+        hplvl1TextView = root.findViewById(R.id.hplvl1);
+        hpmaxTextView = root.findViewById(R.id.hplvlmax);
+        atklvl1TextView = root.findViewById(R.id.atklvl1);
+        atkmaxTextView = root.findViewById(R.id.atklvlmax);
+        rcvvl1TextView = root.findViewById(R.id.rcvlvl1);
+        rcvmaxTextView = root.findViewById(R.id.rcvlvlmax);
+
+
         comboTextView.setText(String.format("Combo: %d", unit.getCombo()));
         maxlvlTextView.setText(String.format("Level Max: %d", unit.getLevelMax()));
         maxexpTextView.setText(String.format("Exp Max: %s", unit.getExpToMax()));
+
+        levelmaxTextView.setText(String.valueOf(unit.getLevelMax()));
+        hplvl1TextView.setText(String.valueOf(unit.getHpLevel1()));
+        hpmaxTextView.setText(String.valueOf(unit.getMaxHp()));
+        atklvl1TextView.setText(String.valueOf(unit.getAtkLevel1()));
+        atkmaxTextView.setText(String.valueOf(unit.getMaxAtk()));
+        rcvvl1TextView.setText(String.valueOf(unit.getRcvLevel1()));
+        rcvmaxTextView.setText(String.valueOf(unit.getMaxRcv()));
 
         return root;
     }

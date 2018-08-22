@@ -36,7 +36,7 @@ public class CheckDatabaseVersionAsyncTaskListener implements AsyncTaskListener<
 
     @Override
     public void onPreExecute() {
-        Snackbar.make(context.getView(), "Checking database update...", Snackbar.LENGTH_SHORT).show();
+        //Snackbar.make(context.getView(), "Checking database update...", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
