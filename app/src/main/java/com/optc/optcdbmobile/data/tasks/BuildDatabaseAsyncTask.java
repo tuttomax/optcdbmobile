@@ -40,7 +40,6 @@ import com.optc.optcdbmobile.data.database.entities.SpecialLocation;
 import com.optc.optcdbmobile.data.database.entities.TrainingForestLocation;
 import com.optc.optcdbmobile.data.database.entities.TreasureLocation;
 import com.optc.optcdbmobile.data.database.entities.Unit;
-import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.optcdb.entities.Cooldown;
 import com.optc.optcdbmobile.data.optcdb.entities.Detail;
 import com.optc.optcdbmobile.data.optcdb.entities.FamilyContainer;
@@ -130,41 +129,41 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, String, Integer> {
         final Future<List<Unit>> futureUnits = service.submit(new Callable<List<Unit>>() {
             @Override
             public List<Unit> call() throws Exception {
-                return (List<Unit>) API.getData(Constants.APIType.UNITS_TYPE);
+                return (List<Unit>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.UNITS_TYPE);
             }
         });
 
         final Future<List<Detail>> futureDetails = service.submit(new Callable<List<Detail>>() {
             @Override
             public List<Detail> call() throws Exception {
-                return (List<Detail>) API.getData(Constants.APIType.DETAILS_TYPE);
+                return (List<Detail>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.DETAILS_TYPE);
             }
         });
 
         final Future<List<Cooldown>> futureCooldown = service.submit(new Callable<List<Cooldown>>() {
             @Override
             public List<Cooldown> call() throws Exception {
-                return (List<Cooldown>) API.getData(Constants.APIType.COOLDOWNS_TYPE);
+                return (List<Cooldown>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.COOLDOWNS_TYPE);
             }
         });
 
         final Future<List<Evolution>> futureEvolution = service.submit(new Callable<List<Evolution>>() {
             @Override
             public List<Evolution> call() throws Exception {
-                return (List<Evolution>) API.getData(Constants.APIType.EVOLUTIONS_TYPE);
+                return (List<Evolution>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.EVOLUTIONS_TYPE);
             }
         });
 
         final Future<List<Object>> futureDrops = service.submit(new Callable<List<Object>>() {
             @Override
             public List<Object> call() throws Exception {
-                return (List<Object>) API.getData(Constants.APIType.DROPS_TYPE);
+                return (List<Object>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.DROPS_TYPE);
             }
         });
         final Future<List<FamilyContainer>> futureFamily = service.submit(new Callable<List<FamilyContainer>>() {
             @Override
             public List<FamilyContainer> call() throws Exception {
-                return (List<FamilyContainer>) API.getData(Constants.APIType.FAMILIES_TYPE);
+                return (List<FamilyContainer>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.FAMILIES_TYPE);
             }
         });
 
@@ -340,7 +339,7 @@ public class BuildDatabaseAsyncTask extends AsyncTask<Void, String, Integer> {
             ex.printStackTrace();
             return -1;
         }
-        newVersion = (Integer) API.getData(Constants.APIType.VERSION_TYPE);
+        newVersion = (Integer) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.VERSION_TYPE);
         return 1;
     }
 

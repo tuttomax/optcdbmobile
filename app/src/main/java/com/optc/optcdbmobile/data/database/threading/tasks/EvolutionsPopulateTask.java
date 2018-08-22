@@ -21,7 +21,6 @@ import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.entities.Evolution;
 import com.optc.optcdbmobile.data.database.threading.DatabaseTask;
 import com.optc.optcdbmobile.data.database.threading.TaskCallback;
-import com.optc.optcdbmobile.data.optcdb.API;
 
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class EvolutionsPopulateTask extends DatabaseTask {
 
         setOperation("Downloading evolution list");
         try {
-            List<Evolution> evolutionList = (List<Evolution>) API.getData(Constants.APIType.EVOLUTIONS_TYPE);
+            List<Evolution> evolutionList = (List<Evolution>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.EVOLUTIONS_TYPE);
 
             setOperation("Populating evolution table");
             setMax(evolutionList.size());

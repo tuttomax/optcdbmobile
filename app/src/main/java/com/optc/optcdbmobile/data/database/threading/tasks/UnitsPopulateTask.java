@@ -21,7 +21,6 @@ import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.database.threading.DatabaseTask;
 import com.optc.optcdbmobile.data.database.threading.TaskCallback;
-import com.optc.optcdbmobile.data.optcdb.API;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class UnitsPopulateTask extends DatabaseTask {
         try {
 
             setOperation("Downloading units data...");
-            List<Unit> unitsData = (List<Unit>) API.getData(Constants.APIType.UNITS_TYPE);
+            List<Unit> unitsData = (List<Unit>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.UNITS_TYPE);
 
             setMax(unitsData.size());
             setOperation("Populating units table");

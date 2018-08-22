@@ -30,7 +30,6 @@ import com.optc.optcdbmobile.data.database.threading.tasks.EvolutionsPopulateTas
 import com.optc.optcdbmobile.data.database.threading.tasks.FamiliesPopulateTask;
 import com.optc.optcdbmobile.data.database.threading.tasks.TagsPopulateTask;
 import com.optc.optcdbmobile.data.database.threading.tasks.UnitsPopulateTask;
-import com.optc.optcdbmobile.data.optcdb.API;
 
 public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, Integer> {
 
@@ -80,7 +79,7 @@ public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, I
             return -1;
         }
 
-        return (Integer) API.getData(Constants.APIType.VERSION_TYPE);
+        return (Integer) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.VERSION_TYPE);
     }
 
     @Override

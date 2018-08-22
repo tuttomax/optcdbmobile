@@ -20,11 +20,28 @@ package com.optc.optcdbmobile.data.optcdb.api_parser;
 import com.optc.optcdbmobile.data.database.entities.Alias;
 import com.optc.optcdbmobile.data.optcdb.BaseParser;
 
+import org.mozilla.javascript.NativeArray;
+import org.mozilla.javascript.NativeObject;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AliasParser extends BaseParser<List<Alias>> {
     @Override
     public List<Alias> parse(Object jsParsed) {
-        return null;
+        NativeObject rootObj = (NativeObject) jsParsed;
+        List<Alias> list = new ArrayList<>();
+
+        for (Map.Entry<Object, Object> entry : rootObj.entrySet()) {
+            Integer unitId = toType(entry.getKey(), Integer.class);
+
+            NativeArray aliasArray = toType(entry.getValue(), NativeArray.class);
+            for (int index = 0; index < aliasArray.size(); index++) {
+                String aliasName = toType(aliasArray.get(index), String.class);
+                list.add(new Alias(unitId, index, aliasName));
+            }
+        }
+        return list;
     }
 }

@@ -20,7 +20,6 @@ import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.threading.DatabaseTask;
 import com.optc.optcdbmobile.data.database.threading.TaskCallback;
-import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.optcdb.entities.Cooldown;
 
 import java.util.List;
@@ -36,7 +35,7 @@ public class CooldownsPopulateTask extends DatabaseTask {
         setState(RUNNING);
         try {
             setOperation("Downloading special cooldowns data...");
-            List<Cooldown> cooldownList = (List<Cooldown>) API.getData(Constants.APIType.COOLDOWNS_TYPE);
+            List<Cooldown> cooldownList = (List<Cooldown>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.COOLDOWNS_TYPE);
 
             setOperation("Updating units' special cooldown");
             setMax(cooldownList.size());

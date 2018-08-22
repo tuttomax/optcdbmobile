@@ -20,7 +20,6 @@ import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.threading.DatabaseTask;
 import com.optc.optcdbmobile.data.database.threading.TaskCallback;
-import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.optcdb.entities.Detail;
 
 import java.util.List;
@@ -37,7 +36,7 @@ public class DetailsPopulatorTask extends DatabaseTask {
 
         try {
             setOperation("Downloading details data...");
-            List<Detail> detailList = (List<Detail>) API.getData(Constants.APIType.DETAILS_TYPE);
+            List<Detail> detailList = (List<Detail>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.DETAILS_TYPE);
 
             setOperation("Updating units' details");
             setMax(detailList.size());

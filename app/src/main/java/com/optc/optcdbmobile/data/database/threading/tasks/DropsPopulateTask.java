@@ -30,7 +30,6 @@ import com.optc.optcdbmobile.data.database.entities.TrainingForestLocation;
 import com.optc.optcdbmobile.data.database.entities.TreasureLocation;
 import com.optc.optcdbmobile.data.database.threading.DatabaseTask;
 import com.optc.optcdbmobile.data.database.threading.TaskCallback;
-import com.optc.optcdbmobile.data.optcdb.API;
 
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class DropsPopulateTask extends DatabaseTask {
         try {
 
             setOperation("Downloading drops data");
-            List<Object> dropsList = (List<Object>) API.getData(Constants.APIType.DROPS_TYPE);
+            List<Object> dropsList = (List<Object>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.DROPS_TYPE);
 
             setOperation("Populating drops table");
             setMax(dropsList.size());

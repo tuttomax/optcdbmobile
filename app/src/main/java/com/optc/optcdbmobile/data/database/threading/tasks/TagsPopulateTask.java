@@ -5,7 +5,6 @@ import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.entities.Tag;
 import com.optc.optcdbmobile.data.database.threading.DatabaseTask;
 import com.optc.optcdbmobile.data.database.threading.TaskCallback;
-import com.optc.optcdbmobile.data.optcdb.API;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class TagsPopulateTask extends DatabaseTask {
         try {
 
             setOperation("Downloading tags data...");
-            List<Tag> tagsData = (List<Tag>) API.getData(Constants.APIType.TAGS_TYPE);
+            List<Tag> tagsData = (List<Tag>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.TAGS_TYPE);
 
             setMax(tagsData.size());
             setOperation("Populating tags table");

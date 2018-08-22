@@ -20,7 +20,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import com.optc.optcdbmobile.data.Constants;
-import com.optc.optcdbmobile.data.optcdb.API;
 
 public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte> {
 
@@ -49,7 +48,7 @@ public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte>
 
     @Override
     protected Byte doInBackground(Void... voids) {
-        Integer newVersion = (Integer) API.getData(Constants.APIType.VERSION_TYPE);
+        Integer newVersion = (Integer) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.VERSION_TYPE);
 
         boolean updateAvailable = currentVersion < newVersion;
 

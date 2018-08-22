@@ -22,7 +22,6 @@ import com.optc.optcdbmobile.data.database.entities.Family;
 import com.optc.optcdbmobile.data.database.entities.FamilyUnit;
 import com.optc.optcdbmobile.data.database.threading.DatabaseTask;
 import com.optc.optcdbmobile.data.database.threading.TaskCallback;
-import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.optcdb.entities.FamilyContainer;
 
 import java.util.List;
@@ -40,7 +39,7 @@ public class FamiliesPopulateTask extends DatabaseTask {
 
         try {
             setOperation("Downloading family data...");
-            List<FamilyContainer> familyList = (List<FamilyContainer>) API.getData(Constants.APIType.FAMILIES_TYPE);
+            List<FamilyContainer> familyList = (List<FamilyContainer>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.FAMILIES_TYPE);
 
             setOperation("Populating family table");
             setMax(familyList.size());

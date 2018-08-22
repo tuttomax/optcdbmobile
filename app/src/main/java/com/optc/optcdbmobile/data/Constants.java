@@ -19,7 +19,7 @@ package com.optc.optcdbmobile.data;
 public class Constants {
 
 
-    public class APIType {
+    public class API {
         public final static byte VERSION_TYPE = 0;
         public final static byte UNITS_TYPE = 1;
         public final static byte EVOLUTIONS_TYPE = 2;

@@ -46,39 +46,39 @@ public class API {
     private final static String urlBigImage = "https://onepiece-treasurecruise.com/wp-content/uploads/c%s.png";
 
     private final static HashMap<Byte, String> url_table = new HashMap<Byte, String>(6) {{
-        put(Constants.APIType.VERSION_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/version.js");
-        put(Constants.APIType.UNITS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/units.js");
-        put(Constants.APIType.EVOLUTIONS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/evolutions.js");
-        put(Constants.APIType.DROPS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/drops.js");
-        put(Constants.APIType.DETAILS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/details.js");
-        put(Constants.APIType.COOLDOWNS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/cooldowns.js");
-        put(Constants.APIType.FAMILIES_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/families.js");
-        put(Constants.APIType.TAGS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/flags.js");
-        put(Constants.APIType.ALIASES_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/aliases.js");
+        put(Constants.API.VERSION_TYPE, "https://raw.githubusercontent.com/tuttomax/optcdbmobile/master/version.js");
+        put(Constants.API.UNITS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/units.js");
+        put(Constants.API.EVOLUTIONS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/evolutions.js");
+        put(Constants.API.DROPS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/drops.js");
+        put(Constants.API.DETAILS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/details.js");
+        put(Constants.API.COOLDOWNS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/cooldowns.js");
+        put(Constants.API.FAMILIES_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/families.js");
+        put(Constants.API.TAGS_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/flags.js");
+        put(Constants.API.ALIASES_TYPE, "https://raw.githubusercontent.com/optc-db/optc-db.github.io/master/common/data/aliases.js");
     }};
 
     private final static HashMap<Byte, String> name_table = new HashMap<Byte, String>(6) {{
-        put(Constants.APIType.VERSION_TYPE, "dbVersion");
-        put(Constants.APIType.UNITS_TYPE, "units");
-        put(Constants.APIType.EVOLUTIONS_TYPE, "evolutions");
-        put(Constants.APIType.DROPS_TYPE, "drops");
-        put(Constants.APIType.DETAILS_TYPE, "details");
-        put(Constants.APIType.COOLDOWNS_TYPE, "cooldowns");
-        put(Constants.APIType.FAMILIES_TYPE, "families");
-        put(Constants.APIType.TAGS_TYPE, "flags");
-        put(Constants.APIType.ALIASES_TYPE, "aliases");
+        put(Constants.API.VERSION_TYPE, "dbVersion");
+        put(Constants.API.UNITS_TYPE, "units");
+        put(Constants.API.EVOLUTIONS_TYPE, "evolutions");
+        put(Constants.API.DROPS_TYPE, "drops");
+        put(Constants.API.DETAILS_TYPE, "details");
+        put(Constants.API.COOLDOWNS_TYPE, "cooldowns");
+        put(Constants.API.FAMILIES_TYPE, "families");
+        put(Constants.API.TAGS_TYPE, "flags");
+        put(Constants.API.ALIASES_TYPE, "aliases");
     }};
 
     private final static HashMap<Byte, BaseParser> parser_table = new HashMap<Byte, BaseParser>(6) {{
-        put(Constants.APIType.VERSION_TYPE, new VersionParser());
-        put(Constants.APIType.UNITS_TYPE, new UnitsParser());
-        put(Constants.APIType.EVOLUTIONS_TYPE, new EvolutionsParser());
-        put(Constants.APIType.DROPS_TYPE, new DropsParser());
-        put(Constants.APIType.DETAILS_TYPE, new DetailsParser());
-        put(Constants.APIType.COOLDOWNS_TYPE, new CooldownsParser());
-        put(Constants.APIType.FAMILIES_TYPE, new FamilyParser());
-        put(Constants.APIType.TAGS_TYPE, new TagParser());
-        put(Constants.APIType.ALIASES_TYPE, new AliasParser());
+        put(Constants.API.VERSION_TYPE, new VersionParser());
+        put(Constants.API.UNITS_TYPE, new UnitsParser());
+        put(Constants.API.EVOLUTIONS_TYPE, new EvolutionsParser());
+        put(Constants.API.DROPS_TYPE, new DropsParser());
+        put(Constants.API.DETAILS_TYPE, new DetailsParser());
+        put(Constants.API.COOLDOWNS_TYPE, new CooldownsParser());
+        put(Constants.API.FAMILIES_TYPE, new FamilyParser());
+        put(Constants.API.TAGS_TYPE, new TagParser());
+        put(Constants.API.ALIASES_TYPE, new AliasParser());
     }};
 
 
