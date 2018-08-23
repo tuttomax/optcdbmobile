@@ -67,10 +67,12 @@ public class CheckDatabaseVersionAsyncTaskListener implements AsyncTaskListener<
             PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
                     .putBoolean(Constants.Settings.pref_update_available, false)
                     .apply();
+
+            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
+                    .putBoolean(Constants.Settings.pref_check_done_key, true)
+                    .apply();
         }
 
-        PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                .putBoolean(Constants.Settings.pref_check_done_key, true)
-                .apply();
+
     }
 }

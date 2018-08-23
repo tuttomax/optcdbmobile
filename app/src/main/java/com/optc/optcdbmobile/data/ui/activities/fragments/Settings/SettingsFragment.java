@@ -46,7 +46,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
             Logger.getLogger(TAG).info(key);
 
             if (key.equals(getString(R.string.pref_database_version_key))) {
-                model.setDatabaseVersion(sharedPreferences.getInt(key, -1));
+                model.setDatabaseVersion(sharedPreferences.getFloat(key, -1f));
             } else if (key.equals(Constants.Settings.pref_update_available)) {
                 model.setUpdateAvailable(sharedPreferences.getBoolean(key, false));
             }
@@ -58,9 +58,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
         super.onCreate(savedInstanceState);
         model = ViewModelProviders.of(this).get(SettingsViewModel.class);
 
-        model.getDatabaseVersion().observe(this, new Observer<Integer>() {
+        model.getDatabaseVersion().observe(this, new Observer<Float>() {
             @Override
-            public void onChanged(@Nullable Integer newVersion) {
+            public void onChanged(@Nullable Float newVersion) {
                 findPreference(getString(R.string.pref_database_version_key)).setSummary(String.valueOf(newVersion));
             }
         });

@@ -17,9 +17,14 @@
 package com.optc.optcdbmobile.data.database.data_access_object;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Query;
 
 import com.optc.optcdbmobile.data.database.entities.PotentialDescription;
 
+import java.util.List;
+
 @Dao
 public abstract class PotentialDescriptionDAO implements BaseDAO<PotentialDescription> {
+    @Query("SELECT * FROM potential_description_table WHERE potential_id=:id")
+    public abstract List<PotentialDescription> getPotentialDescriptions(int id);
 }

@@ -26,7 +26,7 @@ import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.database.threading.ListTaskDialog;
 import com.optc.optcdbmobile.data.database.threading.TaskDelegate;
 
-public class ParallelBuildingDatabaseAsyncTaskListener implements AsyncTaskListener<Integer> {
+public class ParallelBuildingDatabaseAsyncTaskListener implements AsyncTaskListener<Float> {
     private AsyncTaskContext context;
     private View view;
 
@@ -46,11 +46,11 @@ public class ParallelBuildingDatabaseAsyncTaskListener implements AsyncTaskListe
     }
 
     @Override
-    public void onPostExecute(Integer returnedValue) {
+    public void onPostExecute(Float returnedValue) {
         dialog.dismiss();
         if (returnedValue > 0) {
             PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                    .putInt(Constants.Settings.pref_database_version_key, returnedValue).apply();
+                    .putFloat(Constants.Settings.pref_database_version_key, returnedValue).apply();
             Snackbar.make(view, "Database building complete", Snackbar.LENGTH_LONG).show();
         } else {
             PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()

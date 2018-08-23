@@ -16,18 +16,18 @@
     <style name="MainTheme" parent="BaseAppTheme.NoActionBar">
         <item name="dialogTheme">@style/BaseAppTheme.TaskDialog</item>
 
-        <item name="android:actionBarStyle">@style/BaseAppTheme.Toolbar</item>
+        <item name="actionBarStyle">@style/BaseAppTheme.Toolbar</item>
         <item name="buttonStyle">@style/BaseAppTheme.Button</item>
     </style>
 
     <style name="BaseAppTheme.Button">
-        <item name="android:background">@color/secondaryLightColor</item>
+        <item name="background">@color/secondaryLightColor</item>
         <item name="android:textColor">@color/secondaryLightTextColor</item>
     </style>
 
     <style name="BaseAppTheme.Toolbar" parent="BaseAppTheme">
-        <item name="android:background">@color/secondaryLightColor</item>
-        <item name="android:titleTextStyle">@style/BaseAppTheme.Toolbar.Title</item>
+        <item name="background">@color/secondaryLightColor</item>
+        <item name="titleTextStyle">@style/BaseAppTheme.Toolbar.Title</item>
         <item name="actionMenuTextColor">@color/secondaryLightTextColor</item>
     </style>
 
@@ -36,7 +36,7 @@
     </style>
 
     <style name="BaseAppTheme.Dialog" parent="BaseAppTheme.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@drawable/rounded_background</item>
         <item name="android:windowIsFloating">true</item>
     </style>

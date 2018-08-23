@@ -26,4 +26,7 @@ public abstract class SpecialDAO implements BaseDAO<Special> {
 
     @Query("SELECT COUNT(id) FROM special_table WHERE id=:id")
     public abstract int getCount(int id);
+
+    @Query("SELECT * FROM special_table WHERE id=:id")
+    public abstract Special getSpecial(int id);
 }

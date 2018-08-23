@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 
 public class SettingsViewModel extends AndroidViewModel {
 
-    private MutableLiveData<Integer> databaseVersion;
+    private MutableLiveData<Float> databaseVersion;
     private MutableLiveData<Integer> appVersion;
 
     private MutableLiveData<Boolean> updateAvailable;
@@ -22,11 +22,11 @@ public class SettingsViewModel extends AndroidViewModel {
         updateAvailable = new MutableLiveData<>();
     }
 
-    public LiveData<Integer> getDatabaseVersion() {
+    public LiveData<Float> getDatabaseVersion() {
         return databaseVersion;
     }
 
-    public void setDatabaseVersion(Integer newVersion) {
+    public void setDatabaseVersion(Float newVersion) {
         this.databaseVersion.setValue(newVersion);
     }
 
@@ -35,7 +35,7 @@ public class SettingsViewModel extends AndroidViewModel {
     }
 
     public void setAppVersion(Integer newVersion) {
-        this.databaseVersion.setValue(newVersion);
+        this.appVersion.setValue(newVersion);
     }
 
     public LiveData<Boolean> getUpdateAvailable() {

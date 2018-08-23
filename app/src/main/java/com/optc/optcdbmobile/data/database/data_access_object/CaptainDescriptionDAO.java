@@ -17,9 +17,15 @@
 package com.optc.optcdbmobile.data.database.data_access_object;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Query;
 
 import com.optc.optcdbmobile.data.database.entities.CaptainDescription;
 
+import java.util.List;
+
 @Dao
 public abstract class CaptainDescriptionDAO implements BaseDAO<CaptainDescription> {
+
+    @Query("SELECT * FROM captain_description_table WHERE captain_id=:id")
+    public abstract List<CaptainDescription> getCaptainDescriptions(int id);
 }

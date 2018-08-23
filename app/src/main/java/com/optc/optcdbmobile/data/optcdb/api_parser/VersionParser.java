@@ -18,9 +18,9 @@ package com.optc.optcdbmobile.data.optcdb.api_parser;
 
 import com.optc.optcdbmobile.data.optcdb.BaseParser;
 
-public class VersionParser extends BaseParser<Integer> {
+public class VersionParser extends BaseParser<Float> {
     @Override
-    public Integer parse(Object jsParsed) {
-        return toType(jsParsed, Integer.class);
+    public Float parse(Object jsParsed) {
+        return toType(jsParsed, Float.class);
     }
 }

@@ -25,7 +25,7 @@ public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte>
 
     private SharedPreferences preferences;
 
-    private Integer currentVersion;
+    private Float currentVersion;
     private boolean autoDownload;
 
     private AsyncTaskListener<Byte> listener;
@@ -41,14 +41,14 @@ public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte>
             listener.onPreExecute();
         }
 
-        currentVersion = preferences.getInt(Constants.Settings.pref_database_version_key, -1);
+        currentVersion = preferences.getFloat(Constants.Settings.pref_database_version_key, -1);
         autoDownload = preferences.getBoolean(Constants.Settings.pref_auto_download_key, false);
     }
 
 
     @Override
     protected Byte doInBackground(Void... voids) {
-        Integer newVersion = (Integer) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.VERSION_TYPE);
+        Float newVersion = (Float) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.VERSION_TYPE);
 
         boolean updateAvailable = currentVersion < newVersion;
 

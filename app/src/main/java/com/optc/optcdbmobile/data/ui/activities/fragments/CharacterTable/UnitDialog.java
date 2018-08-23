@@ -1,7 +1,6 @@
 package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -60,10 +59,10 @@ public class UnitDialog extends DialogFragment {
 
         try {
             adapter.setHasCaptain(viewModel.unitHasCaptain(unit.getDatabaseId()));
-            adapter.setHasCaptain(viewModel.unitHasSpecial(unit.getDatabaseId()));
-            adapter.setHasCaptain(viewModel.unitHasSailor(unit.getDatabaseId()));
-            adapter.setHasCaptain(viewModel.unitHasPotential(unit.getDatabaseId()));
-            adapter.setHasCaptain(viewModel.unitHasLimit(unit.getDatabaseId()));
+            adapter.setHasSpecial(viewModel.unitHasSpecial(unit.getDatabaseId()));
+            adapter.setHasSailor(viewModel.unitHasSailor(unit.getDatabaseId()));
+            adapter.setHasPotential(viewModel.unitHasPotential(unit.getDatabaseId()));
+            adapter.setHasLimit(viewModel.unitHasLimit(unit.getDatabaseId()));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -105,6 +104,7 @@ public class UnitDialog extends DialogFragment {
 
         unitCost.setText(String.format("Cost:\n%s", unit.getCost()));
 
+
         ImageView unitImage = root.findViewById(R.id.unit_image);
         Glide
                 .with(this)
@@ -113,7 +113,8 @@ public class UnitDialog extends DialogFragment {
                         .override(580)
                         .centerInside()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .error(new ColorDrawable(UnitHelper.getTypeColor(unit.getType1(), getResources()))))
+                        .placeholder(R.drawable.ic_no_bigimage)
+                        .error(R.drawable.ic_no_bigimage))
                 .into(unitImage);
 
 
@@ -187,15 +188,15 @@ public class UnitDialog extends DialogFragment {
             add(GeneralFragment.newInstance(unit), "General");
 
             if (hasCaptain || hasSpecial || hasSailor) {
+
                 add(SpecialFragment.newInstance(unit.getDatabaseId()), "Abilities");
             }
 
-            if (hasPotential) {
-
+            if (hasLimit || hasPotential) {
+                add(LimitBreakFragment.newInstance(unit.getDatabaseId()), "Limit Break");
             }
-            if (hasLimit) {
 
-            }
+
         }
 
         @Override

@@ -14,24 +14,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.CaptainTextView
-                android:id="@+id/captain_informative"
+            <com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.LimitTextView
+                android:id="@+id/limit_informative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-
-            <com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.SpecialTextView
-                android:id="@+id/special_informative"
+            <com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.PotentialTextView
+                android:id="@+id/potential_informative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.SailorTextView
-                android:id="@+id/sailor_informative"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
         </LinearLayout>
-
     </ScrollView>
-
 
 </LinearLayout>

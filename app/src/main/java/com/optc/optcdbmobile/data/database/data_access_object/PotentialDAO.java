@@ -21,9 +21,14 @@ import android.arch.persistence.room.Query;
 
 import com.optc.optcdbmobile.data.database.entities.Potential;
 
+import java.util.List;
+
 @Dao
 public abstract class PotentialDAO implements BaseDAO<Potential> {
 
     @Query("SELECT COUNT(id) FROM potential_table WHERE id=:id")
     public abstract int getCount(int id);
+
+    @Query("SELECT * FROM potential_table WHERE id=:id")
+    public abstract List<Potential> getPotentials(int id);
 }

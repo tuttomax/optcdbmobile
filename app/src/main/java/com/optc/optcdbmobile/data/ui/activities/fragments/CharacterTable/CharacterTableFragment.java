@@ -27,6 +27,7 @@ public class CharacterTableFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         adapter = new CharacterTableAdapter(getContext());
         adapter.setItemClickListner(new CharacterTableAdapter.ItemClickListner() {
             @Override

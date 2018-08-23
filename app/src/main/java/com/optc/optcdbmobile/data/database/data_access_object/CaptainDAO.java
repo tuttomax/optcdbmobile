@@ -26,4 +26,7 @@ public abstract class CaptainDAO implements BaseDAO<Captain> {
 
     @Query("SELECT COUNT(id) FROM captain_table WHERE id=:id")
     public abstract int getCount(int id);
+
+    @Query("SELECT * FROM captain_table WHERE id=:id")
+    public abstract Captain getCaptain(int id);
 }

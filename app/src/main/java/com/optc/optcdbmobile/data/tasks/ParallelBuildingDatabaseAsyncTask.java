@@ -31,13 +31,13 @@ import com.optc.optcdbmobile.data.database.threading.tasks.FamiliesPopulateTask;
 import com.optc.optcdbmobile.data.database.threading.tasks.TagsPopulateTask;
 import com.optc.optcdbmobile.data.database.threading.tasks.UnitsPopulateTask;
 
-public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, Integer> {
+public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, Float> {
 
-    private AsyncTaskListener<Integer> listener;
+    private AsyncTaskListener<Float> listener;
     private OPTCDatabase database;
     private TaskDelegate delegate;
 
-    public ParallelBuildingDatabaseAsyncTask(AsyncTaskListener<Integer> listener) {
+    public ParallelBuildingDatabaseAsyncTask(AsyncTaskListener<Float> listener) {
         this.listener = listener;
     }
 
@@ -53,7 +53,7 @@ public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, I
     }
 
     @Override
-    protected Integer doInBackground(Void... voids) {
+    protected Float doInBackground(Void... voids) {
 
         try {
             database.clearAllTables();
@@ -76,14 +76,14 @@ public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, I
             delegate.awaitTermination(25);
 
         } catch (Exception ex) {
-            return -1;
+            return -1f;
         }
 
-        return (Integer) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.VERSION_TYPE);
+        return (Float) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.VERSION_TYPE);
     }
 
     @Override
-    protected void onPostExecute(Integer returnedValue) {
+    protected void onPostExecute(Float returnedValue) {
         if (listener != null) {
             listener.onPostExecute(returnedValue);
         }

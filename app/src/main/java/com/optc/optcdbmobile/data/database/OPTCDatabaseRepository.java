@@ -30,6 +30,14 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 
 import com.optc.optcdbmobile.data.Constants;
+import com.optc.optcdbmobile.data.database.entities.Captain;
+import com.optc.optcdbmobile.data.database.entities.CaptainDescription;
+import com.optc.optcdbmobile.data.database.entities.Limit;
+import com.optc.optcdbmobile.data.database.entities.Potential;
+import com.optc.optcdbmobile.data.database.entities.PotentialDescription;
+import com.optc.optcdbmobile.data.database.entities.SailorDescription;
+import com.optc.optcdbmobile.data.database.entities.Special;
+import com.optc.optcdbmobile.data.database.entities.SpecialDescription;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
 import com.optc.optcdbmobile.data.tasks.CheckDatabaseVersionAsyncTask;
@@ -162,5 +170,37 @@ public class OPTCDatabaseRepository {
         return count > 0;
     }
 
+    public List<CaptainDescription> getCaptainDescriptions(int id) {
+        return database.captainDescriptionDAO().getCaptainDescriptions(id);
+    }
 
+
+    public Captain getCaptain(int id) {
+        return database.captainDAO().getCaptain(id);
+    }
+
+    public Special getSpecial(int id) {
+        return database.specialDAO().getSpecial(id);
+    }
+
+    public List<SpecialDescription> getSpecialDescriptions(int id) {
+        return database.specialDescriptionDAO().getSpecialDescriptions(id);
+    }
+
+
+    public List<SailorDescription> getSailorDescriptions(int id) {
+        return database.sailorDescriptionDAO().getSailorDecriptions(id);
+    }
+
+    public List<Potential> getPotentials(int id) {
+        return database.potentialDAO().getPotentials(id);
+    }
+
+    public List<Limit> getLimits(int id) {
+        return database.limitDAO().getLimits(id);
+    }
+
+    public List<PotentialDescription> getPotentialDescriptions(int id) {
+        return database.potentialDescriptionDAO().getPotentialDescriptions(id);
+    }
 }
