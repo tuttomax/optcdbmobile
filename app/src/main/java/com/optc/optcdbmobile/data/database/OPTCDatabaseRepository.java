@@ -32,6 +32,7 @@ import android.view.View;
 import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.entities.Captain;
 import com.optc.optcdbmobile.data.database.entities.CaptainDescription;
+import com.optc.optcdbmobile.data.database.entities.Evolution;
 import com.optc.optcdbmobile.data.database.entities.Limit;
 import com.optc.optcdbmobile.data.database.entities.Potential;
 import com.optc.optcdbmobile.data.database.entities.PotentialDescription;
@@ -127,7 +128,7 @@ public class OPTCDatabaseRepository {
     }
 
     public void CheckVersion(AsyncTaskContext context) {
-        if (sharedPreferences.getBoolean(Constants.Settings.pref_update_available, true)) {
+        if (sharedPreferences.getBoolean(Constants.Settings.pref_update_available, false)) {
             if (sharedPreferences.getBoolean(Constants.Settings.pref_check_done_key, false)) return;
 
             if (thereIsConnection(context.getView())) {
@@ -170,6 +171,18 @@ public class OPTCDatabaseRepository {
         return count > 0;
     }
 
+
+    public boolean unitHasEvolutions(int id) {
+        int count = database.evolutionDAO().getCountEvolutions(id);
+        return count > 0;
+    }
+
+    public boolean unitHasEvolvesFrom(int id) {
+        int count = database.evolutionDAO().getCountEvolvesFrom(id);
+        return count > 0;
+    }
+
+
     public List<CaptainDescription> getCaptainDescriptions(int id) {
         return database.captainDescriptionDAO().getCaptainDescriptions(id);
     }
@@ -202,5 +215,13 @@ public class OPTCDatabaseRepository {
 
     public List<PotentialDescription> getPotentialDescriptions(int id) {
         return database.potentialDescriptionDAO().getPotentialDescriptions(id);
+    }
+
+    public List<Evolution> getEvolvesTo(int id) {
+        return database.evolutionDAO().getEvolvesTo(id);
+    }
+
+    public List<Evolution> getEvolvesFrom(int id) {
+        return database.evolutionDAO().getEvolvesFrom(id);
     }
 }

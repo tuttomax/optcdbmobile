@@ -41,7 +41,7 @@ public class LimitTextView extends android.support.v7.widget.AppCompatTextView {
         int level = limit.getIndex();
         String levelString = String.format("Level %d", level++);
         builder.append(levelString).foreground(Color.WHITE).background(ResourcesCompat.getColor(getResources(), R.color.secondaryColor, null))
-                .append(limit.getDescription())
+                .tab().append(limit.getDescription())
                 .newline();
     }
 }

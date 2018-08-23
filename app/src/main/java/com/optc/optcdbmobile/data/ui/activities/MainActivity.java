@@ -18,6 +18,7 @@ package com.optc.optcdbmobile.data.ui.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.optc.optcdbmobile.R;
+import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
 import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.CharacterTableFragment;
@@ -121,6 +123,14 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_check_done_key, false).commit();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_update_available, false).commit();
+
+        super.onDestroy();
     }
 
     private void initFragment(String TAG) {

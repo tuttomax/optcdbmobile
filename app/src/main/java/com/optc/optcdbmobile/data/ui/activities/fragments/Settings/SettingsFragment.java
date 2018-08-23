@@ -102,7 +102,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
         setPreferencesFromResource(R.xml.pref_settings, rootKey);
 
         final SingleLinePreference databaseVersionPreference = (SingleLinePreference) findPreference(getString(R.string.pref_database_version_key));
-        Integer currentVersion = PreferenceManager.getDefaultSharedPreferences(getContext()).getInt(getString(R.string.pref_database_version_key), -1);
+        Float currentVersion = PreferenceManager.getDefaultSharedPreferences(getContext()).getFloat(getString(R.string.pref_database_version_key), -1);
         databaseVersionPreference.setSummary(String.valueOf(currentVersion));
     }
 

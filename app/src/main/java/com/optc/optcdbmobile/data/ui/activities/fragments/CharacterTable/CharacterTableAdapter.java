@@ -18,7 +18,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.Constants;
-import com.optc.optcdbmobile.data.GlideApp;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
@@ -27,10 +26,6 @@ import java.util.List;
 
 public class CharacterTableAdapter extends RecyclerView.Adapter<CharacterTableAdapter.BaseHolder> {
 
-    private static final int THUMB_WIDTH = 96;
-    private static final int THUMB_HEIGHT = 96;
-    private static final int CARD_THUMB_WIDTH = 120;
-    private static final int CARD_THUMB_HEIGHT = 120;
     Context context;
     private List<Unit> list;
     private LayoutInflater inflater;
@@ -64,9 +59,6 @@ public class CharacterTableAdapter extends RecyclerView.Adapter<CharacterTableAd
         if (getItemViewType(i) == 0) {
             return new HeaderHolder(inflater.inflate(R.layout.header_character_table, viewGroup, false));
         }
-        if (card_view_on)
-            return new UnitHolder(inflater.inflate(R.layout.item_card_character_table, viewGroup, false));
-
         return new UnitHolder(inflater.inflate(R.layout.item_character_table, viewGroup, false));
     }
 
@@ -100,7 +92,7 @@ public class CharacterTableAdapter extends RecyclerView.Adapter<CharacterTableAd
                     .transition(DrawableTransitionOptions.withCrossFade())
 
                     .apply(new RequestOptions()
-                            .override(THUMB_WIDTH, THUMB_HEIGHT)
+                            .override(UnitHelper.THUMB_WIDTH, UnitHelper.THUMB_HEIGHT)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .error(R.drawable.ic_nothumb)
                             .fitCenter()

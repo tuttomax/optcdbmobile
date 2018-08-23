@@ -2,11 +2,14 @@ package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.MediatorLiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.database.entities.Captain;
 import com.optc.optcdbmobile.data.database.entities.CaptainDescription;
+import com.optc.optcdbmobile.data.database.entities.Evolution;
 import com.optc.optcdbmobile.data.database.entities.Limit;
 import com.optc.optcdbmobile.data.database.entities.Potential;
 import com.optc.optcdbmobile.data.database.entities.PotentialDescription;
@@ -26,18 +29,23 @@ public class UnitDialogViewModel extends AndroidViewModel {
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private OPTCDatabaseRepository repo;
 
+    public MutableLiveData<List<Evolution>> evolvesTo;
+    public MutableLiveData<List<Evolution>> evolvesFrom;
+
     public UnitDialogViewModel(@NonNull Application application) {
         super(application);
 
         repo = OPTCDatabaseRepository.getInstance(application);
 
+        evolvesTo = new MutableLiveData<>();
+        evolvesFrom = new MediatorLiveData<>();
 
     }
 
     public boolean unitHasCaptain(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<Boolean>() {
             @Override
-            public Boolean call() throws Exception {
+            public Boolean call() {
                 return repo.unitHasCaptain(id);
             }
         }).get();
@@ -46,7 +54,7 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public boolean unitHasSpecial(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<Boolean>() {
             @Override
-            public Boolean call() throws Exception {
+            public Boolean call() {
                 return repo.unitHasSpecial(id);
             }
         }).get();
@@ -55,7 +63,7 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public boolean unitHasSailor(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<Boolean>() {
             @Override
-            public Boolean call() throws Exception {
+            public Boolean call() {
                 return repo.unitHasSailor(id);
             }
         }).get();
@@ -64,7 +72,7 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public boolean unitHasPotential(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<Boolean>() {
             @Override
-            public Boolean call() throws Exception {
+            public Boolean call() {
                 return repo.unitHasPotential(id);
             }
         }).get();
@@ -73,7 +81,7 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public boolean unitHasLimit(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<Boolean>() {
             @Override
-            public Boolean call() throws Exception {
+            public Boolean call() {
                 return repo.unitHasLimit(id);
             }
         }).get();
@@ -82,7 +90,7 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public List<CaptainDescription> getCaptainDescriptions(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<List<CaptainDescription>>() {
             @Override
-            public List<CaptainDescription> call() throws Exception {
+            public List<CaptainDescription> call() {
                 return repo.getCaptainDescriptions(id);
             }
         }).get();
@@ -91,7 +99,7 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public Captain getCaptain(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<Captain>() {
             @Override
-            public Captain call() throws Exception {
+            public Captain call() {
                 return repo.getCaptain(id);
             }
         }).get();
@@ -100,7 +108,7 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public Special getSpecial(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<Special>() {
             @Override
-            public Special call() throws Exception {
+            public Special call() {
                 return repo.getSpecial(id);
             }
         }).get();
@@ -109,7 +117,7 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public List<SpecialDescription> getSpecialDescriptions(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<List<SpecialDescription>>() {
             @Override
-            public List<SpecialDescription> call() throws Exception {
+            public List<SpecialDescription> call() {
                 return repo.getSpecialDescriptions(id);
             }
         }).get();
@@ -119,7 +127,7 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public List<SailorDescription> getSailorDescriptions(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<List<SailorDescription>>() {
             @Override
-            public List<SailorDescription> call() throws Exception {
+            public List<SailorDescription> call() {
                 return repo.getSailorDescriptions(id);
             }
         }).get();
@@ -128,7 +136,7 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public List<Potential> getPotentials(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<List<Potential>>() {
             @Override
-            public List<Potential> call() throws Exception {
+            public List<Potential> call() {
                 return repo.getPotentials(id);
             }
         }).get();
@@ -137,7 +145,7 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public List<Limit> getLimits(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<List<Limit>>() {
             @Override
-            public List<Limit> call() throws Exception {
+            public List<Limit> call() {
                 return repo.getLimits(id);
             }
         }).get();
@@ -146,8 +154,44 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public List<PotentialDescription> getPotentialDescriptions(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<List<PotentialDescription>>() {
             @Override
-            public List<PotentialDescription> call() throws Exception {
+            public List<PotentialDescription> call() {
                 return repo.getPotentialDescriptions(id);
+            }
+        }).get();
+    }
+
+    public void getEvolvesTo(final int id) throws ExecutionException, InterruptedException {
+        evolvesTo.setValue(executorService.submit(new Callable<List<Evolution>>() {
+            @Override
+            public List<Evolution> call() {
+                return repo.getEvolvesTo(id);
+            }
+        }).get());
+    }
+
+    public void getEvolvesFrom(final int id) throws ExecutionException, InterruptedException {
+        evolvesFrom.setValue(executorService.submit(new Callable<List<Evolution>>() {
+            @Override
+            public List<Evolution> call() {
+                return repo.getEvolvesFrom(id);
+            }
+        }).get());
+    }
+
+    public boolean unitHasEvolutions(final int id) throws ExecutionException, InterruptedException {
+        return executorService.submit(new Callable<Boolean>() {
+            @Override
+            public Boolean call() {
+                return repo.unitHasEvolutions(id);
+            }
+        }).get();
+    }
+
+    public boolean unitHasEvovlesFrom(final int id) throws ExecutionException, InterruptedException {
+        return executorService.submit(new Callable<Boolean>() {
+            @Override
+            public Boolean call() {
+                return repo.unitHasEvolvesFrom(id);
             }
         }).get();
     }

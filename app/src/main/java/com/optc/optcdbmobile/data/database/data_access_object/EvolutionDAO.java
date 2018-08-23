@@ -17,9 +17,32 @@
 package com.optc.optcdbmobile.data.database.data_access_object;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Query;
 
 import com.optc.optcdbmobile.data.database.entities.Evolution;
 
+import java.util.List;
+
 @Dao
 public abstract class EvolutionDAO implements BaseDAO<Evolution> {
+
+    @Query("SELECT COUNT(evolution_id) FROM evolution_table WHERE unit_id=:id")
+    public abstract int getCountEvolutions(int id);
+
+    @Query("SELECT COUNT(unit_id) FROM evolution_table WHERE evolution_id=:id")
+    public abstract int getCountEvolvesFrom(int id);
+
+    /**
+     * @param id Unit id who is the base form
+     * @return List of evolutions from unit with id specified
+     */
+    @Query("SELECT * FROM evolution_table WHERE unit_id=:id")
+    public abstract List<Evolution> getEvolvesTo(int id);
+
+    /**
+     * @param id Unit id who is the evolution
+     * @return List of evolutions to unit with id specified;
+     */
+    @Query("SELECT * FROM evolution_table WHERE evolution_id=:id")
+    public abstract List<Evolution> getEvolvesFrom(int id);
 }

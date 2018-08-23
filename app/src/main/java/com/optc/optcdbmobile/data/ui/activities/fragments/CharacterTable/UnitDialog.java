@@ -63,6 +63,8 @@ public class UnitDialog extends DialogFragment {
             adapter.setHasSailor(viewModel.unitHasSailor(unit.getDatabaseId()));
             adapter.setHasPotential(viewModel.unitHasPotential(unit.getDatabaseId()));
             adapter.setHasLimit(viewModel.unitHasLimit(unit.getDatabaseId()));
+            adapter.setHasEvolutions(viewModel.unitHasEvolutions(unit.getDatabaseId()));
+            adapter.setHasEvolvesFrom(viewModel.unitHasEvovlesFrom(unit.getDatabaseId()));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -155,22 +157,17 @@ public class UnitDialog extends DialogFragment {
 
 
     private class DynamicViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> fragments;
+        private final List<String> titles;
         private boolean hasSpecial;
         private boolean hasCaptain;
         private boolean hasSailor;
         private boolean hasLimit;
         private boolean hasPotential;
-
-
-        private final List<Fragment> fragments;
-        private final List<String> titles;
-        private final String[] TITLES = new String[]{
-                "General",
-                "Abilities",
-                "Limit break",
-                "Evolutions",
-                "Family"
-        };
+        private boolean hasEvolvesFrom;
+        private boolean hasEvolutions;
+        private boolean hasFamily;
+        private boolean hasTags;
         private UnitProxy unit;
 
         DynamicViewPagerAdapter(FragmentManager fm, UnitProxy unit) {
@@ -196,6 +193,17 @@ public class UnitDialog extends DialogFragment {
                 add(LimitBreakFragment.newInstance(unit.getDatabaseId()), "Limit Break");
             }
 
+            if (hasEvolutions || hasEvolvesFrom) {
+                add(EvolutionsFragment.newInstance(unit.getDatabaseId()), "Evolutions");
+            }
+
+            if (hasFamily) {
+
+            }
+
+            if (hasTags) {
+
+            }
 
         }
 
@@ -241,6 +249,22 @@ public class UnitDialog extends DialogFragment {
 
         public void setHasPotential(boolean hasPotential) {
             this.hasPotential = hasPotential;
+        }
+
+        public void setHasEvolvesFrom(boolean hasEvolvesFrom) {
+            this.hasEvolvesFrom = hasEvolvesFrom;
+        }
+
+        public void setHasEvolutions(boolean hasEvolutions) {
+            this.hasEvolutions = hasEvolutions;
+        }
+
+        public void setHasFamily(boolean hasFamily) {
+            this.hasFamily = hasFamily;
+        }
+
+        public void setHasTags(boolean hasTags) {
+            this.hasTags = hasTags;
         }
     }
 

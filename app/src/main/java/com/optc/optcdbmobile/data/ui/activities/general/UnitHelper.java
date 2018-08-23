@@ -33,6 +33,10 @@ public class UnitHelper {
         put("Booster", R.drawable.ic_booster);
 
     }};
+    public static final int THUMB_WIDTH = 96;
+    public static final int THUMB_HEIGHT = 96;
+    private static final int CARD_THUMB_WIDTH = 580;
+    private static final int CARD_THUMB_HEIGHT = 580;
 
     public static int getTypeColor(String colorName, Resources res) {
         return ResourcesCompat.getColor(res, colorsId.get(colorName), null);

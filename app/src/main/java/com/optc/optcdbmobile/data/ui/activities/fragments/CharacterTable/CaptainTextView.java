@@ -36,18 +36,20 @@ public class CaptainTextView extends android.support.v7.widget.AppCompatTextView
     public void buildText() {
         SpannableBuilder builder = SpannableBuilder.create()
                 .append("Captain").bold().newline();
+        if (captain != null) {
 
-        if (captainDescriptions != null) {
-            for (CaptainDescription captainDescription : captainDescriptions) {
-                appendCaptainDescription(builder, captainDescription);
+            if (captainDescriptions != null) {
+                for (CaptainDescription captainDescription : captainDescriptions) {
+                    appendCaptainDescription(builder, captainDescription);
+                }
+            }
+
+            if (captain.getNotes() != null) {
+                builder.append(captain.getNotes()).italic();
             }
         }
-
-        if (captain.getNotes() != null) {
-            builder.append(captain.getNotes()).italic();
-        }
-
         setText(builder.getInternalBuilder(), BufferType.SPANNABLE);
+
     }
 
 
