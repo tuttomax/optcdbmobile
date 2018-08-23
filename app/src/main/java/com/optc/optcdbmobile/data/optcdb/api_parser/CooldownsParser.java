@@ -38,11 +38,13 @@ public class CooldownsParser extends BaseParser<List<Cooldown>> {
                 Double d = (Double) element;
                 Byte b = d.byteValue();
                 list.add(new Cooldown(index, b, b));
+                index++;
             } else if (element instanceof NativeArray) {
                 NativeArray array = (NativeArray) element;
                 Byte min = toType(array.get(0), Byte.class);
                 Byte max = toType(array.get(1), Byte.class);
                 list.add(new Cooldown(index, min, max));
+                index++;
             }
         }
         return list;
