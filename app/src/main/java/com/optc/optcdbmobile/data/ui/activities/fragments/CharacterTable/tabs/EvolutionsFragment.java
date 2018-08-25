@@ -35,6 +35,8 @@ public class EvolutionsFragment extends Fragment {
                 public void onClick(int databaseId) {
                     if (id == databaseId) return;
                     //TODO Handle Material-NonUnit click
+
+
                     UnitDialog.newInstance(databaseId).show(getChildFragmentManager(), UnitDialog.class.getSimpleName());
                 }
 

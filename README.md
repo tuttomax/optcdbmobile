@@ -3,14 +3,14 @@ Wrapper mobile of http://optc-db.github.io
 
 ### TODO
 
-- [ ] Character Table
+- [X] Character Table -> V1.0
 - [ ] Drop table
 - [ ] Evolution Helper
 - [ ] Slot Planner
+- [ ] Probability Calculator
 - [ ] [Nakama Integration](https://www.nakama.network/about)
   - [ ] Teams
   - [ ] Box Managment
-- [ ] Probability Calculator
 - [ ] Damage Calculator
 
 #### Tests
@@ -21,8 +21,8 @@ Wrapper mobile of http://optc-db.github.io
   - [x] Units parser
   - [x] Cooldown parser
   - [x] Evolutions parser
-  - [ ] Aliases parser
-  - [ ] Tag parser
+  - [x] Aliases parser
+  - [x] Tag parser
   - [x] Family parser
   
   
