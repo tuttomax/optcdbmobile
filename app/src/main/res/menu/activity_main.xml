@@ -10,21 +10,26 @@
 
         <item
             android:id="@+id/nav_menu_damage_calculator"
+            android:enabled="false"
             android:title="Damage calculator" />
 
         <item
             android:id="@+id/nav_menu_drop_table"
+            android:enabled="false"
             android:title="Drop table" />
 
         <item
             android:id="@+id/nav_menu_evolution_helper"
+            android:enabled="false"
             android:title="Evolution helper" />
 
         <item
             android:id="@+id/nav_menu_slot_planner"
+            android:enabled="false"
             android:title="Slot planner" />
         <item
             android:id="@+id/nav_menu_probability_calculator"
+            android:enabled="false"
             android:title="Propability calculator" />
 
     </group>

@@ -71,4 +71,5 @@
     <string name="level">Level</string>
     <string name="lvl_1">1</string>
     <string name="rcv">RCV</string>
+    <string name="search_title">Search</string>
 </resources>

@@ -34,7 +34,7 @@ public class EvolutionsPopulateTask extends DatabaseTask {
         setCurrent(0);
         setState(RUNNING);
 
-        setOperation("Downloading evolution list");
+        setOperation("Downloading evolution data...");
         try {
             List<Evolution> evolutionList = (List<Evolution>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.EVOLUTIONS_TYPE);
 

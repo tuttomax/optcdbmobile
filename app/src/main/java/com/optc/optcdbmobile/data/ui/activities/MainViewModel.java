@@ -18,62 +18,52 @@ package com.optc.optcdbmobile.data.ui.activities;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.support.annotation.NonNull;
 
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.database.entities.Unit;
-import com.optc.optcdbmobile.data.optcdb.entities.Detail;
 
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class MainViewModel extends AndroidViewModel {
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
+
+    private final ExecutorService executorService = Executors.newFixedThreadPool(3);
 
     private OPTCDatabaseRepository repository;
 
-    private LiveData<List<Unit>> units = new MutableLiveData<>();
-    private MutableLiveData<Detail> currentUnitDetail;
+    public MutableLiveData<List<Unit>> units;
 
-    public MainViewModel(Application application) {
+    public MainViewModel(@NonNull Application application) {
         super(application);
-        repository = new OPTCDatabaseRepository(application);
 
+        repository = OPTCDatabaseRepository.getInstance(application);
 
-        Future<LiveData<List<Unit>>> task = executorService.submit(new Callable<LiveData<List<Unit>>>() {
+        units = new MutableLiveData<>();
+
+    }
+
+    public void getUnits() {
+        executorService.submit(new Runnable() {
             @Override
-            public LiveData<List<Unit>> call() throws Exception {
-                return repository.getUnits();
+            public void run() {
+                units.postValue(repository.getUnits());
             }
         });
-
-        try {
-            units = task.get(60, TimeUnit.SECONDS);
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (TimeoutException e) {
-            e.printStackTrace();
-        }
-
     }
 
 
-    public LiveData<List<Unit>> getUnits() {
-        return units;
+    public void getUnitsWithName(final String name) {
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                units.postValue(repository.getUnitsWithName(name));
+            }
+        });
     }
 
-    public MutableLiveData<Detail> getCurrentUnitDetail() {
-        return currentUnitDetail;
-    }
 
 
 }

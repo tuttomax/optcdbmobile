@@ -1,21 +1,21 @@
-package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
+package com.optc.optcdbmobile.data.ui.activities.general;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.optc.optcdbmobile.data.database.entities.Unit;
 
-public class UnitProxy implements Parcelable {
+public class UnitParcelable implements Parcelable {
 
-    public static final Creator<UnitProxy> CREATOR = new Creator<UnitProxy>() {
+    public static final Creator<UnitParcelable> CREATOR = new Creator<UnitParcelable>() {
         @Override
-        public UnitProxy createFromParcel(Parcel in) {
-            return new UnitProxy(in);
+        public UnitParcelable createFromParcel(Parcel in) {
+            return new UnitParcelable(in);
         }
 
         @Override
-        public UnitProxy[] newArray(int size) {
-            return new UnitProxy[size];
+        public UnitParcelable[] newArray(int size) {
+            return new UnitParcelable[size];
         }
     };
     private int databaseId;
@@ -38,7 +38,7 @@ public class UnitProxy implements Parcelable {
     private Byte socket;
     private Float stars;
 
-    UnitProxy(Unit unit) {
+    public UnitParcelable(Unit unit) {
         databaseId = unit.getId();
         unitId = unit.getUnitId();
         name = unit.getName();
@@ -51,7 +51,7 @@ public class UnitProxy implements Parcelable {
         atkLevel1 = unit.getAtkLevel1();
         maxAtk = unit.getMaxAtk();
         hpLevel1 = unit.getHpLevel1();
-        maxHp = unit.getHpLevel1();
+        maxHp = unit.getMaxHp();
         rcvLevel1 = unit.getRcvLevel1();
         maxRcv = unit.getMaxRcv();
         cost = unit.getCost();
@@ -60,7 +60,7 @@ public class UnitProxy implements Parcelable {
         stars = unit.getStars();
     }
 
-    protected UnitProxy(Parcel in) {
+    protected UnitParcelable(Parcel in) {
         databaseId = in.readInt();
         unitId = in.readInt();
         name = in.readString();

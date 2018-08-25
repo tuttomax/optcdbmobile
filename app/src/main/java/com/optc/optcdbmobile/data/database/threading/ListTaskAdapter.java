@@ -47,7 +47,7 @@ public class ListTaskAdapter extends RecyclerView.Adapter<ListTaskAdapter.TaskVi
     private final List<Task> list;
 
     private final android.os.Handler notifyHandler = new android.os.Handler(Looper.getMainLooper());
-    private final ExecutorService executorService = Executors.newFixedThreadPool(4);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(5);
     private final List<Future<?>> futureList = new ArrayList<>();
     private int currentIndex = 0;
 

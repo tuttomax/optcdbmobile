@@ -14,12 +14,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.LimitTextView
+            <com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.LimitTextView
                 android:id="@+id/limit_informative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.PotentialTextView
+            <com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.PotentialTextView
                 android:id="@+id/potential_informative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

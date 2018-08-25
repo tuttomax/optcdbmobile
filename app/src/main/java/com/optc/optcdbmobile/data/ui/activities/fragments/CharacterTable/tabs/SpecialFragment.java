@@ -1,4 +1,4 @@
-package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
+package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.tabs;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -15,6 +15,10 @@ import com.optc.optcdbmobile.data.database.entities.CaptainDescription;
 import com.optc.optcdbmobile.data.database.entities.SailorDescription;
 import com.optc.optcdbmobile.data.database.entities.Special;
 import com.optc.optcdbmobile.data.database.entities.SpecialDescription;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.UnitDialogViewModel;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.CaptainTextView;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.SailorTextView;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.SpecialTextView;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
 
 import java.util.List;
@@ -22,16 +26,13 @@ import java.util.concurrent.ExecutionException;
 
 public class SpecialFragment extends Fragment {
 
-    private int id;
     UnitDialogViewModel viewModel;
-
     Captain captain;
     List<CaptainDescription> captainDescriptions;
-
     Special special;
     List<SpecialDescription> specialDescriptions;
-
     List<SailorDescription> sailorDescriptions;
+    private int id;
 
     public static SpecialFragment newInstance(int id) {
 
@@ -47,7 +48,7 @@ public class SpecialFragment extends Fragment {
         super.onCreate(savedInstanceState);
         id = getArguments().getInt(UnitHelper.UNIT_ID);
 
-        viewModel = ViewModelProviders.of(this).get(UnitDialogViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(UnitDialogViewModel.class);
 
         try {
             captain = viewModel.getCaptain(id);

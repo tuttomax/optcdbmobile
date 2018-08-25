@@ -23,7 +23,6 @@ import com.optc.optcdbmobile.data.database.threading.TaskCallback;
 import com.optc.optcdbmobile.data.optcdb.entities.Cooldown;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 public class CooldownsPopulateTask extends DatabaseTask {
     public CooldownsPopulateTask(OPTCDatabase database, TaskCallback callback) {
@@ -43,18 +42,10 @@ public class CooldownsPopulateTask extends DatabaseTask {
             setOperation("Updating units' special cooldown");
             setMax(cooldownList.size());
             for (Cooldown cooldown : cooldownList) {
-                synchronized (lock) {
-
-
-                    Logger.getLogger(CooldownsPopulateTask.class.getSimpleName()).info(
-                            String.format("%d -> (%d, %d)", cooldown.getId(), cooldown.getMin(), cooldown.getMax())
-                    );
-                }
                 getDatabase().specialDescriptionDAO().updateCooldown(cooldown.getId(), cooldown.getMin(), cooldown.getMax());
                 increment();
             }
-        } catch (
-                Exception ex)
+        } catch (Exception ex)
 
         {
             setError(ex);

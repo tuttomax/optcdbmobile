@@ -17,7 +17,6 @@
 package com.optc.optcdbmobile.data.database;
 
 
-import android.arch.lifecycle.LiveData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,6 +33,7 @@ import com.optc.optcdbmobile.data.database.entities.Captain;
 import com.optc.optcdbmobile.data.database.entities.CaptainDescription;
 import com.optc.optcdbmobile.data.database.entities.Evolution;
 import com.optc.optcdbmobile.data.database.entities.Limit;
+import com.optc.optcdbmobile.data.database.entities.LocationInformation;
 import com.optc.optcdbmobile.data.database.entities.Potential;
 import com.optc.optcdbmobile.data.database.entities.PotentialDescription;
 import com.optc.optcdbmobile.data.database.entities.SailorDescription;
@@ -128,22 +128,30 @@ public class OPTCDatabaseRepository {
     }
 
     public void CheckVersion(AsyncTaskContext context) {
-        if (sharedPreferences.getBoolean(Constants.Settings.pref_update_available, false)) {
-            if (sharedPreferences.getBoolean(Constants.Settings.pref_check_done_key, false)) return;
 
-            if (thereIsConnection(context.getView())) {
-                CheckDatabaseVersionAsyncTask task = new CheckDatabaseVersionAsyncTask(new CheckDatabaseVersionAsyncTaskListener(context));
-                task.setPreferences(sharedPreferences);
-                task.execute();
-            }
+        if (sharedPreferences.getBoolean(Constants.Settings.pref_check_done_key, false)) return;
+
+        if (thereIsConnection(context.getView())) {
+            CheckDatabaseVersionAsyncTask task = new CheckDatabaseVersionAsyncTask(new CheckDatabaseVersionAsyncTaskListener(context));
+            task.setPreferences(sharedPreferences);
+            task.execute();
         }
+
     }
 
 
-    public LiveData<List<Unit>> getUnits() {
+    public List<Unit> getUnits() {
         return database.unitDAO().getUnits();
     }
 
+    public Unit getUnit(int id) {
+        return database.unitDAO().getUnit(id);
+    }
+
+    public List<Unit> getUnitsWithName(String name) {
+        String query = "%" + name + "%";
+        return database.unitDAO().getUnitsWithName(query);
+    }
 
     public boolean unitHasCaptain(int id) {
 
@@ -223,5 +231,23 @@ public class OPTCDatabaseRepository {
 
     public List<Evolution> getEvolvesFrom(int id) {
         return database.evolutionDAO().getEvolvesFrom(id);
+    }
+
+    public List<LocationInformation> getManualDropsOf(int id) {
+        return database.locationDropsDAO().getManualDropsOf(id);
+    }
+
+    public List<LocationInformation> getFamilyDropsOf(int id) {
+        return database.locationDropsDAO().getFamilyDropsOf(id);
+    }
+
+    public Boolean unitHasManuals(int id) {
+        int count = database.locationDropsDAO().getManualDropsCount(id);
+        return count > 0;
+    }
+
+    public Boolean unitHasFamily(int id) {
+        int count = database.locationDropsDAO().getFamilyCount(id);
+        return count > 0;
     }
 }

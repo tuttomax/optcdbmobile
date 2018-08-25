@@ -1,4 +1,4 @@
-package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
+package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.tabs;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -11,20 +11,49 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.database.entities.Evolution;
+import com.optc.optcdbmobile.data.optcdb.API;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.EvolutionAdapter;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.UnitDialog;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.UnitDialogViewModel;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class EvolutionsFragment extends Fragment {
+    private final EvolutionAdapter.OnEvolutionItemAdapterEvent ON_EVOLUTION_ITEM_ADAPTER_EVENT =
+            new EvolutionAdapter.OnEvolutionItemAdapterEvent() {
+                @Override
+                public void onClick(int id) {
+                    //TODO Handle Material-NonUnit click
+                    UnitDialog.newInstance(id).show(getChildFragmentManager(), UnitDialog.class.getSimpleName());
+                }
+
+                @Override
+                public void onLoadThumb(ImageView v, int id) {
+                    Glide.with(getContext())
+                            .load(API.getThumb(id))
+                            .transition(DrawableTransitionOptions.withCrossFade())
+
+                            .apply(new RequestOptions()
+                                    .override(UnitHelper.THUMB_WIDTH, UnitHelper.THUMB_HEIGHT)
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .error(R.drawable.ic_nothumb)
+                                    .fitCenter()
+                            ).into(v);
+                }
+            };
     private int id;
-
-
-    private EvolutionRecyclerViewAdapter toAdapter;
-    private EvolutionRecyclerViewAdapter fromAdapter;
+    private EvolutionAdapter toAdapter;
+    private EvolutionAdapter fromAdapter;
     private UnitDialogViewModel viewModel;
 
     public static EvolutionsFragment newInstance(int id) {
@@ -44,13 +73,14 @@ public class EvolutionsFragment extends Fragment {
 
         viewModel = ViewModelProviders.of(this).get(UnitDialogViewModel.class);
 
-        toAdapter = new EvolutionRecyclerViewAdapter(getContext(), EvolutionRecyclerViewAdapter.TO);
-        fromAdapter = new EvolutionRecyclerViewAdapter(getContext(), EvolutionRecyclerViewAdapter.FROM);
+        toAdapter = new EvolutionAdapter(getContext(), EvolutionAdapter.TO);
+        fromAdapter = new EvolutionAdapter(getContext(), EvolutionAdapter.FROM);
 
         viewModel.evolvesTo.observe(this, new Observer<List<Evolution>>() {
             @Override
             public void onChanged(@Nullable List<Evolution> evolutions) {
                 toAdapter.setEvolutions(evolutions);
+                toAdapter.setOnEvolutionItemAdapterEvent(ON_EVOLUTION_ITEM_ADAPTER_EVENT);
             }
         });
 
@@ -58,6 +88,8 @@ public class EvolutionsFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<Evolution> evolutions) {
                 fromAdapter.setEvolutions(evolutions);
+                fromAdapter.setOnEvolutionItemAdapterEvent(ON_EVOLUTION_ITEM_ADAPTER_EVENT);
+
             }
         });
 

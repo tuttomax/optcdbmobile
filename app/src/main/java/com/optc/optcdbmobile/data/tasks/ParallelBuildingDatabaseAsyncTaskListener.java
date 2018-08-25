@@ -41,7 +41,7 @@ public class ParallelBuildingDatabaseAsyncTaskListener implements AsyncTaskListe
     @Override
     public void onPreExecute() {
         PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                .putInt(Constants.Settings.pref_database_version_key, -1).apply();
+                .putFloat(Constants.Settings.pref_database_version_key, -1f).apply();
         dialog.show(context.getSupportFragmentManager(), ListTaskDialog.TAG);
     }
 
@@ -54,7 +54,7 @@ public class ParallelBuildingDatabaseAsyncTaskListener implements AsyncTaskListe
             Snackbar.make(view, "Database building complete", Snackbar.LENGTH_LONG).show();
         } else {
             PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                    .putInt(Constants.Settings.pref_database_version_key, -1).apply();
+                    .putFloat(Constants.Settings.pref_database_version_key, -1f).apply();
 
             Snackbar.make(view, "Error building database", Snackbar.LENGTH_INDEFINITE)
                     .setActionTextColor(Color.RED)

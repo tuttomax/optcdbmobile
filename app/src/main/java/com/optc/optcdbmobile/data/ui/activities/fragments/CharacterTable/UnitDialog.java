@@ -21,9 +21,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
-import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.optcdb.API;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.DoubleColorDrawable;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.RepeatableDrawableWidget;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.tabs.EvolutionsFragment;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.tabs.FamilyFragment;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.tabs.GeneralFragment;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.tabs.LimitBreakFragment;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.tabs.ManualsFragment;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.tabs.SpecialFragment;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
+import com.optc.optcdbmobile.data.ui.activities.general.UnitParcelable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +41,9 @@ import java.util.concurrent.ExecutionException;
 public class UnitDialog extends DialogFragment {
 
     private DynamicViewPagerAdapter adapter;
-    private UnitProxy unit;
+    private UnitParcelable unit;
 
-    public static UnitDialog newInstance(UnitProxy unit) {
+    public static UnitDialog newInstance(UnitParcelable unit) {
 
         Bundle b = new Bundle();
         b.putParcelable(UnitHelper.UNIT_PARCELLABLE, unit);
@@ -44,15 +52,32 @@ public class UnitDialog extends DialogFragment {
         return fragment;
     }
 
+    public static UnitDialog newInstance(int id) {
+        Bundle b = new Bundle();
+        b.putInt(UnitHelper.UNIT_ID, id);
+        UnitDialog fragment = new UnitDialog();
+        fragment.setArguments(b);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        OPTCDatabaseRepository repo = OPTCDatabaseRepository.getInstance(getContext());
-        Bundle args = getArguments();
-        unit = args.getParcelable(UnitHelper.UNIT_PARCELLABLE);
-
         UnitDialogViewModel viewModel = ViewModelProviders.of(this).get(UnitDialogViewModel.class);
+
+        Bundle args = getArguments();
+
+        unit = args.getParcelable(UnitHelper.UNIT_PARCELLABLE);
+        if (unit == null) {
+            int id = args.getInt(UnitHelper.UNIT_ID);
+            try {
+                unit = new UnitParcelable(viewModel.getUnit(id));
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         adapter = new DynamicViewPagerAdapter(getChildFragmentManager(), unit);
 
@@ -64,7 +89,11 @@ public class UnitDialog extends DialogFragment {
             adapter.setHasPotential(viewModel.unitHasPotential(unit.getDatabaseId()));
             adapter.setHasLimit(viewModel.unitHasLimit(unit.getDatabaseId()));
             adapter.setHasEvolutions(viewModel.unitHasEvolutions(unit.getDatabaseId()));
-            adapter.setHasEvolvesFrom(viewModel.unitHasEvovlesFrom(unit.getDatabaseId()));
+            adapter.setHasEvolvesFrom(viewModel.unitHasEvolvesFrom(unit.getDatabaseId()));
+            adapter.setHasManuals(viewModel.unitHasManuals(unit.getDatabaseId()));
+            adapter.setHasFamily(viewModel.unitHasFamily(unit.getDatabaseId()));
+
+
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -159,6 +188,7 @@ public class UnitDialog extends DialogFragment {
     private class DynamicViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> fragments;
         private final List<String> titles;
+
         private boolean hasSpecial;
         private boolean hasCaptain;
         private boolean hasSailor;
@@ -167,10 +197,11 @@ public class UnitDialog extends DialogFragment {
         private boolean hasEvolvesFrom;
         private boolean hasEvolutions;
         private boolean hasFamily;
-        private boolean hasTags;
-        private UnitProxy unit;
+        private boolean hasManuals;
 
-        DynamicViewPagerAdapter(FragmentManager fm, UnitProxy unit) {
+        private UnitParcelable unit;
+
+        DynamicViewPagerAdapter(FragmentManager fm, UnitParcelable unit) {
             super(fm);
             this.unit = unit;
 
@@ -197,22 +228,19 @@ public class UnitDialog extends DialogFragment {
                 add(EvolutionsFragment.newInstance(unit.getDatabaseId()), "Evolutions");
             }
 
-            if (hasFamily) {
-
+            if (hasManuals) {
+                add(ManualsFragment.newInstance(unit.getDatabaseId()), "Manuals");
             }
 
-            if (hasTags) {
-
+            if (hasFamily) {
+                add(FamilyFragment.newInstance(unit.getDatabaseId()), "Family");
             }
 
         }
 
         @Override
         public Fragment getItem(int i) {
-
-
             return fragments.get(i);
-
         }
 
         @Override
@@ -231,31 +259,31 @@ public class UnitDialog extends DialogFragment {
             titles.add(title);
         }
 
-        public void setHasSpecial(boolean hasSpecial) {
+        void setHasSpecial(boolean hasSpecial) {
             this.hasSpecial = hasSpecial;
         }
 
-        public void setHasCaptain(boolean hasCaptain) {
+        void setHasCaptain(boolean hasCaptain) {
             this.hasCaptain = hasCaptain;
         }
 
-        public void setHasSailor(boolean hasSailor) {
+        void setHasSailor(boolean hasSailor) {
             this.hasSailor = hasSailor;
         }
 
-        public void setHasLimit(boolean hasLimit) {
+        void setHasLimit(boolean hasLimit) {
             this.hasLimit = hasLimit;
         }
 
-        public void setHasPotential(boolean hasPotential) {
+        void setHasPotential(boolean hasPotential) {
             this.hasPotential = hasPotential;
         }
 
-        public void setHasEvolvesFrom(boolean hasEvolvesFrom) {
+        void setHasEvolvesFrom(boolean hasEvolvesFrom) {
             this.hasEvolvesFrom = hasEvolvesFrom;
         }
 
-        public void setHasEvolutions(boolean hasEvolutions) {
+        void setHasEvolutions(boolean hasEvolutions) {
             this.hasEvolutions = hasEvolutions;
         }
 
@@ -263,8 +291,8 @@ public class UnitDialog extends DialogFragment {
             this.hasFamily = hasFamily;
         }
 
-        public void setHasTags(boolean hasTags) {
-            this.hasTags = hasTags;
+        public void setHasManuals(boolean hasManuals) {
+            this.hasManuals = hasManuals;
         }
     }
 

@@ -1,4 +1,4 @@
-package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
+package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.tabs;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -13,6 +13,9 @@ import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.database.entities.Limit;
 import com.optc.optcdbmobile.data.database.entities.Potential;
 import com.optc.optcdbmobile.data.database.entities.PotentialDescription;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.UnitDialogViewModel;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.LimitTextView;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.PotentialTextView;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
 
 import java.util.List;
@@ -38,7 +41,7 @@ public class LimitBreakFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         id = getArguments().getInt(UnitHelper.UNIT_ID);
-        UnitDialogViewModel viewModel = ViewModelProviders.of(this).get(UnitDialogViewModel.class);
+        UnitDialogViewModel viewModel = ViewModelProviders.of(getActivity()).get(UnitDialogViewModel.class);
 
         try {
             potentials = viewModel.getPotentials(id);

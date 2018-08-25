@@ -17,11 +17,16 @@
 package com.optc.optcdbmobile.data.database.data_access_object;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Query;
 
 import com.optc.optcdbmobile.data.database.entities.Alias;
+
+import java.util.List;
 
 @Dao
 public abstract class AliasDAO implements BaseDAO<Alias> {
 
+    @Query("SELECT * FROM alias_table")
+    public abstract List<Alias> getAliases();
 
 }

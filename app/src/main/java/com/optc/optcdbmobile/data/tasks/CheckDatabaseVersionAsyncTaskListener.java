@@ -25,6 +25,7 @@ import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 
 import static com.optc.optcdbmobile.data.Constants.DatabaseVersionTask.ACTION_AUTOMATIC_UPDATE;
 import static com.optc.optcdbmobile.data.Constants.DatabaseVersionTask.ACTION_SHOW_UPDATE;
+import static com.optc.optcdbmobile.data.Constants.DatabaseVersionTask.NO_ACTION;
 
 public class CheckDatabaseVersionAsyncTaskListener implements AsyncTaskListener<Byte> {
 
@@ -41,38 +42,36 @@ public class CheckDatabaseVersionAsyncTaskListener implements AsyncTaskListener<
 
     @Override
     public void onPostExecute(Byte action) {
-        if (action != null) {
-            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                    .putBoolean(Constants.Settings.pref_update_available, true)
-                    .apply();
 
-            switch (action) {
-                case ACTION_SHOW_UPDATE:
-                    Snackbar.make(context.getView(), "New database version available", Snackbar.LENGTH_LONG)
-                            .setAction("UPDATE", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    //new BuildDatabaseAsyncTask(refView.get()).execute();
-                                    OPTCDatabaseRepository.getInstance(context.getView().getContext()).BuildDatabase(context);
-                                }
-                            }).show();
-                    break;
-                case ACTION_AUTOMATIC_UPDATE:
-                    Snackbar.make(context.getView(), "Updating database...", Snackbar.LENGTH_SHORT).show();
-                    //new BuildDatabaseAsyncTask(refView.get()).execute();
-                    OPTCDatabaseRepository.getInstance(context.getView().getContext()).BuildDatabase(context);
-                    break;
-            }
-        } else {
-            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                    .putBoolean(Constants.Settings.pref_update_available, false)
-                    .apply();
+        PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
+                .putBoolean(Constants.Settings.pref_update_available, true)
+                .apply();
 
-            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                    .putBoolean(Constants.Settings.pref_check_done_key, true)
-                    .apply();
+        switch (action) {
+            case ACTION_SHOW_UPDATE:
+                Snackbar.make(context.getView(), "New database version available", Snackbar.LENGTH_LONG)
+                        .setAction("UPDATE", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //new BuildDatabaseAsyncTask(refView.get()).execute();
+                                OPTCDatabaseRepository.getInstance(context.getView().getContext()).BuildDatabase(context);
+                            }
+                        }).show();
+                break;
+            case ACTION_AUTOMATIC_UPDATE:
+                Snackbar.make(context.getView(), "Updating database...", Snackbar.LENGTH_SHORT).show();
+                //new BuildDatabaseAsyncTask(refView.get()).execute();
+                OPTCDatabaseRepository.getInstance(context.getView().getContext()).BuildDatabase(context);
+                break;
+            case NO_ACTION:
+                PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
+                        .putBoolean(Constants.Settings.pref_update_available, false)
+                        .apply();
+
+                PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
+                        .putBoolean(Constants.Settings.pref_check_done_key, true)
+                        .apply();
+                break;
         }
-
-
     }
 }

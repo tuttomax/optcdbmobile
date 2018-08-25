@@ -34,7 +34,6 @@ import org.mozilla.javascript.NativeObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 
 public class DetailsParser extends BaseParser<List<Detail>> {
@@ -50,10 +49,6 @@ public class DetailsParser extends BaseParser<List<Detail>> {
             final Detail detail = new Detail();
 
             Integer id = toType(obj.getKey(), Integer.class);
-
-
-            Logger.getLogger(DetailsParser.class.getSimpleName()).info(String.valueOf(id));
-
 
             NativeObject internal_obj = (NativeObject) obj.getValue();
 

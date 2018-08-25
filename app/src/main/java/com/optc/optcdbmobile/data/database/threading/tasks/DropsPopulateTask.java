@@ -44,7 +44,7 @@ public class DropsPopulateTask extends DatabaseTask {
         setState(RUNNING);
         try {
 
-            setOperation("Downloading drops data");
+            setOperation("Downloading drops data...");
             List<Object> dropsList = (List<Object>) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.DROPS_TYPE);
 
             setOperation("Populating drops table");

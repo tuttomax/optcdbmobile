@@ -11,11 +11,14 @@ import com.optc.optcdbmobile.data.database.entities.Captain;
 import com.optc.optcdbmobile.data.database.entities.CaptainDescription;
 import com.optc.optcdbmobile.data.database.entities.Evolution;
 import com.optc.optcdbmobile.data.database.entities.Limit;
+import com.optc.optcdbmobile.data.database.entities.Location;
+import com.optc.optcdbmobile.data.database.entities.LocationInformation;
 import com.optc.optcdbmobile.data.database.entities.Potential;
 import com.optc.optcdbmobile.data.database.entities.PotentialDescription;
 import com.optc.optcdbmobile.data.database.entities.SailorDescription;
 import com.optc.optcdbmobile.data.database.entities.Special;
 import com.optc.optcdbmobile.data.database.entities.SpecialDescription;
+import com.optc.optcdbmobile.data.database.entities.Unit;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -25,12 +28,15 @@ import java.util.concurrent.Executors;
 
 public class UnitDialogViewModel extends AndroidViewModel {
 
-
+    //TODO Rewrite me in order to create a shared modelview
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private OPTCDatabaseRepository repo;
 
     public MutableLiveData<List<Evolution>> evolvesTo;
     public MutableLiveData<List<Evolution>> evolvesFrom;
+    public MutableLiveData<List<LocationInformation>> familyDrops;
+    public MutableLiveData<List<LocationInformation>> manualDrops;
+    public MutableLiveData<List<Location>> locations;
 
     public UnitDialogViewModel(@NonNull Application application) {
         super(application);
@@ -39,9 +45,12 @@ public class UnitDialogViewModel extends AndroidViewModel {
 
         evolvesTo = new MutableLiveData<>();
         evolvesFrom = new MediatorLiveData<>();
-
+        familyDrops = new MutableLiveData<>();
+        manualDrops = new MutableLiveData<>();
+        locations = new MutableLiveData<>();
     }
 
+    //region unitHas
     public boolean unitHasCaptain(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<Boolean>() {
             @Override
@@ -86,6 +95,54 @@ public class UnitDialogViewModel extends AndroidViewModel {
             }
         }).get();
     }
+
+    public boolean unitHasEvolutions(final int id) throws ExecutionException, InterruptedException {
+        return executorService.submit(new Callable<Boolean>() {
+            @Override
+            public Boolean call() {
+                return repo.unitHasEvolutions(id);
+            }
+        }).get();
+    }
+
+    public boolean unitHasEvolvesFrom(final int id) throws ExecutionException, InterruptedException {
+        return executorService.submit(new Callable<Boolean>() {
+            @Override
+            public Boolean call() {
+                return repo.unitHasEvolvesFrom(id);
+            }
+        }).get();
+    }
+
+    public boolean unitHasManuals(final int id) throws ExecutionException, InterruptedException {
+        return executorService.submit(new Callable<Boolean>() {
+            @Override
+            public Boolean call() {
+                return repo.unitHasManuals(id);
+            }
+        }).get();
+    }
+
+    public boolean unitHasFamily(final int id) throws ExecutionException, InterruptedException {
+        return executorService.submit(new Callable<Boolean>() {
+            @Override
+            public Boolean call() {
+                return repo.unitHasFamily(id);
+            }
+        }).get();
+    }
+
+    //endregion
+
+    public Unit getUnit(final int id) throws ExecutionException, InterruptedException {
+        return executorService.submit(new Callable<Unit>() {
+            @Override
+            public Unit call() {
+                return repo.getUnit(id);
+            }
+        }).get();
+    }
+
 
     public List<CaptainDescription> getCaptainDescriptions(final int id) throws ExecutionException, InterruptedException {
         return executorService.submit(new Callable<List<CaptainDescription>>() {
@@ -178,21 +235,22 @@ public class UnitDialogViewModel extends AndroidViewModel {
         }).get());
     }
 
-    public boolean unitHasEvolutions(final int id) throws ExecutionException, InterruptedException {
-        return executorService.submit(new Callable<Boolean>() {
+
+    public void getManualDropsOf(final int id) {
+        executorService.submit(new Runnable() {
             @Override
-            public Boolean call() {
-                return repo.unitHasEvolutions(id);
+            public void run() {
+                manualDrops.postValue(repo.getManualDropsOf(id));
             }
-        }).get();
+        });
     }
 
-    public boolean unitHasEvovlesFrom(final int id) throws ExecutionException, InterruptedException {
-        return executorService.submit(new Callable<Boolean>() {
+    public void getFamilyDropsOf(final int id) {
+        executorService.submit(new Runnable() {
             @Override
-            public Boolean call() {
-                return repo.unitHasEvolvesFrom(id);
+            public void run() {
+                familyDrops.postValue(repo.getFamilyDropsOf(id));
             }
-        }).get();
+        });
     }
 }

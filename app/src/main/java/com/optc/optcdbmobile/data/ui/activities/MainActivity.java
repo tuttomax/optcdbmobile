@@ -18,10 +18,12 @@ package com.optc.optcdbmobile.data.ui.activities;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home);
 
         drawer = findViewById(R.id.drawer_layout);
-        NavigationView nav = findViewById(R.id.nav_view);
+        final NavigationView nav = findViewById(R.id.nav_view);
 
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -90,9 +92,15 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
             }
         });
 
-        nav.setCheckedItem(R.id.nav_menu_character_table);
-        initFragment(CHARACTER_TABLE_FRAGMENT);
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                nav.setCheckedItem(R.id.nav_menu_character_table);
+                initFragment(CHARACTER_TABLE_FRAGMENT);
+            }
+        });
     }
+
 
     @Override
     protected void onResume() {
@@ -122,13 +130,22 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
 
     @Override
     public void onBackPressed() {
-        finish();
+
+        if (drawer.isDrawerOpen(Gravity.START)) drawer.closeDrawer(Gravity.START);
+
+        FragmentManager.BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1);
+        if (CHARACTER_TABLE_FRAGMENT.equals(entry.getName())) {
+            finish();
+        } else {
+            initFragment(CHARACTER_TABLE_FRAGMENT);
+        }
     }
+
 
     @Override
     protected void onDestroy() {
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_check_done_key, false).commit();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_update_available, false).commit();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_check_done_key, false).apply();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_update_available, false).apply();
 
         super.onDestroy();
     }
@@ -136,17 +153,17 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
     private void initFragment(String TAG) {
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        Fragment fragmentToInit = getSupportFragmentManager().findFragmentByTag(TAG);
-        if (fragmentToInit == null) {
-            if (TAG.equals(CHARACTER_TABLE_FRAGMENT)) {
-                fragmentToInit = new CharacterTableFragment();
-            } else if (TAG.equals(SETTINGS_TAG_FRAGMENT)) {
-                fragmentToInit = new SettingsFragment();
-            }
+        Fragment fragmentToInit = null;
+
+        if (TAG.equals(CHARACTER_TABLE_FRAGMENT)) {
+            fragmentToInit = new CharacterTableFragment();
+        } else if (TAG.equals(SETTINGS_TAG_FRAGMENT)) {
+            fragmentToInit = new SettingsFragment();
         }
 
         transaction
                 .replace(R.id.content_frame, fragmentToInit)
+                .addToBackStack(TAG)
                 .commit();
 
     }

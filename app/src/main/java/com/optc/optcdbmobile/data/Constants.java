@@ -71,7 +71,9 @@ public class Constants {
     }
 
     public class DatabaseVersionTask {
+        public final static byte NO_ACTION = 0;
         public final static byte ACTION_SHOW_UPDATE = 1;
         public final static byte ACTION_AUTOMATIC_UPDATE = 2;
+
     }
 }

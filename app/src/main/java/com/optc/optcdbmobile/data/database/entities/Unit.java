@@ -18,10 +18,12 @@ package com.optc.optcdbmobile.data.database.entities;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity(tableName = "unit_table")
-public class Unit {
+public class Unit implements Comparable<Unit> {
 
     @PrimaryKey
     private int id;
@@ -151,5 +153,27 @@ public class Unit {
 
     public Float getStars() {
         return stars;
+    }
+
+    @Ignore
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (obj == this) return true;
+
+        return obj instanceof Unit && this.getUnitId() == ((Unit) obj).getUnitId();
+    }
+
+    @Override
+    public int compareTo(@NonNull Unit o) {
+        if (unitId == o.unitId
+                && (name != null && o.name != null && name.equals(o.name))
+                && (type1 != null && o.type1 != null && type1.equals(o.type1))
+                && (type2 != null && o.type2 != null && type2.equals(o.type2))
+                && (maxAtk != null && o.maxAtk != null & maxAtk.equals(o.maxAtk))
+                && (maxHp != null && o.maxHp != null & maxHp.equals(o.maxHp))
+                && (maxRcv != null && o.maxRcv != null & maxRcv.equals(o.maxRcv))) return 1;
+
+        return 0;
     }
 }

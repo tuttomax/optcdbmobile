@@ -16,7 +16,6 @@
 
 package com.optc.optcdbmobile.data.database.data_access_object;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Query;
 
@@ -29,6 +28,14 @@ public abstract class UnitDAO implements BaseDAO<Unit> {
 
 
     @Query("SELECT * FROM unit_table")
-    public abstract LiveData<List<Unit>> getUnits();
+    public abstract List<Unit> getUnits();
 
+    @Query("SELECT * FROM unit_table WHERE lower(name) LIKE :name")
+    public abstract List<Unit> getUnitsWithName(String name);
+
+    @Query("SELECT * FROM unit_table WHERE unit_id IN (SELECT id FROM alias_table WHERE lower(name) LIKE :alias)")
+    public abstract List<Unit> getUnitsWithAlias(String alias);
+
+    @Query("SELECT * FROM unit_table WHERE id=:id")
+    public abstract Unit getUnit(int id);
 }

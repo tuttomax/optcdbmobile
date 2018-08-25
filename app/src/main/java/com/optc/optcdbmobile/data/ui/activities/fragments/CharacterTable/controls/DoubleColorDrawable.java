@@ -1,4 +1,4 @@
-package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
+package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;

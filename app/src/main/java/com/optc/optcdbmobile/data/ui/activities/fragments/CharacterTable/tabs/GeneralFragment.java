@@ -1,4 +1,4 @@
-package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
+package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.tabs;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,15 +11,16 @@ import android.widget.TextView;
 
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
+import com.optc.optcdbmobile.data.ui.activities.general.UnitParcelable;
 
 
 //TODO Move Class and socket inside UnitDialog in order to show them inside the image
 
 public class GeneralFragment extends Fragment {
 
-    private UnitProxy unit;
+    private UnitParcelable unit;
 
-    public static GeneralFragment newInstance(UnitProxy unit) {
+    public static GeneralFragment newInstance(UnitParcelable unit) {
 
         Bundle args = new Bundle();
         args.putParcelable(UnitHelper.UNIT_PARCELLABLE, unit);

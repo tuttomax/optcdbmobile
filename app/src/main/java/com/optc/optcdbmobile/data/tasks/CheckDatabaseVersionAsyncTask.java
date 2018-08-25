@@ -58,7 +58,7 @@ public class CheckDatabaseVersionAsyncTask extends AsyncTask<Void, String, Byte>
                     : Constants.DatabaseVersionTask.ACTION_SHOW_UPDATE;
         }
 
-        return null;
+        return Constants.DatabaseVersionTask.NO_ACTION;
     }
 
     @Override

@@ -24,7 +24,7 @@ import android.support.annotation.NonNull;
 
 /*
    This table will contains all information of drops like:
-        id: 1 (autogenerate in Location)
+        id: 1
 
         name: 'Master'
 
@@ -38,7 +38,7 @@ import android.support.annotation.NonNull;
 
  */
 @Entity(tableName = "location_drops_table",
-        primaryKeys = {"location_id", "name", "index"},
+        primaryKeys = {"location_id", "stage_name", "index"},
         foreignKeys = {
                 @ForeignKey(entity = Location.class,
                         parentColumns = {"id"},
@@ -56,22 +56,23 @@ import android.support.annotation.NonNull;
 
         indices = {
                 @Index(value = "location_id"),
-                @Index(value = {"location_id", "name", "index"}, unique = true)
+                @Index(value = {"location_id", "stage_name", "index"}, unique = true)
         })
 public class LocationDrops {
 
     @ColumnInfo(name = "location_id")
     private int locationId;
     @NonNull
-    private String name;
+    @ColumnInfo(name = "stage_name")
+    private String stageName;
     private int index;
 
     @ColumnInfo(name = "unit_id")
     private int unitId;
 
-    public LocationDrops(int locationId, String name, int index, int unitId) {
+    public LocationDrops(int locationId, String stageName, int index, int unitId) {
         this.locationId = locationId;
-        this.name = name;
+        this.stageName = stageName;
         this.index = index;
         this.unitId = unitId;
     }
@@ -80,8 +81,9 @@ public class LocationDrops {
         return locationId;
     }
 
-    public String getName() {
-        return name;
+    @NonNull
+    public String getStageName() {
+        return stageName;
     }
 
     public int getIndex() {
