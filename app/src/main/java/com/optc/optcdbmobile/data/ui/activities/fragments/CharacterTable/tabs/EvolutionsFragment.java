@@ -32,9 +32,10 @@ public class EvolutionsFragment extends Fragment {
     private final EvolutionAdapter.OnEvolutionItemAdapterEvent ON_EVOLUTION_ITEM_ADAPTER_EVENT =
             new EvolutionAdapter.OnEvolutionItemAdapterEvent() {
                 @Override
-                public void onClick(int id) {
+                public void onClick(int databaseId) {
+                    if (id == databaseId) return;
                     //TODO Handle Material-NonUnit click
-                    UnitDialog.newInstance(id).show(getChildFragmentManager(), UnitDialog.class.getSimpleName());
+                    UnitDialog.newInstance(databaseId).show(getChildFragmentManager(), UnitDialog.class.getSimpleName());
                 }
 
                 @Override
