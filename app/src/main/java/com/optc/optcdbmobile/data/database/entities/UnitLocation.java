@@ -20,9 +20,11 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 
-
-@Deprecated /*  Use LocationDropsDAO
-                This exist cause there is a N-N relationship between Unit and Location */
+/**
+ * @deprecated Use @see com.optc.optcdbmobile.data.database.entities.LocationDrops
+ * This exist cause there is a N-N relationship between Unit and Location
+ */
+@Deprecated
 @Entity(tableName = "unit_location_table",
         primaryKeys = {"location_id", "unit_id"},
         foreignKeys = {

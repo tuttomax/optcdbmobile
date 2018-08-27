@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +33,6 @@ import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitParcelable;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,7 +66,7 @@ public class CharacterTableFragment extends Fragment {
     private MainViewModel mainViewModel;
     private int scrollPosition = 0;
     private boolean hasChanged = false;
-    private boolean firstLaunch = true;
+    private boolean firstLaunch;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,13 +119,8 @@ public class CharacterTableFragment extends Fragment {
 
                 } else if (matcherString.find()) {
                     String name = query.substring(matcherString.start(), matcherString.end());
-                    try {
-                        mainViewModel.getUnitsWithName(name);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    }
+                    mainViewModel.getUnitsWithName(name);
+
                     hasChanged = true;
                     firstLaunch = false;
                 }
@@ -142,14 +138,9 @@ public class CharacterTableFragment extends Fragment {
             @Override
             public boolean onClose() {
                 if (hasChanged) {
-                    try {
-                        mainViewModel.getUnits();
-                        hasChanged = false;
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    }
+                    mainViewModel.getUnits();
+                    hasChanged = false;
+                    firstLaunch = false;
                 }
                 return false;
             }
@@ -178,9 +169,9 @@ public class CharacterTableFragment extends Fragment {
          * Always true cause a BUG
          * BUG: Prevent NotifyItemInserted to update UI.
          * https://stackoverflow.com/questions/39683237/android-recyclerview-adapter-notifyiteminserted-and-notifyitemmoved-at-index-0/40373122#40373122
-
          */
         recyclerView.setHasFixedSize(!firstLaunch);
+        Log.i(CharacterTableFragment.class.getSimpleName(), "Settings setHasFixedSize to " + !firstLaunch);
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -188,7 +179,7 @@ public class CharacterTableFragment extends Fragment {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     Glide.with(CharacterTableFragment.this).resumeRequests();
                 } else {
                     Glide.with(CharacterTableFragment.this).pauseAllRequests();
@@ -197,13 +188,11 @@ public class CharacterTableFragment extends Fragment {
             }
         });
 
-        try {
-            mainViewModel.getUnits();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        mainViewModel.getUnits();
+
+
+        NavigationView nav = view.findViewById(R.id.nav_filters);
+
     }
 
 

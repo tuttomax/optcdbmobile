@@ -18,7 +18,6 @@ package com.optc.optcdbmobile.data.ui.activities;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -35,10 +34,13 @@ import android.view.View;
 
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.Constants;
+import com.optc.optcdbmobile.data.UpdateManager;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
 import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.CharacterTableFragment;
 import com.optc.optcdbmobile.data.ui.activities.fragments.Settings.SettingsFragment;
+
+import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity implements AsyncTaskContext {
@@ -47,12 +49,25 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
 
     private OPTCDatabaseRepository databaseRepository;
     private DrawerLayout drawer;
+    private NavigationView nav;
+
+    private Boolean isFirstLaunch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        try {
+            new UpdateManager(this, this).CheckUpdate();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+
+        isFirstLaunch = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.Settings.pref_first_launch, true);
 
         databaseRepository = OPTCDatabaseRepository.getInstance(getApplication());
 
@@ -64,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home);
 
         drawer = findViewById(R.id.drawer_layout);
-        final NavigationView nav = findViewById(R.id.nav_view);
+        nav = findViewById(R.id.nav_view);
 
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -92,20 +107,23 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
             }
         });
 
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                nav.setCheckedItem(R.id.nav_menu_character_table);
-                initFragment(CHARACTER_TABLE_FRAGMENT);
-            }
-        });
+        nav.setCheckedItem(R.id.nav_menu_character_table);
+        initFragment(CHARACTER_TABLE_FRAGMENT);
+
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        databaseRepository.CheckVersion(this);
+
+        if (isFirstLaunch) {
+            databaseRepository.BuildDatabase(this);
+        } else {
+            databaseRepository.CheckVersion(this);
+        }
+
+
     }
 
     @Override
@@ -144,8 +162,11 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
 
     @Override
     protected void onDestroy() {
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_check_done_key, false).apply();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_update_available, false).apply();
+        if (isFirstLaunch)
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_first_launch, false).commit();
+
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_check_done_key, false).commit();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_update_available, false).commit();
 
         super.onDestroy();
     }

@@ -26,7 +26,7 @@ import java.util.List;
 @Dao
 public abstract class SpecialDescriptionDAO implements BaseDAO<SpecialDescription> {
 
-    @Query(value = "UPDATE special_description_table SET min_cooldown=:min, max_cooldown=:max WHERE special_id=:id")
+    @Query(value = "UPDATE special_description_table SET min_cooldown=:min, max_cooldown=:max WHERE special_id=:id AND min_cooldown=-1 AND max_cooldown=-1")
     public abstract void updateCooldown(int id, int min, int max);
 
     @Query("SELECT * FROM special_description_table WHERE special_id=:id")

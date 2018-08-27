@@ -16,6 +16,7 @@
 
 package com.optc.optcdbmobile.data.tasks;
 
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -50,6 +51,7 @@ public class CheckDatabaseVersionAsyncTaskListener implements AsyncTaskListener<
         switch (action) {
             case ACTION_SHOW_UPDATE:
                 Snackbar.make(context.getView(), "New database version available", Snackbar.LENGTH_LONG)
+                        .setActionTextColor(Color.WHITE)
                         .setAction("UPDATE", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

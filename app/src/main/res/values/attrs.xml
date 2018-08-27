@@ -9,4 +9,8 @@
     <declare-styleable name="RepeatableDrawableWidget">
         <attr name="drawable" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="CheckableTextView">
+        <attr name="checked" format="boolean" />
+    </declare-styleable>
 </resources>

@@ -190,7 +190,7 @@ public class API {
     /* Thanks https://github.com/paolo-optc/optc-mobile-db ->
      https://github.com/paolo-optc/optc-mobile-db/blob/master/app/src/main/java/it/instruman/treasurecruisedatabase/MainActivity.java#L1563
      */
-    private static String simple_download(String url) {
+    public static String simple_download(String url) {
         try {
             URL fileURL = new URL(url);
             return com.google.common.io.Resources.toString(fileURL, Charsets.UTF_8);

@@ -44,6 +44,22 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="Application">
+
+        <com.optc.optcdbmobile.data.ui.activities.fragments.Settings.SingleLinePreference
+            android:defaultValue="-1"
+            android:enabled="false"
+            android:key="@string/pref_app_version_key"
+            android:persistent="false"
+            android:selectable="false"
+            android:title="@string/pref_app_version_title"
+            app:backgroundColor="@color/secondaryDarkColor"
+            app:summaryColor="@color/infoColor"
+            app:titleColor="@color/secondaryDarkTextColor" />
+
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="Licenses">
         <Preference
             android:key="@string/pref_open_source_key"

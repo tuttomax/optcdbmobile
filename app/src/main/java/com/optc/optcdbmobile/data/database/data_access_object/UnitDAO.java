@@ -38,4 +38,7 @@ public abstract class UnitDAO implements BaseDAO<Unit> {
 
     @Query("SELECT * FROM unit_table WHERE id=:id")
     public abstract Unit getUnit(int id);
+
+    @Query("SELECT * FROM unit_table WHERE :filter")
+    public abstract List<Unit> getUnitsWithFilter(String filter);
 }

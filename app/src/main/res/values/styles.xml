@@ -51,4 +51,9 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
+    <style name="NavigationView" parent="MainTheme">
+        <item name="android:listPreferredItemHeightSmall">90dp</item>
+        <item name="listPreferredItemHeightSmall">90dp</item>
+    </style>
+
 </resources>

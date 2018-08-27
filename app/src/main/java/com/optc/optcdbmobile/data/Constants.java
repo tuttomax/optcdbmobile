@@ -18,6 +18,21 @@ package com.optc.optcdbmobile.data;
 
 public class Constants {
 
+    public static class Settings {
+        //UI preference
+        public final static String pref_wifi_download_key = "wifi_download";
+        public final static String pref_auto_download_key = "auto_download";
+        public final static String pref_database_version_key = "database_version";
+        public final static String pref_card_layout_key = "card_layout";
+        // non-UI preference
+        public final static String pref_check_done_key = "check_done";
+        public static final String pref_update_available = "update_available";
+
+        public final static String pref_first_launch = "first_launch";
+
+        public final static String pref_app_version_key = "app_version";
+
+    }
 
     public class API {
         public final static byte VERSION_TYPE = 0;
@@ -57,17 +72,11 @@ public class Constants {
         public static final byte NEO = 3;
     }
 
-
-    public static class Settings {
-        //UI preference
-        public final static String pref_wifi_download_key = "wifi_download";
-        public final static String pref_auto_download_key = "auto_download";
-        public final static String pref_database_version_key = "database_version";
-        public final static String pref_card_layout_key = "card_layout";
-        // non-UI preference
-        public final static String pref_check_done_key = "check_done";
-        public static final String pref_update_available = "update_available";
-
+    public class APP {
+        public final static String APP_VERSION_URL = "https://raw.githubusercontent.com/tuttomax/optcdbmobile/master/appVersion";
+        public final static String APP_DOWNLOAD_URL = "https://github.com/tuttomax/optcdbmobile/releases/download/%d/app_install.apk";
+        public final static String MIME_TYPE_APK = "application/vnd.android.package-archive";
+        public final static String PREF_APK_LOCATION_KEY = "app_location";
     }
 
     public class DatabaseVersionTask {
