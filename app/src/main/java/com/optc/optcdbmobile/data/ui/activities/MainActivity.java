@@ -119,11 +119,12 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
 
         if (isFirstLaunch) {
             databaseRepository.BuildDatabase(this);
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_first_launch, false).apply();
         } else {
             databaseRepository.CheckVersion(this);
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_check_done_key, false).apply();
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_update_available, false).apply();
         }
-
-
     }
 
     @Override
@@ -159,17 +160,6 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
         }
     }
 
-
-    @Override
-    protected void onDestroy() {
-        if (isFirstLaunch)
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_first_launch, false).commit();
-
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_check_done_key, false).commit();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_update_available, false).commit();
-
-        super.onDestroy();
-    }
 
     private void initFragment(String TAG) {
 

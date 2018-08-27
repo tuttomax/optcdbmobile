@@ -8,13 +8,12 @@ import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.Toast;
 
-import com.optc.optcdbmobile.R;
+import com.optc.optcdbmobile.BuildConfig;
 import com.optc.optcdbmobile.data.optcdb.API;
 
 import java.util.concurrent.Callable;
@@ -46,22 +45,24 @@ public class UpdateManager {
         Pair<Boolean, Integer> updateInfo = Executors.newSingleThreadExecutor().submit(new Callable<Pair<Boolean, Integer>>() {
             @Override
             public Pair<Boolean, Integer> call() throws Exception {
-                Integer currentVersion = PreferenceManager.getDefaultSharedPreferences(mContext).getInt(mContext.getString(R.string.pref_app_version_key), -1);
+                Integer currentVersion = BuildConfig.VERSION_CODE;
                 Integer newVersion = Integer.valueOf(API.simple_download(Constants.APP.APP_VERSION_URL));
                 return Pair.create(currentVersion < newVersion, newVersion);
             }
         }).get();
+
         if (updateInfo.first) {
 
             Log.i(UpdateManager.class.getSimpleName(), "App update available");
 
             Toast.makeText(mContext, "Downloading app update...", Toast.LENGTH_LONG);
 
-            DownloadManager.Request downloadRequest = new DownloadManager.Request(Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, updateInfo.second)))
+            Uri downloadUri = Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, updateInfo.second));
+
+            DownloadManager.Request downloadRequest = new DownloadManager.Request(downloadUri)
                     .setMimeType(Constants.APP.MIME_TYPE_APK)
                     .setVisibleInDownloadsUi(true)
                     .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
-
 
             idFile.setValue(downloadManager.enqueue(downloadRequest));
         }
