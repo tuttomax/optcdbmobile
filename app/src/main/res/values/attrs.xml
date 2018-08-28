@@ -11,6 +11,7 @@
     </declare-styleable>
 
     <declare-styleable name="CheckableTextView">
-        <attr name="checked" format="boolean" />
+        <attr name="background_checked" format="reference" />
+        <attr name="background_normal" format="reference" />
     </declare-styleable>
 </resources>

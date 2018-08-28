@@ -2,6 +2,8 @@ package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,16 +11,23 @@ import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.SearchView;
 
 import com.bumptech.glide.Glide;
@@ -27,20 +36,30 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.database.entities.Unit;
+import com.optc.optcdbmobile.data.database.filters.Filter;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.ui.activities.MainViewModel;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.FilterContext;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.FilterInfo;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.FilterType;
+import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.commands.NormalCommand;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitParcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CharacterTableFragment extends Fragment {
+public class CharacterTableFragment extends Fragment implements FilterContext {
 
 
     private final static Pattern onlyNumber = Pattern.compile("^\\d+?$");
     private final static Pattern onlyString = Pattern.compile("^\\w+?$");
+    private final List<FilterInfo> filters = new ArrayList<>();
+    private final List<Filter> activatedFilter = new ArrayList<>();
+
+
     private final DiffCharacterTableAdapter.OnUnitItemAdapterEvents ON_UNIT_ITEM_ADAPTER_EVENTS = new DiffCharacterTableAdapter.OnUnitItemAdapterEvents() {
         @Override
         public void onClick(Unit unit) {
@@ -191,9 +210,86 @@ public class CharacterTableFragment extends Fragment {
         mainViewModel.getUnits();
 
 
-        NavigationView nav = view.findViewById(R.id.nav_filters);
+        initFilters();
+        initUiFilters(view);
+
 
     }
 
+    private void initFilters() {
+        filters.add(new FilterInfo(FilterType.HEADER | FilterType.COLOR));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel("STR").setCommand(new NormalCommand()));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel("QCK").setCommand(new NormalCommand()));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel("DEX").setCommand(new NormalCommand()));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel("PSY").setCommand(new NormalCommand()));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel("INT").setCommand(new NormalCommand()));
 
+        filters.add(new FilterInfo(FilterType.HEADER | FilterType.CLASS));
+        filters.add(new FilterInfo(FilterType.HEADER | FilterType.RARITY));
+        filters.add(new FilterInfo(FilterType.HEADER | FilterType.COST));
+        filters.add(new FilterInfo(FilterType.HEADER | FilterType.DROP));
+
+    }
+
+    private void initUiFilters(View view) {
+        NavigationView nav = view.findViewById(R.id.nav_filters);
+        ScrollView parentFilter = nav.findViewById(R.id.parent_filters);
+        parentFilter.setLayoutParams(new ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        LinearLayout root = new LinearLayout(getContext());
+        root.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        root.setOrientation(LinearLayout.VERTICAL);
+        parentFilter.addView(root);
+
+        for (final FilterInfo info : filters) {
+            if (info.isHeader()) {
+                root.addView(getUiHeader(getContext(), info));
+            } else {
+                root.addView(getUiFilter(getContext(), info));
+            }
+
+        }
+
+    }
+
+    private AppCompatTextView getUiHeader(Context context, FilterInfo info) {
+        AppCompatTextView textView = new AppCompatTextView(context);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        textView.setTextAppearance(getContext(), android.R.attr.textAppearanceLarge);
+        textView.setText(info.getLabel());
+        textView.setGravity(Gravity.CENTER_VERTICAL);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
+        textView.setTypeface(Typeface.DEFAULT_BOLD);
+        return textView;
+    }
+
+    private AppCompatCheckBox getUiFilter(final Context context, final FilterInfo info) {
+        final AppCompatCheckBox checkbox = new AppCompatCheckBox(getContext());
+        checkbox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        checkbox.setText(info.getLabel());
+        checkbox.setChecked(false);
+
+        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.i(CharacterTableFragment.class.getSimpleName(), String.format("Clicked on " + info.getLabel()));
+
+                buttonView.jumpDrawablesToCurrentState();
+
+                if (isChecked) {
+                    info.getCommand().execute(info.getFilter(), CharacterTableFragment.this);
+                } else {
+                    info.getCommand().rollback(info.getFilter(), CharacterTableFragment.this);
+                }
+                Log.i(CharacterTableFragment.class.getSimpleName(), String.format("%s filter: %s", checkbox.isChecked() ? "Added" : "Removed", info.getLabel()));
+                Log.i(CharacterTableFragment.class.getSimpleName(), "Number of filter activated: " + activatedFilter.size());
+            }
+        });
+
+        return checkbox;
+    }
+
+    @Override
+    public List<Filter> getUiFilters() {
+        return activatedFilter;
+    }
 }

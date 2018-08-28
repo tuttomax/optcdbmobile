@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.File;
 
@@ -24,10 +25,12 @@ public class UpdateManagerBroadcastReceiver extends BroadcastReceiver {
             Uri uri = downloadManager.getUriForDownloadedFile(id);
             if (uri == null) throw new NullPointerException("uri is null");
 
+
             Cursor newCursor = context.getContentResolver().query(uri, columns, null, null, null);
             newCursor.moveToFirst();
             String location = newCursor.getString(newCursor.getColumnIndex(columns[0]));
             newCursor.close();
+            Log.i(UpdateManager.class.getSimpleName(), "File downloaded in: " + location);
 
 
             Intent installApk = new Intent(Intent.ACTION_VIEW);

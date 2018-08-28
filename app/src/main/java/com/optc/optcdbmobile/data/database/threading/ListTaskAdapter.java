@@ -150,7 +150,7 @@ public class ListTaskAdapter extends RecyclerView.Adapter<ListTaskAdapter.TaskVi
 
     @Override
     public void updateOperation(int i, String operation) {
-        //list.get(i).setOperation(operation);
+        //list.get(i).setLabel(operation);
         notifyItemChanged(i, PAYLOAD_OPERATION);
     }
 

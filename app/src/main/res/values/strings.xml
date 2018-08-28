@@ -76,4 +76,5 @@
     <string name="lvl_1">1</string>
     <string name="rcv">RCV</string>
     <string name="search_title">Search</string>
+    <string name="pref_open_source_title">Open Source</string>
 </resources>

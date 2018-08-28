@@ -29,6 +29,7 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+import com.optc.optcdbmobile.BuildConfig;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
@@ -57,6 +58,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         model = ViewModelProviders.of(this).get(SettingsViewModel.class);
+        model.getAppVersion().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                findPreference(getString(R.string.pref_app_version_key)).setSummary(s);
+            }
+        });
 
         model.getDatabaseVersion().observe(this, new Observer<Float>() {
             @Override
@@ -76,6 +83,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
                 rebuild_database.setTitleColor(ResourcesCompat.getColor(getResources(), color, null));
             }
         });
+
+        Float currentVersion = PreferenceManager.getDefaultSharedPreferences(getContext()).getFloat(getString(R.string.pref_database_version_key), -1);
+        model.setDatabaseVersion(currentVersion);
+
+        model.setAppVersion(String.format("%s [%d]", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
 
     }
 
@@ -101,9 +113,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
         PreferenceManager.setDefaultValues(getContext(), R.xml.pref_settings, false);
         setPreferencesFromResource(R.xml.pref_settings, rootKey);
 
-        final SingleLinePreference databaseVersionPreference = (SingleLinePreference) findPreference(getString(R.string.pref_database_version_key));
-        Float currentVersion = PreferenceManager.getDefaultSharedPreferences(getContext()).getFloat(getString(R.string.pref_database_version_key), -1);
-        databaseVersionPreference.setSummary(String.valueOf(currentVersion));
+
     }
 
     @Override

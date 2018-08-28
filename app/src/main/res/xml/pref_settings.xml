@@ -64,7 +64,7 @@
         <Preference
             android:key="@string/pref_open_source_key"
             android:persistent="false"
-            android:title="Open Source" />
+            android:title="@string/pref_open_source_title" />
     </PreferenceCategory>
 
 

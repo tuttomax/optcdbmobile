@@ -44,7 +44,7 @@ public class UpdateManager {
     public void CheckUpdate() throws ExecutionException, InterruptedException {
         Pair<Boolean, Integer> updateInfo = Executors.newSingleThreadExecutor().submit(new Callable<Pair<Boolean, Integer>>() {
             @Override
-            public Pair<Boolean, Integer> call() throws Exception {
+            public Pair<Boolean, Integer> call() {
                 Integer currentVersion = BuildConfig.VERSION_CODE;
                 Integer newVersion = Integer.valueOf(API.simple_download(Constants.APP.APP_VERSION_URL));
                 return Pair.create(currentVersion < newVersion, newVersion);
@@ -57,7 +57,8 @@ public class UpdateManager {
 
             Toast.makeText(mContext, "Downloading app update...", Toast.LENGTH_LONG);
 
-            Uri downloadUri = Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, updateInfo.second));
+//            Uri downloadUri = Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, updateInfo.second));
+            Uri downloadUri = Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, 1));
 
             DownloadManager.Request downloadRequest = new DownloadManager.Request(downloadUri)
                     .setMimeType(Constants.APP.MIME_TYPE_APK)
