@@ -2,7 +2,6 @@ package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +11,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -242,27 +242,36 @@ public class CharacterTableFragment extends Fragment implements FilterContext {
 
         for (final FilterInfo info : filters) {
             if (info.isHeader()) {
-                root.addView(getUiHeader(getContext(), info));
+                setUiHeader(root, info);
             } else {
-                root.addView(getUiFilter(getContext(), info));
+                setUiFilter(root, info);
             }
 
         }
 
     }
 
-    private AppCompatTextView getUiHeader(Context context, FilterInfo info) {
-        AppCompatTextView textView = new AppCompatTextView(context);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+    private void setUiHeader(ViewGroup root, FilterInfo info) {
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER_VERTICAL;
+
+        AppCompatTextView textView = new AppCompatTextView(getContext());
+        textView.setLayoutParams(params);
         textView.setTextAppearance(getContext(), android.R.attr.textAppearanceLarge);
         textView.setText(info.getLabel());
-        textView.setGravity(Gravity.CENTER_VERTICAL);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
-        textView.setTypeface(Typeface.DEFAULT_BOLD);
-        return textView;
+        textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+        textView.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+
+        AppCompatImageView imageView = new AppCompatImageView(getContext());
+        imageView.setLayoutParams(params);
+        imageView.setBackgroundResource(R.drawable.separator);
+
+        root.addView(textView);
+        root.addView(imageView);
     }
 
-    private AppCompatCheckBox getUiFilter(final Context context, final FilterInfo info) {
+    private void setUiFilter(ViewGroup root, final FilterInfo info) {
         final AppCompatCheckBox checkbox = new AppCompatCheckBox(getContext());
         checkbox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         checkbox.setText(info.getLabel());
@@ -273,7 +282,7 @@ public class CharacterTableFragment extends Fragment implements FilterContext {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.i(CharacterTableFragment.class.getSimpleName(), String.format("Clicked on " + info.getLabel()));
 
-                buttonView.jumpDrawablesToCurrentState();
+                buttonView.jumpDrawablesToCurrentState(); //without this there is a strange BUG:flickering when changing status
 
                 if (isChecked) {
                     info.getCommand().execute(info.getFilter(), CharacterTableFragment.this);
@@ -284,8 +293,7 @@ public class CharacterTableFragment extends Fragment implements FilterContext {
                 Log.i(CharacterTableFragment.class.getSimpleName(), "Number of filter activated: " + activatedFilter.size());
             }
         });
-
-        return checkbox;
+        root.addView(checkbox);
     }
 
     @Override
