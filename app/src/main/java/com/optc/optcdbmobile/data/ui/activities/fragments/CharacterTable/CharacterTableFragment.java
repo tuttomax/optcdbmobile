@@ -39,12 +39,12 @@ import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.database.filters.Filter;
+import com.optc.optcdbmobile.data.database.filters.FilterContext;
+import com.optc.optcdbmobile.data.database.filters.FilterInfo;
+import com.optc.optcdbmobile.data.database.filters.FilterType;
 import com.optc.optcdbmobile.data.database.filters.Filters;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.ui.activities.MainViewModel;
-import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.FilterContext;
-import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.FilterInfo;
-import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.FilterType;
 import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.commands.NormalCommand;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitParcelable;
@@ -110,6 +110,7 @@ public class CharacterTableFragment extends Fragment {
                         super.onDismissed(transientBottomBar, event);
                     }
                 });
+
                 adapter.submitList(units);
 
             }
@@ -222,17 +223,38 @@ public class CharacterTableFragment extends Fragment {
     }
 
     private void initFilters() {
+
+        //TODO Create factory class
         filters.add(new FilterInfo(FilterType.HEADER | FilterType.COLOR));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel("STR").setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel("DEX").setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel("QCK").setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel("PSY").setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel("INT").setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel(UnitHelper.STR_STRING).setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel(UnitHelper.QCK_STRING).setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.QCK_STRING))));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel(UnitHelper.DEX_STRING).setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.DEX_STRING))));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel(UnitHelper.PSY_STRING).setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.PSY_STRING))));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel(UnitHelper.INT_STRING).setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.INT_STRING))));
 
         filters.add(new FilterInfo(FilterType.HEADER | FilterType.CLASS));
+        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.FIGHTER_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.FIGHTER_STRING))));
+        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.SLASHER_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.SLASHER_STRING))));
+        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.SHOOTER_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.SHOOTER_STRING))));
+        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.STRIKER_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STRIKER_STRING))));
+        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.DRIVEN_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.DRIVEN_STRING))));
+        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.POWERHOUSE_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.POWERHOUSE_STRING))));
+        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.FREE_SPIRIT_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.FREE_SPIRIT_STRING))));
+        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.CEREBRAL_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.CEREBRAL_STRING))));
+
+
         filters.add(new FilterInfo(FilterType.HEADER | FilterType.RARITY));
         filters.add(new FilterInfo(FilterType.HEADER | FilterType.COST));
         filters.add(new FilterInfo(FilterType.HEADER | FilterType.DROP));
+        filters.add(new FilterInfo(FilterType.DROP).setLabel("Global units").setCommand(new NormalCommand()).setFilter(Filters.GLOBAL_FILTER));
+        filters.add(new FilterInfo(FilterType.DROP).setLabel("Japan exclusive").setCommand(new NormalCommand()).setFilter(Filters.JAPAN_FILTER));
+        filters.add(new FilterInfo(FilterType.DROP).setLabel("In RR pool").setCommand(new NormalCommand()).setFilter(Filters.RARE_RECRUIT_FILTER));
+
+        filters.add(new FilterInfo(FilterType.HEADER | FilterType.EXCLUSION));
+        filters.add(new FilterInfo(FilterType.EXCLUSION).setLabel("Exclude base form").setCommand(new NormalCommand()).setFilter(Filters.EXCLUDE_BASE_FORM));
+        filters.add(new FilterInfo(FilterType.EXCLUSION).setLabel("Exclude fodder").setCommand(new NormalCommand()).setFilter(Filters.EXCLUDE_FODDER_FILTER));
+        filters.add(new FilterInfo(FilterType.EXCLUSION).setLabel("Exclude booster and evolver").setCommand(new NormalCommand()).setFilter(Filters.EXCLUDE_BOOSTER_AND_EVOLVER));
+
 
     }
 

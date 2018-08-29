@@ -1,7 +1,7 @@
 package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
 
 import com.optc.optcdbmobile.data.database.filters.Filter;
-import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.FilterContext;
+import com.optc.optcdbmobile.data.database.filters.FilterContext;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -114,16 +114,27 @@ class CharacterTableFilterContext implements FilterContext {
     @Override
     public Filter getQuery() {
         Filter root = Filter.create();
+
         addGroup(root, listColorFilter);
+        concatenate(root, listColorFilter, listClassFilter);
         addGroup(root, listClassFilter);
+        concatenate(root, listClassFilter, listRarityFilter);
         addGroup(root, listRarityFilter);
+        concatenate(root, listRarityFilter, listCostFilter);
         addGroup(root, listCostFilter);
+        concatenate(root, listCostFilter, listDropFilter);
         addGroup(root, listDropFilter);
+        concatenate(root, listDropFilter, listExclusionFilter);
         addGroup(root, listExclusionFilter);
+        concatenate(root, listExclusionFilter, listTreasureMapFilter);
         addGroup(root, listTreasureMapFilter);
+        concatenate(root, listTreasureMapFilter, listCaptainFilter);
         addGroup(root, listCaptainFilter);
+        concatenate(root, listCaptainFilter, listSpecialFilter);
         addGroup(root, listSpecialFilter);
+        concatenate(root, listSpecialFilter, listLimitFilter);
         addGroup(root, listLimitFilter);
+        concatenate(root, listLimitFilter, listSailorFilter);
         addGroup(root, listSailorFilter);
 
         return root;
@@ -131,12 +142,16 @@ class CharacterTableFilterContext implements FilterContext {
 
     private void addGroup(Filter root, List<Filter> list) {
         if (list.isEmpty()) return;
-
         Iterator<Filter> colorIterator = list.iterator();
-        root.open().newCondition(colorIterator.next().build());
+        //root.open();
+        root.newCondition(colorIterator.next().build());
         while (colorIterator.hasNext()) {
             root.or().newCondition(colorIterator.next().build());
         }
-        root.close();
+        //root.close();
+    }
+
+    private void concatenate(Filter root, List<Filter> prev, List<Filter> next) {
+        if (!prev.isEmpty() && !next.isEmpty()) root.and();
     }
 }

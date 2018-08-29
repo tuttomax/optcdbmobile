@@ -1,5 +1,7 @@
 package com.optc.optcdbmobile.data.database.filters;
 
+import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
+
 public class Filters {
     /**
      * SELECT * FROM unit_table AS UT WHERE :filter
@@ -12,22 +14,22 @@ public class Filters {
     public final static String TRUE = "1";
     public final static String FALSE = "0";
 
-    public final static String BOOSTER = "Booster";
-    public final static String EVOLVER = "Evolver";
     public final static Filter COLOR1_FILTER = Filter.create().newCondition("type1").equals("%s");
     public final static Filter COLOR2_FILTER = Filter.create().newCondition("type2").equals("%s");
     public final static Filter CLASS1_FILTER = Filter.create().newCondition("class1").equals("%s");
     public final static Filter CLASS2_FILTER = Filter.create().newCondition("class2").equals("%s");
     public final static Filter STARS_FILTER = Filter.create().newCondition("stars").equals("%s");
     public final static Filter COST_FILTER = Filter.create().newCondition("cost").between("%s", "%s");
-    public final static Filter GLOBAL_FILTER = Filter.create().exists().open().select("unit_id").from("tag_table")
+    public final static Filter GLOBAL_FILTER = Filter.create().newCondition("id").in().open().select("id").from("tag_table")
             .where().newCondition("global").equals(TRUE).close();
-    public final static Filter JAPAN_FILTER = Filter.create().exists().open().select("unit_id").from("tag_table")
+    public final static Filter JAPAN_FILTER = Filter.create().newCondition("id").in().open().select("id").from("tag_table")
             .where().newCondition("global").equals(FALSE).close();
-    public final static Filter RARE_RECRUIT_FILTER = Filter.create().exists().open().select("unit_id").from("tag_table")
+    public final static Filter RARE_RECRUIT_FILTER = Filter.create().newCondition("id").in().open().select("unit_id").from("tag_table")
             .where().newCondition("rr").equals(TRUE).or().newCondition("lrr").equals(TRUE).close();
     public final static Filter EXCLUDE_BASE_FORM = Filter.create().not().exists().open().select("unit_id")
             .from("evolution_table").where().newCondition("unit_id").equals("UT.id").close();
+    public final static Filter EXCLUDE_BOOSTER_AND_EVOLVER = Filter.create().open().newCondition("class1").not_equals(String.format("'%s'", UnitHelper.BOOSTER))
+            .or().newCondition("class1").not_equals(String.format("'%s'", UnitHelper.EVOLVER)).close();
 
     private final static String[] FOODERS = new String[]{
             "%Group%",
@@ -98,7 +100,7 @@ public class Filters {
         Filter filter = Filter.create().open();
         for (int index = 0; index < FOODERS.length; index++) {
             if (index != 0) filter.or();
-            filter.newCondition("name").like(FOODERS[index]);
+            filter.open().newCondition("name").like(String.format("'%s'", FOODERS[index])).close();
         }
         filter.close();
         return filter;
@@ -107,7 +109,8 @@ public class Filters {
     private static Filter generate_fooder_filter() {
         return Filter.create().open()
                 .newCondition("cost").lesser("2").and()
-                .open().newCondition("class1").equals(BOOSTER).or().newCondition("class1").equals(EVOLVER).close().close()
+                .open().newCondition("class1").equals(String.format("'%s'", UnitHelper.BOOSTER))
+                .or().newCondition("class1").equals(String.format("'%s'", UnitHelper.EVOLVER)).close().close()
                 .or().newCondition(generate_fodder_pattern().build());
     }
 

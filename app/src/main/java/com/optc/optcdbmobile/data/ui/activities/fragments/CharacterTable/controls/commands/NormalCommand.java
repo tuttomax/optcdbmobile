@@ -1,9 +1,9 @@
 package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.commands;
 
+import com.optc.optcdbmobile.data.database.filters.FilterContext;
+import com.optc.optcdbmobile.data.database.filters.FilterInfo;
+import com.optc.optcdbmobile.data.database.filters.FilterType;
 import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.Command;
-import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.FilterContext;
-import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.FilterInfo;
-import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.FilterType;
 
 public class NormalCommand implements Command {
 

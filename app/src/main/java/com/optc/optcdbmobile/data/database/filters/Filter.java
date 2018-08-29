@@ -5,12 +5,14 @@ public class Filter implements Cloneable {
     private StringBuilder builder;
     private Object[] args;
 
+    private int behaviour;
+
     private Filter() {
         builder = new StringBuilder();
     }
 
     public static Filter create() {
-        return new Filter();
+        return new Filter().setBehaviour(FilterBehaviour.OR);
     }
 
     public String build() {
@@ -49,6 +51,11 @@ public class Filter implements Cloneable {
 
     public Filter equals(String right) {
         builder.append("=").append(" ").append(right).append(" ");
+        return this;
+    }
+
+    public Filter not_equals(String right) {
+        builder.append("!=").append(" ").append(right).append(" ");
         return this;
     }
 
@@ -133,5 +140,12 @@ public class Filter implements Cloneable {
         return this;
     }
 
+    public int getBehaviour() {
+        return behaviour;
+    }
 
+    public Filter setBehaviour(int behaviour) {
+        this.behaviour = behaviour;
+        return this;
+    }
 }

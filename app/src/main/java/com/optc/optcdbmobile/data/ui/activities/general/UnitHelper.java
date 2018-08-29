@@ -16,7 +16,18 @@ public class UnitHelper {
     public static final String PSY_STRING = "PSY";
     public static final String INT_STRING = "INT";
 
-    //TODO Classe;
+    public static final String FIGHTER_STRING = "Fighter";
+    public static final String SLASHER_STRING = "Slasher";
+    public static final String SHOOTER_STRING = "Shooter";
+    public static final String STRIKER_STRING = "Striker";
+    public static final String DRIVEN_STRING = "Driven";
+    public static final String POWERHOUSE_STRING = "Powerhouse";
+    public static final String FREE_SPIRIT_STRING = "Free Spirit";
+    public static final String CEREBRAL_STRING = "Cerebral";
+    public static final String BOOSTER = "Booster";
+    public static final String EVOLVER = "Evolver";
+
+
 
     public static final String UNIT_PARCELLABLE = "__UNIT__";
     public static final String UNIT_ID = "__id__";
@@ -28,16 +39,16 @@ public class UnitHelper {
         put(INT_STRING, R.color.colorINT);
     }};
     private final static Map<String, Integer> classId = new HashMap<String, Integer>() {{
-        put("Fighter", R.drawable.ic_fighter);
-        put("Slasher", R.drawable.ic_slasher);
-        put("Shooter", R.drawable.ic_shooter);
-        put("Striker", R.drawable.ic_striker);
-        put("Driven", R.drawable.ic_driven);
-        put("Powerhouse", R.drawable.ic_powerhouse);
-        put("Free Spirit", R.drawable.ic_free_spirit);
-        put("Cerebral", R.drawable.ic_cerebral);
-        put("Evolver", R.drawable.ic_evolver);
-        put("Booster", R.drawable.ic_booster);
+        put(FIGHTER_STRING, R.drawable.ic_fighter);
+        put(SLASHER_STRING, R.drawable.ic_slasher);
+        put(SHOOTER_STRING, R.drawable.ic_shooter);
+        put(STRIKER_STRING, R.drawable.ic_striker);
+        put(DRIVEN_STRING, R.drawable.ic_driven);
+        put(POWERHOUSE_STRING, R.drawable.ic_powerhouse);
+        put(FREE_SPIRIT_STRING, R.drawable.ic_free_spirit);
+        put(CEREBRAL_STRING, R.drawable.ic_cerebral);
+        put(EVOLVER, R.drawable.ic_evolver);
+        put(BOOSTER, R.drawable.ic_booster);
 
     }};
     public static final int THUMB_WIDTH = 96;
