@@ -27,17 +27,51 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_filters"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:fitsSystemWindows="true">
 
-        <ScrollView
-            android:id="@+id/parent_filters"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scrollbars="vertical" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:background="@drawable/rounded_background"
+                android:padding="3dp"
+                android:text="Submit"
+                android:textColor="@color/primaryTextColor"
+                app:backgroundTint="@color/primaryColor" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/clear_filters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@drawable/rounded_background"
+                android:padding="3dp"
+                android:text="Clear filters"
+                android:textColor="@color/primaryTextColor"
+                app:backgroundTint="@color/primaryColor" />
+
+            <ScrollView
+                android:id="@+id/scrollview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:id="@+id/filters_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+        </LinearLayout>
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

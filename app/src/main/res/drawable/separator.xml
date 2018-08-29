@@ -4,7 +4,7 @@
     android:shape="rectangle">
 
     <gradient
-        android:angle="90"
+        android:angle="180"
         android:centerColor="@android:color/black"
         android:centerX="50%"
         android:centerY="50%"
@@ -13,7 +13,7 @@
         android:type="linear" />
 
     <padding
-        android:bottom="5dp"
-        android:top="5dp" />
+        android:bottom="1dp"
+        android:top="1dp" />
 
 </shape>

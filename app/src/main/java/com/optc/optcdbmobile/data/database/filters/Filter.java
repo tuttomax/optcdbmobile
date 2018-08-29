@@ -1,8 +1,9 @@
 package com.optc.optcdbmobile.data.database.filters;
 
-public class Filter {
+public class Filter implements Cloneable {
 
     private StringBuilder builder;
+    private Object[] args;
 
     private Filter() {
         builder = new StringBuilder();
@@ -13,7 +14,32 @@ public class Filter {
     }
 
     public String build() {
-        return builder.toString();
+        if (args != null && args.length > 0) {
+            return String.format(builder.toString(), args);
+        } else {
+            return builder.toString();
+        }
+    }
+
+    @Override
+    public Filter clone() {
+
+        Filter oldFilter = null;
+        Filter newFilter = Filter.create();
+
+        try {
+            Object clone = super.clone();
+            if (clone instanceof Filter) {
+                oldFilter = (Filter) clone;
+                newFilter.builder = oldFilter.builder;
+                newFilter.args = oldFilter.args;
+            }
+
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+
+        return newFilter;
     }
 
     public Filter newCondition(String attr) {
@@ -100,5 +126,12 @@ public class Filter {
         builder.append("LIKE").append(" ").append(pattern).append(" ");
         return this;
     }
+
+
+    public Filter setArgs(String... strings) {
+        this.args = strings;
+        return this;
+    }
+
 
 }

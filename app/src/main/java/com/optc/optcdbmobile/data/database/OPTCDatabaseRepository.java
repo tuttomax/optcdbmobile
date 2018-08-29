@@ -17,6 +17,7 @@
 package com.optc.optcdbmobile.data.database;
 
 
+import android.arch.persistence.db.SimpleSQLiteQuery;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -56,9 +57,11 @@ public class OPTCDatabaseRepository {
     private final ConnectivityManager connectivityManager;
     private final SharedPreferences sharedPreferences;
 
+
     public OPTCDatabaseRepository(Context context) {
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         database = OPTCDatabase.getInstance(context);
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -249,5 +252,11 @@ public class OPTCDatabaseRepository {
     public Boolean unitHasFamily(int id) {
         int count = database.locationDropsDAO().getFamilyCount(id);
         return count > 0;
+    }
+
+    public List<Unit> getUnitsWithFilter(String filter) {
+        String query = String.format("SELECT * FROM unit_table WHERE %s", filter);
+        SimpleSQLiteQuery filterQuery = new SimpleSQLiteQuery(query);
+        return database.unitDAO().getUnitsWithFilter(filterQuery);
     }
 }

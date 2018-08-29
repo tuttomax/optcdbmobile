@@ -10,6 +10,8 @@ import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
@@ -37,6 +39,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.database.filters.Filter;
+import com.optc.optcdbmobile.data.database.filters.Filters;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.ui.activities.MainViewModel;
 import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.FilterContext;
@@ -51,14 +54,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CharacterTableFragment extends Fragment implements FilterContext {
+public class CharacterTableFragment extends Fragment {
 
 
     private final static Pattern onlyNumber = Pattern.compile("^\\d+?$");
     private final static Pattern onlyString = Pattern.compile("^\\w+?$");
     private final List<FilterInfo> filters = new ArrayList<>();
-    private final List<Filter> activatedFilter = new ArrayList<>();
 
+    private final FilterContext filterContext = new CharacterTableFilterContext();
 
     private final DiffCharacterTableAdapter.OnUnitItemAdapterEvents ON_UNIT_ITEM_ADAPTER_EVENTS = new DiffCharacterTableAdapter.OnUnitItemAdapterEvents() {
         @Override
@@ -80,6 +83,8 @@ public class CharacterTableFragment extends Fragment implements FilterContext {
                     ).into(view);
         }
     };
+
+
     DiffCharacterTableAdapter adapter;
     private RecyclerView recyclerView;
     private MainViewModel mainViewModel;
@@ -218,11 +223,11 @@ public class CharacterTableFragment extends Fragment implements FilterContext {
 
     private void initFilters() {
         filters.add(new FilterInfo(FilterType.HEADER | FilterType.COLOR));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel("STR").setCommand(new NormalCommand()));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel("QCK").setCommand(new NormalCommand()));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel("DEX").setCommand(new NormalCommand()));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel("PSY").setCommand(new NormalCommand()));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel("INT").setCommand(new NormalCommand()));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel("STR").setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel("DEX").setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel("QCK").setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel("PSY").setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
+        filters.add(new FilterInfo(FilterType.COLOR).setLabel("INT").setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
 
         filters.add(new FilterInfo(FilterType.HEADER | FilterType.CLASS));
         filters.add(new FilterInfo(FilterType.HEADER | FilterType.RARITY));
@@ -231,22 +236,48 @@ public class CharacterTableFragment extends Fragment implements FilterContext {
 
     }
 
-    private void initUiFilters(View view) {
-        NavigationView nav = view.findViewById(R.id.nav_filters);
-        ScrollView parentFilter = nav.findViewById(R.id.parent_filters);
-        parentFilter.setLayoutParams(new ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        LinearLayout root = new LinearLayout(getContext());
-        root.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        root.setOrientation(LinearLayout.VERTICAL);
-        parentFilter.addView(root);
+
+    private void initUiFilters(final View view) {
+        final NavigationView nav = view.findViewById(R.id.nav_filters);
+        final ScrollView scrollView = nav.findViewById(R.id.scrollview);
+        final LinearLayout container = scrollView.findViewById(R.id.filters_container);
+
+        AppCompatButton clearAllFiltersButton = nav.findViewById(R.id.clear_filters);
+        clearAllFiltersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int index = 0; index < container.getChildCount(); index++) {
+                    View child = container.getChildAt(index);
+                    if (child instanceof AppCompatCheckBox) {
+                        ((AppCompatCheckBox) child).setChecked(false);
+                        if (hasChanged) mainViewModel.getUnits();
+                        ((DrawerLayout) nav.getParent()).closeDrawer(Gravity.END);
+                    }
+                }
+
+            }
+        });
+
+        AppCompatButton submitButton = nav.findViewById(R.id.submit);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Filter finalQuery = filterContext.getQuery();
+                Log.i(CharacterTableFragment.class.getSimpleName(), finalQuery.build());
+                Snackbar.make(v, "This will take a while...", Snackbar.LENGTH_LONG).show();
+                mainViewModel.getUnitsWithFilter(finalQuery.build());
+                hasChanged = true;
+                ((DrawerLayout) nav.getParent()).closeDrawer(Gravity.END);
+            }
+        });
+
 
         for (final FilterInfo info : filters) {
             if (info.isHeader()) {
-                setUiHeader(root, info);
+                setUiHeader(container, info);
             } else {
-                setUiFilter(root, info);
+                setUiFilter(container, info);
             }
-
         }
 
     }
@@ -280,24 +311,15 @@ public class CharacterTableFragment extends Fragment implements FilterContext {
         checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.i(CharacterTableFragment.class.getSimpleName(), String.format("Clicked on " + info.getLabel()));
-
                 buttonView.jumpDrawablesToCurrentState(); //without this there is a strange BUG:flickering when changing status
-
                 if (isChecked) {
-                    info.getCommand().execute(info.getFilter(), CharacterTableFragment.this);
+                    info.getCommand().execute(info, filterContext);
                 } else {
-                    info.getCommand().rollback(info.getFilter(), CharacterTableFragment.this);
+                    info.getCommand().rollback(info, filterContext);
                 }
-                Log.i(CharacterTableFragment.class.getSimpleName(), String.format("%s filter: %s", checkbox.isChecked() ? "Added" : "Removed", info.getLabel()));
-                Log.i(CharacterTableFragment.class.getSimpleName(), "Number of filter activated: " + activatedFilter.size());
             }
         });
         root.addView(checkbox);
     }
 
-    @Override
-    public List<Filter> getUiFilters() {
-        return activatedFilter;
-    }
 }

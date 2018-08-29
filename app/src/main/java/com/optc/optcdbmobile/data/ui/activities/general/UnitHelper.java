@@ -10,15 +10,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UnitHelper {
+    public static final String STR_STRING = "STR";
+    public static final String QCK_STRING = "QCK";
+    public static final String DEX_STRING = "DEX";
+    public static final String PSY_STRING = "PSY";
+    public static final String INT_STRING = "INT";
+
+    //TODO Classe;
 
     public static final String UNIT_PARCELLABLE = "__UNIT__";
     public static final String UNIT_ID = "__id__";
     private final static Map<String, Integer> colorsId = new HashMap<String, Integer>() {{
-        put("STR", R.color.colorSTR);
-        put("QCK", R.color.colorQCK);
-        put("DEX", R.color.colorDEX);
-        put("PSY", R.color.colorPSY);
-        put("INT", R.color.colorINT);
+        put(STR_STRING, R.color.colorSTR);
+        put(QCK_STRING, R.color.colorQCK);
+        put(DEX_STRING, R.color.colorDEX);
+        put(PSY_STRING, R.color.colorPSY);
+        put(INT_STRING, R.color.colorINT);
     }};
     private final static Map<String, Integer> classId = new HashMap<String, Integer>() {{
         put("Fighter", R.drawable.ic_fighter);
@@ -35,8 +42,6 @@ public class UnitHelper {
     }};
     public static final int THUMB_WIDTH = 96;
     public static final int THUMB_HEIGHT = 96;
-    private static final int CARD_THUMB_WIDTH = 580;
-    private static final int CARD_THUMB_HEIGHT = 580;
 
     public static int getTypeColor(String colorName, Resources res) {
         return ResourcesCompat.getColor(res, colorsId.get(colorName), null);

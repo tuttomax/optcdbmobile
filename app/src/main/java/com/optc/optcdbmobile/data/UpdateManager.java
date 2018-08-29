@@ -46,6 +46,7 @@ public class UpdateManager {
             @Override
             public Pair<Boolean, Integer> call() {
                 Integer currentVersion = BuildConfig.VERSION_CODE;
+                //TODO Implement GITHUB Commit Observer
                 Integer newVersion = Integer.valueOf(API.simple_download(Constants.APP.APP_VERSION_URL));
                 return Pair.create(currentVersion < newVersion, newVersion);
             }

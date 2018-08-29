@@ -56,5 +56,7 @@ public class FilterInfo {
         this.command = command;
         return this;
     }
+
+
 }
 

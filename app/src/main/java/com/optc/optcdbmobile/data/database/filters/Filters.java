@@ -5,6 +5,9 @@ public class Filters {
      * SELECT * FROM unit_table AS UT WHERE :filter
      **/
 
+    //TODO: Move all static Filter inside building function in order to return new object everytime and avoid cloneable interface
+    //TODO: and implement a cache strategy for avoiding new instantiation
+
 
     public final static String TRUE = "1";
     public final static String FALSE = "0";
@@ -25,6 +28,7 @@ public class Filters {
             .where().newCondition("rr").equals(TRUE).or().newCondition("lrr").equals(TRUE).close();
     public final static Filter EXCLUDE_BASE_FORM = Filter.create().not().exists().open().select("unit_id")
             .from("evolution_table").where().newCondition("unit_id").equals("UT.id").close();
+
     private final static String[] FOODERS = new String[]{
             "%Group%",
             "%Ensign Navy HQ%",
@@ -106,5 +110,6 @@ public class Filters {
                 .open().newCondition("class1").equals(BOOSTER).or().newCondition("class1").equals(EVOLVER).close().close()
                 .or().newCondition(generate_fodder_pattern().build());
     }
+
 
 }

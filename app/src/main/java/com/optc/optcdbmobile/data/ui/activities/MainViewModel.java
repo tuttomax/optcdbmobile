@@ -65,5 +65,22 @@ public class MainViewModel extends AndroidViewModel {
     }
 
 
+    public void getUnitsWithFilter(final String filter) {
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                units.postValue(repository.getUnitsWithFilter(filter));
+            }
+        });
+    }
+
+    public void getUnitsAfterFilter() {
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                units.postValue(repository.getUnits());
+            }
+        });
+    }
 
 }

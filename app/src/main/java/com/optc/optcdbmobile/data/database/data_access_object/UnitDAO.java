@@ -16,8 +16,10 @@
 
 package com.optc.optcdbmobile.data.database.data_access_object;
 
+import android.arch.persistence.db.SupportSQLiteQuery;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.RawQuery;
 
 import com.optc.optcdbmobile.data.database.entities.Unit;
 
@@ -39,6 +41,7 @@ public abstract class UnitDAO implements BaseDAO<Unit> {
     @Query("SELECT * FROM unit_table WHERE id=:id")
     public abstract Unit getUnit(int id);
 
-    @Query("SELECT * FROM unit_table WHERE :filter")
-    public abstract List<Unit> getUnitsWithFilter(String filter);
+    @RawQuery
+    public abstract List<Unit> getUnitsWithFilter(SupportSQLiteQuery query);
+
 }

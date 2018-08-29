@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
 
         databaseRepository = OPTCDatabaseRepository.getInstance(getApplication());
 
+
         setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
