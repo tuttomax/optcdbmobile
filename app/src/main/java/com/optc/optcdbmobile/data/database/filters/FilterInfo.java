@@ -1,62 +1,43 @@
 package com.optc.optcdbmobile.data.database.filters;
 
-import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.Command;
+import com.optc.optcdbmobile.data.database.filters.sql_syntax.Statement;
 
 public class FilterInfo {
 
-    private int type;
-    private String label;
-    private Filter filter;
-    private Command command;
+
+    private final int type;
+    private boolean selected;
+    private Statement statement;
 
     public FilterInfo(int type) {
         this.type = type;
-        if (isHeader(type)) label = FilterType.name(getBaseType(type));
-    }
-
-    private static boolean isHeader(int type) {
-        return (type & FilterType.HEADER) == FilterType.HEADER;
-    }
-
-    private static int getBaseType(int type) {
-        return (type & ~FilterType.HEADER);
     }
 
     public boolean isHeader() {
-        return isHeader(type);
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public FilterInfo setLabel(String label) {
-        this.label = label;
-        return this;
+        return (type & FilterType.HEADER) == FilterType.HEADER;
     }
 
     public int getType() {
-        return type;
+        return (type & ~FilterType.HEADER);
     }
 
-    public Filter getFilter() {
-        return filter;
+    public boolean isSelected() {
+        return selected;
     }
 
-    public FilterInfo setFilter(Filter filter) {
-        this.filter = filter;
-        return this;
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
-    public Command getCommand() {
-        return command;
+    public void toggle() {
+        this.selected = !this.selected;
     }
 
-    public FilterInfo setCommand(Command command) {
-        this.command = command;
-        return this;
+    public Statement getStatement() {
+        return statement;
     }
 
-
+    public void setStatement(Statement statement) {
+        this.statement = statement;
+    }
 }
-
