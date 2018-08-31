@@ -2,34 +2,22 @@ package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BaseTransientBottomBar;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.SearchView;
 
 import com.bumptech.glide.Glide;
@@ -38,18 +26,11 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.database.entities.Unit;
-import com.optc.optcdbmobile.data.database.filters.FilterType;
-import com.optc.optcdbmobile.data.database.filters.__Filter;
-import com.optc.optcdbmobile.data.database.filters.__FilterContext;
-import com.optc.optcdbmobile.data.database.filters.__FilterInfo;
-import com.optc.optcdbmobile.data.database.filters.__Filters;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.ui.activities.MainViewModel;
-import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.commands.NormalCommand;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitParcelable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,8 +40,7 @@ public class CharacterTableFragment extends Fragment {
 
     private final static Pattern onlyNumber = Pattern.compile("^\\d+?$");
     private final static Pattern onlyString = Pattern.compile("^\\w+?$");
-    private final List<__FilterInfo> filters = new ArrayList<>();
-    private final __FilterContext filterContext = new __CharacterTableFilterContext();
+
     private boolean fromFilter = false;
 
     private final DiffCharacterTableAdapter.OnUnitItemAdapterEvents ON_UNIT_ITEM_ADAPTER_EVENTS = new DiffCharacterTableAdapter.OnUnitItemAdapterEvents() {
@@ -221,12 +201,17 @@ public class CharacterTableFragment extends Fragment {
         mainViewModel.getUnits();
 
 
+        /*
         initFilters();
         initUiFilters(view);
-
+        */
 
     }
 
+
+    //region filter
+
+    /*
     private void initFilters() {
 
         //TODO Create factory class
@@ -349,5 +334,7 @@ public class CharacterTableFragment extends Fragment {
         });
         root.addView(checkbox);
     }
+
+*/
 
 }

@@ -56,7 +56,7 @@ public class UpdateManager {
 
             Log.i(UpdateManager.class.getSimpleName(), "App update available");
 
-            Toast.makeText(mContext, "Downloading app update...", Toast.LENGTH_LONG);
+            Toast.makeText(mContext, "Downloading app update...", Toast.LENGTH_LONG).show();
 
 //            Uri downloadUri = Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, updateInfo.second));
             Uri downloadUri = Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, 1));

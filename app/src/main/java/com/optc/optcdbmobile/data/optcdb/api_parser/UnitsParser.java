@@ -54,10 +54,6 @@ public class UnitsParser extends BaseParser<List<Unit>> {
 
             ++id;
 
-            if (id == 2195) {
-                id = 2196; //TODO Remove this after optc-db.github.com updates units data
-            }
-
             Object obj = array.get(index++);
             types = parseTypes(obj);
 
