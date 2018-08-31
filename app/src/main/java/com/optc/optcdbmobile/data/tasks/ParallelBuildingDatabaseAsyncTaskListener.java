@@ -52,9 +52,13 @@ public class ParallelBuildingDatabaseAsyncTaskListener implements AsyncTaskListe
             PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
                     .putFloat(Constants.Settings.pref_database_version_key, returnedValue).apply();
             Snackbar.make(view, "Database building complete", Snackbar.LENGTH_LONG).show();
+            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_check_done_key, true).commit();
+            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_update_available, false).commit();
         } else {
             PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
                     .putFloat(Constants.Settings.pref_database_version_key, -1f).apply();
+            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_check_done_key, false).commit();
+            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_update_available, true).commit();
 
             Snackbar.make(view, "Error building database", Snackbar.LENGTH_INDEFINITE)
                     .setActionTextColor(Color.RED)
@@ -65,6 +69,7 @@ public class ParallelBuildingDatabaseAsyncTaskListener implements AsyncTaskListe
                         }
                     }).show();
         }
+
     }
 
     public TaskDelegate getDelegate() {

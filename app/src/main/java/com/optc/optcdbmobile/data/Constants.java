@@ -73,6 +73,7 @@ public class Constants {
     public static class APP {
         public final static String APP_VERSION_URL = "https://raw.githubusercontent.com/tuttomax/optcdbmobile/master/version";
         public final static String APP_DOWNLOAD_URL = "https://github.com/tuttomax/optcdbmobile/releases/download/%d/app_install.apk";
+        public final static String APP_INSTALL_NAME = "app_install.apk";
         public final static String MIME_TYPE_APK = "application/vnd.android.package-archive";
     }
 

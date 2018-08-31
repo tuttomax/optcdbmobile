@@ -16,14 +16,20 @@
 
 package com.optc.optcdbmobile.data.ui.activities;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +50,28 @@ import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends AppCompatActivity implements AsyncTaskContext {
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 0 && permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE) {
+            if (grantResults.length != 0) {
+                int result = grantResults[0];
+                if (result == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        new UpdateManager(this, this).CheckUpdate();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Snackbar.make(getView(), "Can't download update on Download Public folder", BaseTransientBottomBar.LENGTH_LONG).show();
+                }
+            }
+            //else is cancelled
+        }
+    }
+
     public static final String CHARACTER_TABLE_FRAGMENT = CharacterTableFragment.class.getSimpleName();
     private static final String SETTINGS_TAG_FRAGMENT = SettingsFragment.class.getSimpleName();
 
@@ -57,22 +85,20 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try {
-            new UpdateManager(this, this).CheckUpdate();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
+
+
+        setContentView(R.layout.activity_main);
+
 
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 
         isFirstLaunch = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.Settings.pref_first_launch, true);
 
-        databaseRepository = OPTCDatabaseRepository.getInstance(getApplication());
 
-
-        setContentView(R.layout.activity_main);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         ActionBar actionBar = getSupportActionBar();
@@ -108,8 +134,13 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
             }
         });
 
-        nav.setCheckedItem(R.id.nav_menu_character_table);
-        initFragment(CHARACTER_TABLE_FRAGMENT);
+        databaseRepository = OPTCDatabaseRepository.getInstance(getApplication());
+        if (isFirstLaunch) {
+            databaseRepository.BuildDatabase(this);
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_first_launch, false).apply();
+        } else {
+            databaseRepository.CheckVersion(this);
+        }
 
     }
 
@@ -118,14 +149,10 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
     protected void onResume() {
         super.onResume();
 
-        if (isFirstLaunch) {
-            databaseRepository.BuildDatabase(this);
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_first_launch, false).apply();
-        } else {
-            databaseRepository.CheckVersion(this);
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_check_done_key, false).apply();
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_update_available, false).apply();
-        }
+        nav.setCheckedItem(R.id.nav_menu_character_table);
+        initFragment(CHARACTER_TABLE_FRAGMENT);
+
+
     }
 
     @Override

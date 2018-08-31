@@ -75,7 +75,7 @@ public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, F
             Task aliasTask = new AliasPopulateTask(database, (TaskCallback) delegate);
 
             delegate.addTasks(evolutionsTask, familyTask, cooldownsTask, tagsTask, aliasTask);
-            delegate.awaitTermination(35);
+            delegate.awaitTermination(40);
 
         } catch (Exception ex) {
             return -1f;

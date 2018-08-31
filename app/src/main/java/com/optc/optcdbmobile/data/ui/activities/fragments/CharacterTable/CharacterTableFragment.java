@@ -5,12 +5,9 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BaseTransientBottomBar;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,6 +40,13 @@ public class CharacterTableFragment extends Fragment {
 
     private boolean fromFilter = false;
 
+    DiffCharacterTableAdapter adapter;
+    private RecyclerView recyclerView;
+    private MainViewModel mainViewModel;
+    private int scrollPosition = 0;
+    private boolean hasChanged = false;
+    private boolean firstLaunch;
+
     private final DiffCharacterTableAdapter.OnUnitItemAdapterEvents ON_UNIT_ITEM_ADAPTER_EVENTS = new DiffCharacterTableAdapter.OnUnitItemAdapterEvents() {
         @Override
         public void onClick(Unit unit) {
@@ -65,32 +69,19 @@ public class CharacterTableFragment extends Fragment {
     };
 
 
-    DiffCharacterTableAdapter adapter;
-    private RecyclerView recyclerView;
-    private MainViewModel mainViewModel;
-    private int scrollPosition = 0;
-    private boolean hasChanged = false;
-    private boolean firstLaunch;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         firstLaunch = true;
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
+        adapter = new DiffCharacterTableAdapter(getContext());
+        adapter.setOnUnitItemAdapterEvents(ON_UNIT_ITEM_ADAPTER_EVENTS);
+
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         mainViewModel.units.observe(this, new Observer<List<Unit>>() {
             @Override
             public void onChanged(@Nullable List<Unit> units) {
-                Snackbar.make(getView(), String.format("Found %d characters", units.size()), Snackbar.LENGTH_SHORT).addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                    @Override
-                    public void onDismissed(Snackbar transientBottomBar, int event) {
-
-                        Snackbar.make(transientBottomBar.getView(), "Wait a moment...", Snackbar.LENGTH_LONG);
-                        super.onDismissed(transientBottomBar, event);
-                    }
-                });
-
                 if (!fromFilter) adapter.submitList(units);
                 else {
                     adapter.submitList(null);
@@ -99,6 +90,8 @@ public class CharacterTableFragment extends Fragment {
                 }
             }
         });
+
+        mainViewModel.getUnits();
 
 
     }
@@ -147,6 +140,7 @@ public class CharacterTableFragment extends Fragment {
             @Override
             public boolean onClose() {
                 if (hasChanged) {
+                    fromFilter = true;
                     mainViewModel.getUnits();
                     hasChanged = false;
                     firstLaunch = false;
@@ -161,29 +155,23 @@ public class CharacterTableFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_character_table, container, false);
+        View root = inflater.inflate(R.layout.fragment_character_table, container, false);
+        recyclerView = root.findViewById(R.id.character_table_recycler_view);
+        /*
+         * Always true cause a BUG
+         * BUG: Prevent NotifyItemInserted to update UI.
+         * https://stackoverflow.com/questions/39683237/android-recyclerview-adapter-notifyiteminserted-and-notifyitemmoved-at-index-0/40373122#40373122
+         */
+        recyclerView.setHasFixedSize(false);
+        return root;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new DiffCharacterTableAdapter(getContext());
-
-        adapter.setOnUnitItemAdapterEvents(ON_UNIT_ITEM_ADAPTER_EVENTS);
 
         recyclerView = view.findViewById(R.id.character_table_recycler_view);
-
-
-        /*
-         * Always true cause a BUG
-         * BUG: Prevent NotifyItemInserted to update UI.
-         * https://stackoverflow.com/questions/39683237/android-recyclerview-adapter-notifyiteminserted-and-notifyitemmoved-at-index-0/40373122#40373122
-         */
-        recyclerView.setHasFixedSize(!firstLaunch);
-        Log.i(CharacterTableFragment.class.getSimpleName(), "Settings setHasFixedSize to " + !firstLaunch);
-
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -198,7 +186,6 @@ public class CharacterTableFragment extends Fragment {
             }
         });
 
-        mainViewModel.getUnits();
 
 
         /*

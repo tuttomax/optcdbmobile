@@ -37,27 +37,34 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/submit"
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:background="@drawable/rounded_background"
-                android:padding="3dp"
-                android:text="Submit"
-                android:textColor="@color/primaryTextColor"
-                app:backgroundTint="@color/primaryColor" />
+                android:layout_height="match_parent"
+                android:text="Coming soon"
+                android:textStyle="bold" />
+            <!--
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/submit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:background="@drawable/rounded_background"
+                            android:padding="3dp"
+                            android:text="Submit"
+                            android:textColor="@color/primaryTextColor"
+                            app:backgroundTint="@color/primaryColor" />
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/clear_filters"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:background="@drawable/rounded_background"
-                android:padding="3dp"
-                android:text="Clear filters"
-                android:textColor="@color/primaryTextColor"
-                app:backgroundTint="@color/primaryColor" />
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/clear_filters"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:background="@drawable/rounded_background"
+                            android:padding="3dp"
+                            android:text="Clear filters"
+                            android:textColor="@color/primaryTextColor"
+                            app:backgroundTint="@color/primaryColor" />
+            -->
 
             <ScrollView
                 android:id="@+id/scrollview"

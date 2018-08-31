@@ -8,6 +8,7 @@ import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.util.Pair;
@@ -56,12 +57,13 @@ public class UpdateManager {
 
             Log.i(UpdateManager.class.getSimpleName(), "App update available");
 
+
             Toast.makeText(mContext, "Downloading app update...", Toast.LENGTH_LONG).show();
 
-//            Uri downloadUri = Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, updateInfo.second));
-            Uri downloadUri = Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, 1));
+            Uri downloadUri = Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, updateInfo.second));
 
             DownloadManager.Request downloadRequest = new DownloadManager.Request(downloadUri)
+                    .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, String.format("./%s", Constants.APP.APP_INSTALL_NAME))
                     .setMimeType(Constants.APP.MIME_TYPE_APK)
                     .setVisibleInDownloadsUi(true)
                     .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);

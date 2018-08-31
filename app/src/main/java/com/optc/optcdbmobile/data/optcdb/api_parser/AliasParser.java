@@ -35,7 +35,7 @@ public class AliasParser extends BaseParser<List<Alias>> {
 
         for (Map.Entry<Object, Object> entry : rootObj.entrySet()) {
             Integer unitId = toType(entry.getKey(), Integer.class);
-
+            //TODO Handle alias skipped by @see UnitParser
             NativeArray aliasArray = toType(entry.getValue(), NativeArray.class);
             for (int index = 0; index < aliasArray.size(); index++) {
                 String aliasName = toType(aliasArray.get(index), String.class);

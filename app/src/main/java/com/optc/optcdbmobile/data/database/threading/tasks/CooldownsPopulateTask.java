@@ -16,8 +16,6 @@
 
 package com.optc.optcdbmobile.data.database.threading.tasks;
 
-import android.util.Log;
-
 import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.threading.DatabaseTask;
@@ -31,7 +29,6 @@ public class CooldownsPopulateTask extends DatabaseTask {
         super(CooldownsPopulateTask.class.getSimpleName(), database, callback);
     }
 
-    private final Object lock = new Object();
 
     @Override
     public void run() {
@@ -44,9 +41,6 @@ public class CooldownsPopulateTask extends DatabaseTask {
             setOperation("Updating units' special cooldown");
             setMax(cooldownList.size());
             for (Cooldown cooldown : cooldownList) {
-                Log.i(CooldownsPopulateTask.class.getSimpleName(), String.valueOf(cooldown.getId()));
-
-
                 getDatabase().specialDescriptionDAO().updateCooldown(cooldown.getId(), cooldown.getMin(), cooldown.getMax());
                 increment();
             }

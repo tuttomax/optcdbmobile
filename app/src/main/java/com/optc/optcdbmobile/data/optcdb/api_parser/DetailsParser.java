@@ -16,8 +16,6 @@
 
 package com.optc.optcdbmobile.data.optcdb.api_parser;
 
-import android.util.Log;
-
 import com.optc.optcdbmobile.data.database.entities.Captain;
 import com.optc.optcdbmobile.data.database.entities.CaptainDescription;
 import com.optc.optcdbmobile.data.database.entities.Limit;
@@ -152,8 +150,6 @@ public class DetailsParser extends BaseParser<List<Detail>> {
 
         Object specialObj = internal_obj.get("special");
         if (specialObj != null) {
-
-            Log.i(DetailsParser.class.getSimpleName(), String.valueOf(id));
 
             if (specialObj instanceof String) {
                 String specialDesc = toType(specialObj, String.class);

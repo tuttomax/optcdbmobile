@@ -57,6 +57,21 @@
             app:summaryColor="@color/infoColor"
             app:titleColor="@color/secondaryDarkTextColor" />
 
+        <Preference
+            android:icon="@drawable/ic_discord"
+            android:title="Discord">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://discord.gg/wjUKbsn" />
+        </Preference>
+
+        <Preference
+            android:icon="@drawable/ic_github"
+            android:title="Github">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/tuttomax/optcdbmobile" />
+        </Preference>
 
     </PreferenceCategory>
 

@@ -49,8 +49,13 @@ public class UnitsParser extends BaseParser<List<Unit>> {
             reference_id++;
             String name = toType(array.get(index++), String.class);
 
-            if (name == null || name.equals("")) continue;
-            //if (name == null || TextUtils.isEmpty(name)) continue;
+            if (name == null || name.isEmpty()) continue;
+
+
+            if (id == 2244) {
+                id = 2247;
+            }
+
 
             ++id;
 
@@ -148,4 +153,6 @@ public class UnitsParser extends BaseParser<List<Unit>> {
 
         return new String[]{type1, type2};
     }
+
+
 }

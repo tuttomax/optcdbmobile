@@ -94,15 +94,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
         String key = preference.getKey();
+        if (key != null) {
 
-        if (key.equals(getString(R.string.pref_open_source_key))) {
-            startActivity(new Intent(getActivity(), OssLicensesMenuActivity.class));
-            return true;
-        }
+            if (key.equals(getString(R.string.pref_open_source_key))) {
+                startActivity(new Intent(getActivity(), OssLicensesMenuActivity.class));
+                return true;
+            }
 
-        if (key.equals(getString(R.string.pref_rebuild_database_key))) {
-            OPTCDatabaseRepository.getInstance(getActivity().getApplication()).BuildDatabase(SettingsFragment.this);
-            return true;
+            if (key.equals(getString(R.string.pref_rebuild_database_key))) {
+                OPTCDatabaseRepository.getInstance(getActivity().getApplication()).BuildDatabase(SettingsFragment.this);
+                return true;
+            }
         }
 
         return super.onPreferenceTreeClick(preference);
