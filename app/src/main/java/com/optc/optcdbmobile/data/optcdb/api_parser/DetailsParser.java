@@ -16,6 +16,8 @@
 
 package com.optc.optcdbmobile.data.optcdb.api_parser;
 
+import android.util.Log;
+
 import com.optc.optcdbmobile.data.database.entities.Captain;
 import com.optc.optcdbmobile.data.database.entities.CaptainDescription;
 import com.optc.optcdbmobile.data.database.entities.Limit;
@@ -150,6 +152,9 @@ public class DetailsParser extends BaseParser<List<Detail>> {
 
         Object specialObj = internal_obj.get("special");
         if (specialObj != null) {
+
+            Log.i(DetailsParser.class.getSimpleName(), String.valueOf(id));
+
             if (specialObj instanceof String) {
                 String specialDesc = toType(specialObj, String.class);
                 special = new Special(id, specialName, specialNotes);
@@ -172,8 +177,11 @@ public class DetailsParser extends BaseParser<List<Detail>> {
                     NativeArray cooldownsArray = (NativeArray) specialElement.get("cooldown");
 
                     if (cooldownsArray != null) {
-                        min = toType(cooldownsArray.get(0), Integer.class);
-                        max = toType(cooldownsArray.get(1), Integer.class);
+                        Object minObj = cooldownsArray.get(0);
+                        Object maxObj = cooldownsArray.get(1);
+
+                        min = minObj == null ? -1 : toType(cooldownsArray.get(0), Integer.class);
+                        max = maxObj == null ? -1 : toType(cooldownsArray.get(1), Integer.class);
                     }
 
                     specialDescription = new SpecialDescription(id, index, specialDesc, min, max);

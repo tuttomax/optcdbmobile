@@ -17,7 +17,6 @@ import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 public class DiffCharacterTableAdapter extends ListAdapter<Unit, DiffCharacterTableAdapter.UnitHolder> {
@@ -36,19 +35,6 @@ public class DiffCharacterTableAdapter extends ListAdapter<Unit, DiffCharacterTa
         this.onUnitItemAdapterEvents = onUnitItemAdapterEvents;
     }
 
-
-    public void setList() {
-        try {
-            Field mListField = ListAdapter.class.getDeclaredField("mHelper").getClass().getDeclaredField("mList");
-            List<Unit> mList = (List<Unit>) mListField.get(this);
-
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     @NonNull
     @Override

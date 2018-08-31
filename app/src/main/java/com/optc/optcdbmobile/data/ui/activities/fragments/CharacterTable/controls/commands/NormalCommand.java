@@ -1,14 +1,14 @@
 package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.commands;
 
-import com.optc.optcdbmobile.data.database.filters.FilterContext;
-import com.optc.optcdbmobile.data.database.filters.FilterInfo;
 import com.optc.optcdbmobile.data.database.filters.FilterType;
+import com.optc.optcdbmobile.data.database.filters.__FilterContext;
+import com.optc.optcdbmobile.data.database.filters.__FilterInfo;
 import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.Command;
 
 public class NormalCommand implements Command {
 
     @Override
-    public void execute(FilterInfo filter, FilterContext context) {
+    public void execute(__FilterInfo filter, __FilterContext context) {
         if (filter == null) return;
         if (filter.isHeader()) return;
         if (filter.getType() == FilterType.COLOR) {
@@ -38,7 +38,7 @@ public class NormalCommand implements Command {
     }
 
     @Override
-    public void rollback(FilterInfo filter, FilterContext context) {
+    public void rollback(__FilterInfo filter, __FilterContext context) {
         if (filter == null) return;
         if (filter.isHeader()) return;
 

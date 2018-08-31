@@ -38,11 +38,11 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.database.entities.Unit;
-import com.optc.optcdbmobile.data.database.filters.Filter;
-import com.optc.optcdbmobile.data.database.filters.FilterContext;
-import com.optc.optcdbmobile.data.database.filters.FilterInfo;
 import com.optc.optcdbmobile.data.database.filters.FilterType;
-import com.optc.optcdbmobile.data.database.filters.Filters;
+import com.optc.optcdbmobile.data.database.filters.__Filter;
+import com.optc.optcdbmobile.data.database.filters.__FilterContext;
+import com.optc.optcdbmobile.data.database.filters.__FilterInfo;
+import com.optc.optcdbmobile.data.database.filters.__Filters;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.ui.activities.MainViewModel;
 import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.commands.NormalCommand;
@@ -59,9 +59,9 @@ public class CharacterTableFragment extends Fragment {
 
     private final static Pattern onlyNumber = Pattern.compile("^\\d+?$");
     private final static Pattern onlyString = Pattern.compile("^\\w+?$");
-    private final List<FilterInfo> filters = new ArrayList<>();
-
-    private final FilterContext filterContext = new CharacterTableFilterContext();
+    private final List<__FilterInfo> filters = new ArrayList<>();
+    private final __FilterContext filterContext = new __CharacterTableFilterContext();
+    private boolean fromFilter = false;
 
     private final DiffCharacterTableAdapter.OnUnitItemAdapterEvents ON_UNIT_ITEM_ADAPTER_EVENTS = new DiffCharacterTableAdapter.OnUnitItemAdapterEvents() {
         @Override
@@ -111,8 +111,12 @@ public class CharacterTableFragment extends Fragment {
                     }
                 });
 
-                adapter.submitList(units);
-
+                if (!fromFilter) adapter.submitList(units);
+                else {
+                    adapter.submitList(null);
+                    adapter.submitList(units);
+                    fromFilter = false;
+                }
             }
         });
 
@@ -185,6 +189,7 @@ public class CharacterTableFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         adapter = new DiffCharacterTableAdapter(getContext());
+
         adapter.setOnUnitItemAdapterEvents(ON_UNIT_ITEM_ADAPTER_EVENTS);
 
         recyclerView = view.findViewById(R.id.character_table_recycler_view);
@@ -225,35 +230,35 @@ public class CharacterTableFragment extends Fragment {
     private void initFilters() {
 
         //TODO Create factory class
-        filters.add(new FilterInfo(FilterType.HEADER | FilterType.COLOR));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel(UnitHelper.STR_STRING).setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel(UnitHelper.QCK_STRING).setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.QCK_STRING))));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel(UnitHelper.DEX_STRING).setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.DEX_STRING))));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel(UnitHelper.PSY_STRING).setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.PSY_STRING))));
-        filters.add(new FilterInfo(FilterType.COLOR).setLabel(UnitHelper.INT_STRING).setCommand(new NormalCommand()).setFilter(Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.INT_STRING))));
+        filters.add(new __FilterInfo(FilterType.HEADER | FilterType.COLOR));
+        filters.add(new __FilterInfo(FilterType.COLOR).setLabel(UnitHelper.STR_STRING).setCommand(new NormalCommand()).setFilter(__Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
+        filters.add(new __FilterInfo(FilterType.COLOR).setLabel(UnitHelper.QCK_STRING).setCommand(new NormalCommand()).setFilter(__Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.QCK_STRING))));
+        filters.add(new __FilterInfo(FilterType.COLOR).setLabel(UnitHelper.DEX_STRING).setCommand(new NormalCommand()).setFilter(__Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.DEX_STRING))));
+        filters.add(new __FilterInfo(FilterType.COLOR).setLabel(UnitHelper.PSY_STRING).setCommand(new NormalCommand()).setFilter(__Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.PSY_STRING))));
+        filters.add(new __FilterInfo(FilterType.COLOR).setLabel(UnitHelper.INT_STRING).setCommand(new NormalCommand()).setFilter(__Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.INT_STRING))));
 
-        filters.add(new FilterInfo(FilterType.HEADER | FilterType.CLASS));
-        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.FIGHTER_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.FIGHTER_STRING))));
-        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.SLASHER_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.SLASHER_STRING))));
-        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.SHOOTER_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.SHOOTER_STRING))));
-        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.STRIKER_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STRIKER_STRING))));
-        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.DRIVEN_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.DRIVEN_STRING))));
-        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.POWERHOUSE_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.POWERHOUSE_STRING))));
-        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.FREE_SPIRIT_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.FREE_SPIRIT_STRING))));
-        filters.add(new FilterInfo(FilterType.CLASS).setLabel(UnitHelper.CEREBRAL_STRING).setCommand(new NormalCommand()).setFilter(Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.CEREBRAL_STRING))));
+        filters.add(new __FilterInfo(FilterType.HEADER | FilterType.CLASS));
+        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.FIGHTER_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.FIGHTER_STRING))));
+        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.SLASHER_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.SLASHER_STRING))));
+        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.SHOOTER_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.SHOOTER_STRING))));
+        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.STRIKER_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STRIKER_STRING))));
+        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.DRIVEN_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.DRIVEN_STRING))));
+        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.POWERHOUSE_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.POWERHOUSE_STRING))));
+        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.FREE_SPIRIT_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.FREE_SPIRIT_STRING))));
+        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.CEREBRAL_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.CEREBRAL_STRING))));
 
 
-        filters.add(new FilterInfo(FilterType.HEADER | FilterType.RARITY));
-        filters.add(new FilterInfo(FilterType.HEADER | FilterType.COST));
-        filters.add(new FilterInfo(FilterType.HEADER | FilterType.DROP));
-        filters.add(new FilterInfo(FilterType.DROP).setLabel("Global units").setCommand(new NormalCommand()).setFilter(Filters.GLOBAL_FILTER));
-        filters.add(new FilterInfo(FilterType.DROP).setLabel("Japan exclusive").setCommand(new NormalCommand()).setFilter(Filters.JAPAN_FILTER));
-        filters.add(new FilterInfo(FilterType.DROP).setLabel("In RR pool").setCommand(new NormalCommand()).setFilter(Filters.RARE_RECRUIT_FILTER));
+        filters.add(new __FilterInfo(FilterType.HEADER | FilterType.RARITY));
+        filters.add(new __FilterInfo(FilterType.HEADER | FilterType.COST));
+        filters.add(new __FilterInfo(FilterType.HEADER | FilterType.DROP));
+        filters.add(new __FilterInfo(FilterType.DROP).setLabel("Global units").setCommand(new NormalCommand()).setFilter(__Filters.GLOBAL_FILTER));
+        filters.add(new __FilterInfo(FilterType.DROP).setLabel("Japan exclusive").setCommand(new NormalCommand()).setFilter(__Filters.JAPAN_FILTER));
+        filters.add(new __FilterInfo(FilterType.DROP).setLabel("In RR pool").setCommand(new NormalCommand()).setFilter(__Filters.RARE_RECRUIT_FILTER));
 
-        filters.add(new FilterInfo(FilterType.HEADER | FilterType.EXCLUSION));
-        filters.add(new FilterInfo(FilterType.EXCLUSION).setLabel("Exclude base form").setCommand(new NormalCommand()).setFilter(Filters.EXCLUDE_BASE_FORM));
-        filters.add(new FilterInfo(FilterType.EXCLUSION).setLabel("Exclude fodder").setCommand(new NormalCommand()).setFilter(Filters.EXCLUDE_FODDER_FILTER));
-        filters.add(new FilterInfo(FilterType.EXCLUSION).setLabel("Exclude booster and evolver").setCommand(new NormalCommand()).setFilter(Filters.EXCLUDE_BOOSTER_AND_EVOLVER));
+        filters.add(new __FilterInfo(FilterType.HEADER | FilterType.EXCLUSION));
+        filters.add(new __FilterInfo(FilterType.EXCLUSION).setLabel("Exclude base form").setCommand(new NormalCommand()).setFilter(__Filters.EXCLUDE_BASE_FORM));
+        filters.add(new __FilterInfo(FilterType.EXCLUSION).setLabel("Exclude fodder").setCommand(new NormalCommand()).setFilter(__Filters.EXCLUDE_FODDER_FILTER));
+        filters.add(new __FilterInfo(FilterType.EXCLUSION).setLabel("Exclude booster and evolver").setCommand(new NormalCommand()).setFilter(__Filters.EXCLUDE_BOOSTER_AND_EVOLVER));
 
 
     }
@@ -284,9 +289,10 @@ public class CharacterTableFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Filter finalQuery = filterContext.getQuery();
+                __Filter finalQuery = filterContext.getQuery();
                 Log.i(CharacterTableFragment.class.getSimpleName(), finalQuery.build());
                 Snackbar.make(v, "This will take a while...", Snackbar.LENGTH_LONG).show();
+                fromFilter = true;
                 mainViewModel.getUnitsWithFilter(finalQuery.build());
                 hasChanged = true;
                 ((DrawerLayout) nav.getParent()).closeDrawer(Gravity.END);
@@ -294,7 +300,7 @@ public class CharacterTableFragment extends Fragment {
         });
 
 
-        for (final FilterInfo info : filters) {
+        for (final __FilterInfo info : filters) {
             if (info.isHeader()) {
                 setUiHeader(container, info);
             } else {
@@ -304,7 +310,7 @@ public class CharacterTableFragment extends Fragment {
 
     }
 
-    private void setUiHeader(ViewGroup root, FilterInfo info) {
+    private void setUiHeader(ViewGroup root, __FilterInfo info) {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER_VERTICAL;
 
@@ -324,7 +330,7 @@ public class CharacterTableFragment extends Fragment {
         root.addView(imageView);
     }
 
-    private void setUiFilter(ViewGroup root, final FilterInfo info) {
+    private void setUiFilter(ViewGroup root, final __FilterInfo info) {
         final AppCompatCheckBox checkbox = new AppCompatCheckBox(getContext());
         checkbox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         checkbox.setText(info.getLabel());

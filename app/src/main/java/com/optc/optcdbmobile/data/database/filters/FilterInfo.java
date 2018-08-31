@@ -6,11 +6,17 @@ public class FilterInfo {
 
 
     private final int type;
+    private FilterType.Subtype subtype;
     private boolean selected;
     private Statement statement;
 
-    public FilterInfo(int type) {
+    public FilterInfo(int type, FilterType.Subtype subtype) {
         this.type = type;
+        this.subtype = subtype;
+    }
+
+    public FilterInfo(int type) {
+        this(type, null);
     }
 
     public boolean isHeader() {
@@ -19,6 +25,10 @@ public class FilterInfo {
 
     public int getType() {
         return (type & ~FilterType.HEADER);
+    }
+
+    public FilterType.Subtype getSubtype() {
+        return subtype;
     }
 
     public boolean isSelected() {

@@ -23,7 +23,7 @@ public class UpdateManagerBroadcastReceiver extends BroadcastReceiver {
             if (id == -1) throw new RuntimeException("id is -1");
 
             Uri uri = downloadManager.getUriForDownloadedFile(id);
-            if (uri == null) throw new NullPointerException("uri is null");
+            if (uri == null) throw new RuntimeException("uri is null");
 
 
             Cursor newCursor = context.getContentResolver().query(uri, columns, null, null, null);

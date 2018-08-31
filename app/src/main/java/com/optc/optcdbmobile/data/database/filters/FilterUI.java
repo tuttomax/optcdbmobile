@@ -7,14 +7,23 @@ public class FilterUI {
     private int fingerprint;
     private View control;
     private FilterInfo info;
-
-    private FilterUIClickListener clickListener;
+    private FilterMediator mediator;
 
     public FilterUI(int type, String label) {
         this.info = new FilterInfo(type);
         this.label = label;
         this.fingerprint = label.hashCode();
     }
+
+    public void setMediator(FilterMediator mediator) {
+        this.mediator = mediator;
+        mediator.registerFilterUI(this);
+    }
+
+    public void unregisterFromMediator() {
+        mediator.unregisterFilterUI(this);
+    }
+
 
     /**
      * Use for header
@@ -25,13 +34,6 @@ public class FilterUI {
         this(type | FilterType.HEADER, FilterType.name(type));
     }
 
-    public static int getFingerprintFromLabel(String label) {
-        return label.hashCode();
-    }
-
-    public void setClickListener(FilterUIClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
 
     public FilterInfo getInfo() {
         return info;
@@ -55,8 +57,12 @@ public class FilterUI {
             @Override
             public void onClick(View v) {
                 info.toggle();
-                clickListener.onClick(v, info);
+                mediator.toggleState(FilterUI.this);
             }
         });
+    }
+
+    public int getFingerprint() {
+        return fingerprint;
     }
 }

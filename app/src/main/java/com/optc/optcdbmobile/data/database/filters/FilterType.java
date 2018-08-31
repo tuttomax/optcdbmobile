@@ -37,4 +37,24 @@ public class FilterType {
     public static final String name(int id) {
         return nameMap.get(id);
     }
+
+    //enum used for avoiding filters activated at the same time
+    public enum Subtype {
+
+        Colors,
+        Class1,
+        Class2,
+        Rarity,
+        Cost,
+        Farmable,
+        //NoFarmable,
+        ServerUnit,
+        //JapanUnits,
+        RRPool,
+        //NotRRPool,
+        Socket,
+        //NotFarmableSocket,
+
+
+    }
 }

@@ -1,10 +1,10 @@
 package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls;
 
-import com.optc.optcdbmobile.data.database.filters.FilterContext;
-import com.optc.optcdbmobile.data.database.filters.FilterInfo;
+import com.optc.optcdbmobile.data.database.filters.__FilterContext;
+import com.optc.optcdbmobile.data.database.filters.__FilterInfo;
 
 public interface Command {
-    void execute(FilterInfo filter, FilterContext context);
+    void execute(__FilterInfo filter, __FilterContext context);
 
-    void rollback(FilterInfo filter, FilterContext context);
+    void rollback(__FilterInfo filter, __FilterContext context);
 }
