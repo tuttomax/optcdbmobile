@@ -12,11 +12,14 @@ import android.util.Log;
 import java.io.File;
 
 public class UpdateManagerBroadcastReceiver extends BroadcastReceiver {
+    private static final String TAG = "UpdateManagerBroadcastR";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
 
             DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+
             String[] columns = {MediaStore.MediaColumns.DATA};
 
             Long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
@@ -27,10 +30,15 @@ public class UpdateManagerBroadcastReceiver extends BroadcastReceiver {
 
 
             Cursor newCursor = context.getContentResolver().query(uri, columns, null, null, null);
-            newCursor.moveToFirst();
+            if (newCursor == null) throw new RuntimeException("cursor is null");
+
+            if (!newCursor.moveToFirst()) {
+                Log.d(TAG, "newCursor is empty");
+            }
+
             String location = newCursor.getString(newCursor.getColumnIndex(columns[0]));
             newCursor.close();
-            Log.i(UpdateManager.class.getSimpleName(), "File downloaded in: " + location);
+            Log.d(UpdateManager.class.getSimpleName(), "File downloaded in: " + location);
 
 
             Intent installApk = new Intent(Intent.ACTION_VIEW);

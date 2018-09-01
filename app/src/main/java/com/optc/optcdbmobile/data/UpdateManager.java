@@ -55,8 +55,7 @@ public class UpdateManager {
 
         if (updateInfo.first) {
 
-            Log.i(UpdateManager.class.getSimpleName(), "App update available");
-
+            Log.d(UpdateManager.class.getSimpleName(), "App update available");
 
             Toast.makeText(mContext, "Downloading app update...", Toast.LENGTH_LONG).show();
 

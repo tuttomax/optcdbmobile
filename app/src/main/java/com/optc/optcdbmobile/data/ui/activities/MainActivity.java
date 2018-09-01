@@ -40,6 +40,7 @@ import android.view.View;
 
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.Constants;
+import com.optc.optcdbmobile.data.CrashReporter;
 import com.optc.optcdbmobile.data.UpdateManager;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
@@ -85,16 +86,25 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        CrashReporter.install(this);
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        } else {
+            try {
+                new UpdateManager(this, this).CheckUpdate();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
 
 
         setContentView(R.layout.activity_main);
 
-
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
 
         isFirstLaunch = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.Settings.pref_first_launch, true);
 
