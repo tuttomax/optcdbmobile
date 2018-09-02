@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,21 +41,6 @@ public class CharacterTableFragment extends Fragment {
 
     private final static Pattern onlyNumber = Pattern.compile("^\\d+?$");
     private final static Pattern onlyString = Pattern.compile("^\\w+?$");
-
-    private boolean fromFilter = false;
-
-    DiffCharacterTableAdapter characterTableAdapter;
-    FilterAdapter filterAdapter;
-
-    private RecyclerView characterTableRecyclerView;
-    private RecyclerView filterRecyclerView;
-    private FilterCollector filterCollector;
-
-    private MainViewModel mainViewModel;
-    private int scrollPosition = 0;
-    private boolean hasChanged = false;
-    private boolean firstLaunch;
-
     private final DiffCharacterTableAdapter.OnUnitItemAdapterEvents ON_UNIT_ITEM_ADAPTER_EVENTS = new DiffCharacterTableAdapter.OnUnitItemAdapterEvents() {
         @Override
         public void onClick(Unit unit) {
@@ -75,7 +61,16 @@ public class CharacterTableFragment extends Fragment {
                     ).into(view);
         }
     };
-
+    DiffCharacterTableAdapter characterTableAdapter;
+    FilterAdapter filterAdapter;
+    private boolean fromFilter = false;
+    private RecyclerView characterTableRecyclerView;
+    private RecyclerView filterRecyclerView;
+    private FilterCollector filterCollector;
+    private MainViewModel mainViewModel;
+    private int scrollPosition = 0;
+    private boolean hasChanged = false;
+    private boolean firstLaunch;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,7 +91,12 @@ public class CharacterTableFragment extends Fragment {
                 if (!fromFilter) characterTableAdapter.submitList(units);
                 else {
                     characterTableAdapter.submitList(null);
-                    characterTableAdapter.submitList(units);
+                    if (units.size() > 0) characterTableAdapter.submitList(units);
+                    else {
+                        Snackbar.make(CharacterTableFragment.this.getView(), "No match found", Snackbar.LENGTH_LONG).show();
+                        fromFilter = false;
+                        mainViewModel.getUnits();
+                    }
                     fromFilter = false;
                 }
             }

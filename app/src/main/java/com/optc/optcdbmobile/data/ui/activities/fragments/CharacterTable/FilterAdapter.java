@@ -34,7 +34,6 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.BaseViewHo
         collector.setCallback(new FilterMediator.Callback() {
             @Override
             public void OnChangedAfterInform(int index, Object payload) {
-                Log.i(FilterAdapter.class.getSimpleName(), String.valueOf(collector.get(index).isSelected()));
                 notifyItemChanged(index, payload);
             }
         });

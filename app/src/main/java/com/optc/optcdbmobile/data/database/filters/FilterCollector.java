@@ -83,10 +83,13 @@ public class FilterCollector {
                         "of Dri* characters by"
                 }));
 
-        list.add(creator.get("Universal ATK boosting captains", "of all characters by", "of all characters by"));
+        list.add(creator.get("Universal ATK boosting captains", "of all characters by", "ATK of all characters by"));
         list.add(creator.get("ATK boosting captains", "[Bb]oosts ATK", "[Bb]oosts ATK"));
         list.add(creator.get("HP boosting captains", "[Bb]oosts HP", "[Bb]oosts HP"));
-        list.add(creator.get("RCV boosting captains", "[Bb]oosts RCV", "[Bb]oosts RCV"));
+        list.add(creator.get("RCV boosting captains", "[Bb]oosts RCV", new String[]{
+                "[Bb]oosts RCV",
+                "their RCV"
+        }));
         list.add(creator.get("Special boosting captains", "[Bb]oosts damage of", "boosts damage of"));
         list.add(creator.get("2x ATK and HP captains", "[Bb]oosts ATK and HP of.+characters by 2x", "[Bb]oosts ATK and HP of*characters by 2x"));
         list.add(creator.get("2x ATK and RCV captains", "[Bb]oosts ATK and RCV of.+characters by 2x", "[Bb]oosts ATK and RCV of*characters by 2x"));
@@ -104,7 +107,7 @@ public class FilterCollector {
         list.add(creator.get("Positional captains", "after scoring .+ in a row", "after scoring * in a row"));
         list.add(creator.get("\"Beneficial\" Orb captains", "orbs \"beneficial\"", "\"orbs \\\"beneficial\\\"\""));
         list.add(creator.get("Chain multipliers", "[Bb]oosts chain multiplier", "[Bb]oosts chain multiplier"));
-        list.add(creator.get("Combo [Bb]oost Captains", "after the \\d+th hit", "after the [0-9]*th hit"));
+        list.add(creator.get("Combo Boost Captains", "after the \\d+th hit", "after the [0-9]*th hit"));
         list.add(creator.get("Cooldown reducers", "[Rr]educes cooldown of all specials", "[Rr]educes cooldown of all specials"));
         list.add(creator.get("Damage reducers", "[Rr]educes damage received", "[Rr]educes damage received"));
         list.add(creator.get("Healers", "[Rr]ecovers", "[Rr]ecovers"));
@@ -118,54 +121,126 @@ public class FilterCollector {
     }
 
 
+    //TODO Something better than this
     public String getQuery() {
         Queue<FilterUI> skippedStatment = new ArrayDeque<>();
 
-        StringBuilder builder = new StringBuilder();
+        List<FilterUI> colorsFilterUI = new ArrayList<>();
+        List<FilterUI> classes1FilterUI = new ArrayList<>();
+        List<FilterUI> classes2FilterUI = new ArrayList<>();
+        List<FilterUI> captainFilterUI = new ArrayList<>();
 
-        builder.append("SELECT * FROM unit_table WHERE ");
+        boolean thereIsColors = false;
+        boolean thereIsClasses1 = false;
+        boolean thereIsClasses2 = false;
+        boolean thereIsCaptain = false;
 
 
+        StringBuilder finalQuery = new StringBuilder();
+        finalQuery.append("SELECT * FROM unit_table WHERE ");
+
+        //Parse filters in different list
         List<FilterUI> selectedFilters = new ArrayList<>();
         for (FilterUI filterUI : list) {
-            if (filterUI.isSelected())
-                selectedFilters.add(filterUI);
+            if (filterUI.isSelected()) {
+                if (filterUI.getInfo().getType() == FilterType.CAPTAIN) {
+                    captainFilterUI.add(filterUI);
+                } else if (filterUI.getInfo().getType() == FilterType.COLOR) {
+                    colorsFilterUI.add(filterUI);
+                } else if (filterUI.getInfo().getType() == FilterType.CLASS && filterUI.getInfo().getSubtype() == FilterType.Subtype.Class1) {
+                    classes1FilterUI.add(filterUI);
+                } else if (filterUI.getInfo().getType() == FilterType.CLASS && filterUI.getInfo().getSubtype() == FilterType.Subtype.Class2) {
+                    classes2FilterUI.add(filterUI);
+                } else selectedFilters.add(filterUI);
+            }
         }
 
-        Iterator<FilterUI> iter = selectedFilters.iterator();
-
-
-        while (iter.hasNext()) {
-            FilterUI filterUI = iter.next();
-            if (filterUI.isSelected()) {
-                String statment = filterUI.getInfo().getDatabasePattern();
-                String beginStatment = statment.substring(0, 7);
-                if (beginStatment.contains("EXISTS (") || beginStatment.contains("IN (")) {
-                    builder.append(statment);
-                    if (iter.hasNext()) builder.append(" AND ");
-                } else {
-                    skippedStatment.add(filterUI);
+        StringBuilder captainFilter = null;
+        {
+            if (captainFilterUI.size() > 0) {
+                thereIsCaptain = true;
+                //Create composite captain filter
+                Iterator<FilterUI> captainFilterIterator = captainFilterUI.iterator();
+                captainFilter = new StringBuilder();
+                captainFilter.append("id IN (SELECT captain_id FROM captain_description_table WHERE ");
+                while (captainFilterIterator.hasNext()) {
+                    FilterUI filterUI = captainFilterIterator.next();
+                    captainFilter.append(filterUI.getInfo().getDatabasePattern());
+                    if (captainFilterIterator.hasNext()) captainFilter.append(" AND ");
+                    else captainFilter.append(")");
                 }
             }
         }
 
-        FilterUI data = null;
-        int nextType = -1;
-        while ((data = skippedStatment.poll()) != null) {
-
-            nextType = skippedStatment.peek() != null ? skippedStatment.peek().getInfo().getType() : -1;
-
-            builder.append(data.getInfo().getDatabasePattern());
-
-            if (nextType != -1) {
-                if (nextType == data.getInfo().getType()) builder.append(" OR ");
-                else builder.append(") AND ( ");
-            } else {
-                builder.append(" ) ");
+        StringBuilder colorsFilter = null;
+        {
+            if (colorsFilterUI.size() > 0) {
+                thereIsColors = true;
+                //Create composite color filter
+                Iterator<FilterUI> colorsFilterIterator = colorsFilterUI.iterator();
+                colorsFilter = new StringBuilder();
+                colorsFilter.append("(");
+                while (colorsFilterIterator.hasNext()) {
+                    FilterUI filter = colorsFilterIterator.next();
+                    colorsFilter.append(filter.getInfo().getDatabasePattern());
+                    if (colorsFilterIterator.hasNext()) colorsFilter.append(" OR ");
+                }
+                colorsFilter.append(")");
             }
         }
 
-        return builder.toString();
+        StringBuilder classes1Filter = null;
+        {
+            if (classes1FilterUI.size() > 0) {
+                thereIsClasses1 = true;
+                //Create composite class filter
+                Iterator<FilterUI> classFilterIterator = classes1FilterUI.iterator();
+                classes1Filter = new StringBuilder();
+                classes1Filter.append("(");
+                while (classFilterIterator.hasNext()) {
+                    FilterUI filterUI = classFilterIterator.next();
+                    classes1Filter.append(filterUI.getInfo().getDatabasePattern());
+                    if (classFilterIterator.hasNext()) classes1Filter.append(" OR ");
+                }
+                classes1Filter.append(")");
+            }
+        }
+        StringBuilder classes2Filter = null;
+        {
+            if (classes1FilterUI.size() > 0) {
+                thereIsClasses2 = true;
+                //Create composite class filter
+                Iterator<FilterUI> classFilterIterator = classes2FilterUI.iterator();
+                classes2Filter = new StringBuilder();
+                classes2Filter.append("(");
+                while (classFilterIterator.hasNext()) {
+                    FilterUI filterUI = classFilterIterator.next();
+                    classes2Filter.append(filterUI.getInfo().getDatabasePattern());
+                    if (classFilterIterator.hasNext()) classes2Filter.append(" OR ");
+                }
+                classes2Filter.append(")");
+            }
+        }
+
+
+        if (thereIsCaptain) {
+            finalQuery.append(captainFilter.toString());
+        }
+        if (thereIsColors) {
+            finalQuery.append(" AND ");
+            finalQuery.append(colorsFilter.toString());
+        }
+        if (thereIsClasses1) {
+            finalQuery.append(" AND ");
+            finalQuery.append(classes1Filter.toString());
+        }
+        if (thereIsClasses2) {
+            finalQuery.append(" AND ");
+            finalQuery.append(classes2Filter.toString());
+        }
+
+
+        return finalQuery.toString();
     }
 
     public void clear() {

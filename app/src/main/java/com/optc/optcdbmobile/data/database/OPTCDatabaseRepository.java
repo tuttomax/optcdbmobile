@@ -27,7 +27,6 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 
 import com.optc.optcdbmobile.data.Constants;
@@ -256,8 +255,6 @@ public class OPTCDatabaseRepository {
     }
 
     public List<Unit> getUnitsWithFilter(String filter) {
-
-        Log.i(" ## SQL ##", filter);
 
         SimpleSQLiteQuery filterQuery = new SimpleSQLiteQuery(filter);
 

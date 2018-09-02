@@ -28,16 +28,18 @@ public class CaptainFilterCreator extends FilterCreator {
         else if (obj instanceof String[]) {
             String[] strings = (String[]) obj;
             StringBuilder builder = new StringBuilder();
-
+            builder.append("(");
             for (int index = 0; index < strings.length; index++) {
                 builder.append(String.format(basePattern, strings[index]));
                 if (index + 1 != strings.length) {
                     builder.append(" OR ");
                 }
             }
+            builder.append(")");
 
             databasePattern = builder.toString();
         }
-        return create(FilterType.CAPTAIN, captainDesc, regex, "id IN (SELECT captain_id FROM captain_description_table WHERE " + databasePattern + " )");
+        //return create(FilterType.CAPTAIN, captainDesc, regex, "id IN (SELECT captain_id FROM captain_description_table WHERE " + databasePattern + " )");
+        return create(FilterType.CAPTAIN, captainDesc, regex, databasePattern);
     }
 }
