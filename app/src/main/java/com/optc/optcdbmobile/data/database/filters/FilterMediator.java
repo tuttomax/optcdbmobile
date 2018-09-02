@@ -2,11 +2,11 @@ package com.optc.optcdbmobile.data.database.filters;
 
 
 public interface FilterMediator {
-    void toggleState(FilterUI sender);
+    void inform(FilterUI sender);
 
-    void registerFilterUI(FilterUI instance);
+    void setCallback(Callback callback);
 
-    void unregisterFilterUI(FilterUI instance);
-
-
+    interface Callback {
+        void OnChangedAfterInform(int index, Object payload);
+    }
 }

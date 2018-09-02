@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +25,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.database.entities.Unit;
+import com.optc.optcdbmobile.data.database.filters.FilterCollector;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.ui.activities.MainViewModel;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
@@ -40,8 +43,13 @@ public class CharacterTableFragment extends Fragment {
 
     private boolean fromFilter = false;
 
-    DiffCharacterTableAdapter adapter;
-    private RecyclerView recyclerView;
+    DiffCharacterTableAdapter characterTableAdapter;
+    FilterAdapter filterAdapter;
+
+    private RecyclerView characterTableRecyclerView;
+    private RecyclerView filterRecyclerView;
+    private FilterCollector filterCollector;
+
     private MainViewModel mainViewModel;
     private int scrollPosition = 0;
     private boolean hasChanged = false;
@@ -75,17 +83,20 @@ public class CharacterTableFragment extends Fragment {
         setHasOptionsMenu(true);
         firstLaunch = true;
 
-        adapter = new DiffCharacterTableAdapter(getContext());
-        adapter.setOnUnitItemAdapterEvents(ON_UNIT_ITEM_ADAPTER_EVENTS);
+        characterTableAdapter = new DiffCharacterTableAdapter(getContext());
+        characterTableAdapter.setOnUnitItemAdapterEvents(ON_UNIT_ITEM_ADAPTER_EVENTS);
+
+        filterCollector = new FilterCollector();
+        filterAdapter = new FilterAdapter(getContext());
 
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         mainViewModel.units.observe(this, new Observer<List<Unit>>() {
             @Override
             public void onChanged(@Nullable List<Unit> units) {
-                if (!fromFilter) adapter.submitList(units);
+                if (!fromFilter) characterTableAdapter.submitList(units);
                 else {
-                    adapter.submitList(null);
-                    adapter.submitList(units);
+                    characterTableAdapter.submitList(null);
+                    characterTableAdapter.submitList(units);
                     fromFilter = false;
                 }
             }
@@ -116,7 +127,7 @@ public class CharacterTableFragment extends Fragment {
                 if (matcherNumber.find()) {
                     String position = query.substring(matcherNumber.start(), matcherNumber.end());
                     scrollPosition = Integer.valueOf(position);
-                    recyclerView.getLayoutManager().scrollToPosition(scrollPosition);
+                    characterTableRecyclerView.getLayoutManager().scrollToPosition(scrollPosition);
                     //TODO Create ItemDecorator: ScrollToPositionItemDecorator
 
                 } else if (matcherString.find()) {
@@ -154,15 +165,40 @@ public class CharacterTableFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_character_table, container, false);
-        recyclerView = root.findViewById(R.id.character_table_recycler_view);
+        characterTableRecyclerView = root.findViewById(R.id.character_table_recycler_view);
         /*
          * Always true cause a BUG
          * BUG: Prevent NotifyItemInserted to update UI.
          * https://stackoverflow.com/questions/39683237/android-recyclerview-adapter-notifyiteminserted-and-notifyitemmoved-at-index-0/40373122#40373122
          */
-        recyclerView.setHasFixedSize(false);
+        characterTableRecyclerView.setHasFixedSize(false);
+
+        filterRecyclerView = root.findViewById(R.id.filter_recyclerview);
+        filterRecyclerView.setHasFixedSize(false);
+
+
+        AppCompatButton submitButton = root.findViewById(R.id.submit_query);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(CharacterTableFragment.class.getSimpleName(), filterCollector.getQuery());
+                fromFilter = true;
+                mainViewModel.getUnitsWithFilter(filterCollector.getQuery());
+            }
+        });
+
+        AppCompatButton clearFiltersButton = root.findViewById(R.id.clear_filters);
+        clearFiltersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterAdapter.clearFilters();
+                fromFilter = true;
+                mainViewModel.getUnits();
+            }
+        });
+
         return root;
     }
 
@@ -171,10 +207,9 @@ public class CharacterTableFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-        recyclerView = view.findViewById(R.id.character_table_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(adapter);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        characterTableRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        characterTableRecyclerView.setAdapter(characterTableAdapter);
+        characterTableRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
@@ -186,142 +221,11 @@ public class CharacterTableFragment extends Fragment {
             }
         });
 
-
-
-        /*
-        initFilters();
-        initUiFilters(view);
-        */
-
+        filterRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        filterRecyclerView.setAdapter(filterAdapter);
+        filterAdapter.setCollector(filterCollector);
+        filterAdapter.initFilters();
     }
 
-
-    //region filter
-
-    /*
-    private void initFilters() {
-
-        //TODO Create factory class
-        filters.add(new __FilterInfo(FilterType.HEADER | FilterType.COLOR));
-        filters.add(new __FilterInfo(FilterType.COLOR).setLabel(UnitHelper.STR_STRING).setCommand(new NormalCommand()).setFilter(__Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STR_STRING))));
-        filters.add(new __FilterInfo(FilterType.COLOR).setLabel(UnitHelper.QCK_STRING).setCommand(new NormalCommand()).setFilter(__Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.QCK_STRING))));
-        filters.add(new __FilterInfo(FilterType.COLOR).setLabel(UnitHelper.DEX_STRING).setCommand(new NormalCommand()).setFilter(__Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.DEX_STRING))));
-        filters.add(new __FilterInfo(FilterType.COLOR).setLabel(UnitHelper.PSY_STRING).setCommand(new NormalCommand()).setFilter(__Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.PSY_STRING))));
-        filters.add(new __FilterInfo(FilterType.COLOR).setLabel(UnitHelper.INT_STRING).setCommand(new NormalCommand()).setFilter(__Filters.COLOR1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.INT_STRING))));
-
-        filters.add(new __FilterInfo(FilterType.HEADER | FilterType.CLASS));
-        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.FIGHTER_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.FIGHTER_STRING))));
-        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.SLASHER_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.SLASHER_STRING))));
-        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.SHOOTER_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.SHOOTER_STRING))));
-        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.STRIKER_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS1_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.STRIKER_STRING))));
-        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.DRIVEN_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.DRIVEN_STRING))));
-        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.POWERHOUSE_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.POWERHOUSE_STRING))));
-        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.FREE_SPIRIT_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.FREE_SPIRIT_STRING))));
-        filters.add(new __FilterInfo(FilterType.CLASS).setLabel(UnitHelper.CEREBRAL_STRING).setCommand(new NormalCommand()).setFilter(__Filters.CLASS2_FILTER.clone().setArgs(String.format("'%s'", UnitHelper.CEREBRAL_STRING))));
-
-
-        filters.add(new __FilterInfo(FilterType.HEADER | FilterType.RARITY));
-        filters.add(new __FilterInfo(FilterType.HEADER | FilterType.COST));
-        filters.add(new __FilterInfo(FilterType.HEADER | FilterType.DROP));
-        filters.add(new __FilterInfo(FilterType.DROP).setLabel("Global units").setCommand(new NormalCommand()).setFilter(__Filters.GLOBAL_FILTER));
-        filters.add(new __FilterInfo(FilterType.DROP).setLabel("Japan exclusive").setCommand(new NormalCommand()).setFilter(__Filters.JAPAN_FILTER));
-        filters.add(new __FilterInfo(FilterType.DROP).setLabel("In RR pool").setCommand(new NormalCommand()).setFilter(__Filters.RARE_RECRUIT_FILTER));
-
-        filters.add(new __FilterInfo(FilterType.HEADER | FilterType.EXCLUSION));
-        filters.add(new __FilterInfo(FilterType.EXCLUSION).setLabel("Exclude base form").setCommand(new NormalCommand()).setFilter(__Filters.EXCLUDE_BASE_FORM));
-        filters.add(new __FilterInfo(FilterType.EXCLUSION).setLabel("Exclude fodder").setCommand(new NormalCommand()).setFilter(__Filters.EXCLUDE_FODDER_FILTER));
-        filters.add(new __FilterInfo(FilterType.EXCLUSION).setLabel("Exclude booster and evolver").setCommand(new NormalCommand()).setFilter(__Filters.EXCLUDE_BOOSTER_AND_EVOLVER));
-
-
-    }
-
-
-    private void initUiFilters(final View view) {
-        final NavigationView nav = view.findViewById(R.id.nav_filters);
-        final ScrollView scrollView = nav.findViewById(R.id.scrollview);
-        final LinearLayout container = scrollView.findViewById(R.id.filters_container);
-
-        AppCompatButton clearAllFiltersButton = nav.findViewById(R.id.clear_filters);
-        clearAllFiltersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int index = 0; index < container.getChildCount(); index++) {
-                    View child = container.getChildAt(index);
-                    if (child instanceof AppCompatCheckBox) {
-                        ((AppCompatCheckBox) child).setChecked(false);
-                        if (hasChanged) mainViewModel.getUnits();
-                        ((DrawerLayout) nav.getParent()).closeDrawer(Gravity.END);
-                    }
-                }
-
-            }
-        });
-
-        AppCompatButton submitButton = nav.findViewById(R.id.submit);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                __Filter finalQuery = filterContext.getQuery();
-                Log.i(CharacterTableFragment.class.getSimpleName(), finalQuery.build());
-                Snackbar.make(v, "This will take a while...", Snackbar.LENGTH_LONG).show();
-                fromFilter = true;
-                mainViewModel.getUnitsWithFilter(finalQuery.build());
-                hasChanged = true;
-                ((DrawerLayout) nav.getParent()).closeDrawer(Gravity.END);
-            }
-        });
-
-
-        for (final __FilterInfo info : filters) {
-            if (info.isHeader()) {
-                setUiHeader(container, info);
-            } else {
-                setUiFilter(container, info);
-            }
-        }
-
-    }
-
-    private void setUiHeader(ViewGroup root, __FilterInfo info) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.CENTER_VERTICAL;
-
-        AppCompatTextView textView = new AppCompatTextView(getContext());
-        textView.setLayoutParams(params);
-        textView.setTextAppearance(getContext(), android.R.attr.textAppearanceLarge);
-        textView.setText(info.getLabel());
-        textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-        textView.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-
-        AppCompatImageView imageView = new AppCompatImageView(getContext());
-        imageView.setLayoutParams(params);
-        imageView.setBackgroundResource(R.drawable.separator);
-
-        root.addView(textView);
-        root.addView(imageView);
-    }
-
-    private void setUiFilter(ViewGroup root, final __FilterInfo info) {
-        final AppCompatCheckBox checkbox = new AppCompatCheckBox(getContext());
-        checkbox.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        checkbox.setText(info.getLabel());
-        checkbox.setChecked(false);
-
-        checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                buttonView.jumpDrawablesToCurrentState(); //without this there is a strange BUG:flickering when changing status
-                if (isChecked) {
-                    info.getCommand().execute(info, filterContext);
-                } else {
-                    info.getCommand().rollback(info, filterContext);
-                }
-            }
-        });
-        root.addView(checkbox);
-    }
-
-*/
 
 }

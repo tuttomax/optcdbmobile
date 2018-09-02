@@ -24,6 +24,7 @@ import java.util.List;
 
 public interface BaseDAO<T> {
 
+
     @Insert
     void insert(T t);
 

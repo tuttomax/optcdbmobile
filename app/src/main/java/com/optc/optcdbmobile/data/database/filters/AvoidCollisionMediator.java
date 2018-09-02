@@ -1,6 +1,9 @@
 package com.optc.optcdbmobile.data.database.filters;
 
-import java.util.HashMap;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class to handled change state between filterui of the same type
@@ -8,32 +11,99 @@ import java.util.HashMap;
  */
 public class AvoidCollisionMediator implements FilterMediator {
 
+    private final List<FilterUI> internalList;
+    private Callback callback;
 
-    private HashMap<FilterType.Subtype, FilterUI> fingerprint;
+    public AvoidCollisionMediator(List<FilterUI> list) {
+        internalList = list;
+    }
 
-    public AvoidCollisionMediator() {
-        fingerprint = new HashMap<>();
+
+    @Override
+    public void inform(FilterUI sender) {
+        if (sender.isSelected()) {
+            Log.d(AvoidCollisionMediator.class.getSimpleName(), "Avoiding filter collision");
+            FilterInfo info = sender.getInfo();
+            int type = info.getType();
+            FilterType.Subtype subtype = info.getSubtype();
+
+            if (type == FilterType.DROP) {
+                switch (subtype) {
+                    case Farmable:
+                        deselect(FilterType.DROP, FilterType.Subtype.Farmable);
+                        break;
+                    case ServerUnit:
+                        deselect(FilterType.DROP, FilterType.Subtype.ServerUnit);
+                    case RRPool:
+                        deselect(FilterType.DROP, FilterType.Subtype.RRPool);
+                    case FarmableSocket:
+                        deselect(FilterType.DROP, FilterType.Subtype.FarmableSocket);
+                        break;
+                }
+            } else if (type == FilterType.TREASURE_MAP) {
+                deselect(FilterType.TREASURE_MAP);
+            } else if (type == FilterType.CLASS) {
+                List<Integer> indices = getIndices(sender);
+                if (indices.size() >= 2) {
+                    for (Integer index : indices) {
+                        internalList.get(index).setSelected(false, true);
+                        callback.OnChangedAfterInform(index, FilterUI.PAYLOAD_SELECTED);
+                    }
+                }
+            }
+
+        }
+
     }
 
     @Override
-    public void toggleState(FilterUI sender) {
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+    }
 
-        FilterInfo info = sender.getInfo();
-        if (info.isSelected()) {
-            if (fingerprint.containsKey(info.getSubtype())) {
-                FilterUI oldFilter = fingerprint.get(info.getSubtype());
-                oldFilter.getInfo().setSelected(false);
+
+    private void deselect(int type, FilterType.Subtype subtype) {
+        for (int index = 0; index < internalList.size(); index++) {
+            FilterUI filterUI = internalList.get(index);
+
+            FilterInfo info = filterUI.getInfo();
+
+            int filterType = info.getType();
+            FilterType.Subtype filterSubtype = info.getSubtype();
+
+
+            if (subtype == null) {
+                if (type == filterType) {
+                    filterUI.setSelected(false, true);
+                    callback.OnChangedAfterInform(index, FilterUI.PAYLOAD_SELECTED);
+                }
+            } else {
+                if (type == filterType && subtype == filterSubtype) {
+                    filterUI.setSelected(false, true);
+                    callback.OnChangedAfterInform(index, FilterUI.PAYLOAD_SELECTED);
+                }
             }
+
         }
     }
 
-    @Override
-    public void registerFilterUI(FilterUI instance) {
-        fingerprint.put(instance.getInfo().getSubtype(), instance);
+    private void deselect(int type) {
+        deselect(type, null);
     }
 
-    @Override
-    public void unregisterFilterUI(FilterUI instance) {
-        fingerprint.remove(instance.getInfo().getSubtype());
+    private List<Integer> getIndices(FilterUI me) {
+        final int type = me.getInfo().getType();
+        final List<Integer> list = new ArrayList<>();
+        for (int index = 0; index < internalList.size(); index++) {
+            FilterUI filterUI = internalList.get(index);
+            FilterInfo info = filterUI.getInfo();
+            if (filterUI != me &&
+                    info.getType() == type && filterUI.isSelected()) {
+                list.add(index);
+            }
+
+        }
+
+        return list;
     }
 }

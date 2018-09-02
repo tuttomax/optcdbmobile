@@ -32,56 +32,43 @@
         android:layout_gravity="end"
         android:fitsSystemWindows="true">
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/filter_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/filter_button_height"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-            <TextView
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/filter_button_height"
+            android:layout_gravity="top"
+            android:background="@color/secondaryLightColor"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/submit_query"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Coming soon"
-                android:textStyle="bold" />
-            <!--
-                        <android.support.v7.widget.AppCompatButton
-                            android:id="@+id/submit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:background="@drawable/rounded_background"
-                            android:padding="3dp"
-                            android:text="Submit"
-                            android:textColor="@color/primaryTextColor"
-                            app:backgroundTint="@color/primaryColor" />
+                android:layout_height="@dimen/filter_button_height"
+                android:gravity="center"
+                android:padding="4dp"
+                android:text="Submit"
+                android:textColor="@color/secondaryTextColor" />
 
-                        <android.support.v7.widget.AppCompatButton
-                            android:id="@+id/clear_filters"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:background="@drawable/rounded_background"
-                            android:padding="3dp"
-                            android:text="Clear filters"
-                            android:textColor="@color/primaryTextColor"
-                            app:backgroundTint="@color/primaryColor" />
-            -->
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/clear_filters"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/filter_button_height"
+                android:layout_toEndOf="@id/submit_query"
+                android:layout_toRightOf="@id/submit_query"
+                android:gravity="center"
+                android:padding="4dp"
+                android:text="Clear filters"
+                android:textColor="@color/secondaryTextColor" />
 
-            <ScrollView
-                android:id="@+id/scrollview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="vertical">
-
-                <LinearLayout
-                    android:id="@+id/filters_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior" /><!-- Here doesn't word -->
+        </RelativeLayout>
 
 
-            </ScrollView>
-        </LinearLayout>
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

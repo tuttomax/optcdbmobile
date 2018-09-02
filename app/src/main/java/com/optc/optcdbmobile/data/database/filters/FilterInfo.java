@@ -1,14 +1,12 @@
 package com.optc.optcdbmobile.data.database.filters;
 
-import com.optc.optcdbmobile.data.database.filters.sql_syntax.Statement;
-
 public class FilterInfo {
 
 
     private final int type;
     private FilterType.Subtype subtype;
-    private boolean selected;
-    private Statement statement;
+    private String regexPattern;
+    private String databasePattern;
 
     public FilterInfo(int type, FilterType.Subtype subtype) {
         this.type = type;
@@ -31,23 +29,20 @@ public class FilterInfo {
         return subtype;
     }
 
-    public boolean isSelected() {
-        return selected;
+    public String getRegexPattern() {
+        return regexPattern;
     }
 
-    public void setSelected(boolean selected) {
-        this.selected = selected;
+    public void setRegexPattern(String regexPattern) {
+        this.regexPattern = regexPattern;
     }
 
-    public void toggle() {
-        this.selected = !this.selected;
+    public String getDatabasePattern() {
+        return databasePattern;
     }
 
-    public Statement getStatement() {
-        return statement;
-    }
-
-    public void setStatement(Statement statement) {
-        this.statement = statement;
+    public void setDatabasePattern(String databasePattern) {
+        this.databasePattern = databasePattern;
     }
 }
+

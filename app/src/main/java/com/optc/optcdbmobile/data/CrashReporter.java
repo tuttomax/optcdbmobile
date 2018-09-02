@@ -44,4 +44,12 @@ public class CrashReporter {
             System.exit(10);
         }
     }
+
+    public static void SendEmail(Exception ex) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", "optcdbmobile@gmail.com", null));
+        intent.putExtra(Intent.EXTRA_SUBJECT, "optcdmbile - Crash Report");
+        intent.putExtra(Intent.EXTRA_TEXT, ex.toString());
+
+    }
 }

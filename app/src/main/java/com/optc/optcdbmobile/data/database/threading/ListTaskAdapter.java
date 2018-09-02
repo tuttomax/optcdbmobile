@@ -121,26 +121,23 @@ public class ListTaskAdapter extends RecyclerView.Adapter<ListTaskAdapter.TaskVi
     @Override
     public void addTask(Task task) {
 
-
         final int finalIndex = currentIndex++;
         task.setIndex(finalIndex);
         list.add(task);
-
-        notifyHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                //notifyItemInserted(finalIndex); //Cause RecyclerView inconsistency error
-                notifyDataSetChanged();
-            }
-        });
         futureList.add(executorService.submit(task));
     }
 
     @Override
-    public void addTasks(Task... tasks) {
+    public void addTasks(final Task... tasks) {
         for (Task task : tasks) {
             addTask(task);
         }
+        notifyHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemRangeInserted(currentIndex, tasks.length);
+            }
+        });
     }
 
     @Override

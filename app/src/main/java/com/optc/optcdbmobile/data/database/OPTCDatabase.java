@@ -100,6 +100,7 @@ public abstract class OPTCDatabase extends RoomDatabase {
                             .build();
             }
         }
+
         return INSTANCE;
     }
 
@@ -176,6 +177,7 @@ public abstract class OPTCDatabase extends RoomDatabase {
 
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
+
             // Nothing to do now
             // Need for future update of database's schemas
         }

@@ -35,17 +35,12 @@ import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
 
-import java.util.logging.Logger;
-
 public class SettingsFragment extends PreferenceFragmentCompat implements AsyncTaskContext {
     private final static String TAG = SettingsFragment.class.getSimpleName();
     SettingsViewModel model;
     SharedPreferences.OnSharedPreferenceChangeListener listner = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-            Logger.getLogger(TAG).info(key);
-
             if (key.equals(getString(R.string.pref_database_version_key))) {
                 model.setDatabaseVersion(sharedPreferences.getFloat(key, -1f));
             } else if (key.equals(Constants.Settings.pref_update_available)) {
@@ -75,7 +70,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
         model.getUpdateAvailable().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean b) {
-                if (b == null) throw new NullPointerException();
                 String title = b ? "Update available" : "Rebuild database";
                 int color = b ? R.color.infoColor : R.color.primaryTextColor;
                 final SingleLinePreference rebuild_database = (SingleLinePreference) findPreference(getString(R.string.pref_rebuild_database_key));

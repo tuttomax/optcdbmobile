@@ -19,6 +19,7 @@ package com.optc.optcdbmobile.data.tasks;
 import android.os.AsyncTask;
 
 import com.optc.optcdbmobile.data.Constants;
+import com.optc.optcdbmobile.data.CrashReporter;
 import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.threading.Task;
 import com.optc.optcdbmobile.data.database.threading.TaskCallback;
@@ -78,6 +79,7 @@ public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, F
             delegate.awaitTermination(40);
 
         } catch (Exception ex) {
+            CrashReporter.SendEmail(ex);
             return -1f;
         }
 

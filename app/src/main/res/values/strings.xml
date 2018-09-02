@@ -68,8 +68,6 @@
     <string name="main_label">OnePieceTC - Companion</string>
     <string name="nav_menu_settings_title">Settings</string>
     <string name="pref_open_source_key">open_source</string>
-    <string name="pref_card_layout_title">Use card layout</string>
-    <string name="pref_card_layout_key">card_layout</string>
     <string name="atk">ATK</string>
     <string name="hp">HP</string>
     <string name="level">Level</string>

@@ -5,4 +5,6 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">10</dimen>
     <dimen name="left_padding">20dp</dimen>
+
+    <dimen name="filter_button_height">40dp</dimen>
 </resources>

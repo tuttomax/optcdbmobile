@@ -28,4 +28,7 @@ public abstract class CaptainDescriptionDAO implements BaseDAO<CaptainDescriptio
 
     @Query("SELECT * FROM captain_description_table WHERE captain_id=:id")
     public abstract List<CaptainDescription> getCaptainDescriptions(int id);
+
+    @Query("SELECT * FROM captain_description_table WHERE description GLOB :s ")
+    public abstract List<CaptainDescription> searchByRegex(String s);
 }

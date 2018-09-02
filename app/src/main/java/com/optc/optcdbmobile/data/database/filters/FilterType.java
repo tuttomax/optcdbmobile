@@ -41,18 +41,15 @@ public class FilterType {
     //enum used for avoiding filters activated at the same time
     public enum Subtype {
 
-        Colors,
         Class1,
         Class2,
-        Rarity,
-        Cost,
         Farmable,
         //NoFarmable,
         ServerUnit,
         //JapanUnits,
         RRPool,
         //NotRRPool,
-        Socket,
+        FarmableSocket,
         //NotFarmableSocket,
 
 

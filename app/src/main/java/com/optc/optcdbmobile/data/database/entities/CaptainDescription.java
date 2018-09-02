@@ -19,13 +19,15 @@ package com.optc.optcdbmobile.data.database.entities;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Index;
 
 @Entity(tableName = "captain_description_table",
         primaryKeys = {"captain_id", "level"},
         foreignKeys = @ForeignKey(entity = Captain.class,
                 parentColumns = {"id"},
                 childColumns = {"captain_id"},
-                onDelete = ForeignKey.CASCADE))
+                onDelete = ForeignKey.CASCADE),
+        indices = @Index(value = "captain_id"))
 public class CaptainDescription {
 
     @ColumnInfo(name = "captain_id")

@@ -42,6 +42,7 @@ import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.CrashReporter;
 import com.optc.optcdbmobile.data.UpdateManager;
+import com.optc.optcdbmobile.data.WelcomeMessage;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
 import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.CharacterTableFragment;
@@ -66,7 +67,14 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
                         e.printStackTrace();
                     }
                 } else {
-                    Snackbar.make(getView(), "Can't download update on Download Public folder", BaseTransientBottomBar.LENGTH_LONG).show();
+                    Snackbar.make(getView(), "Can't download update on Download Public folder", BaseTransientBottomBar.LENGTH_LONG)
+                            .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                                @Override
+                                public void onDismissed(Snackbar transientBottomBar, int event) {
+                                    Snackbar.make(getView(), "You have to download and install it manually", Snackbar.LENGTH_LONG).show();
+                                }
+                            })
+                            .show();
                 }
             }
             //else is cancelled
@@ -102,8 +110,9 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
         }
 
 
-
         setContentView(R.layout.activity_main);
+
+        WelcomeMessage.Show(this);
 
 
         isFirstLaunch = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.Settings.pref_first_launch, true);
