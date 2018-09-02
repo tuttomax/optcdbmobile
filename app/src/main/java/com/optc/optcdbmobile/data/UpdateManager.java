@@ -5,7 +5,9 @@ import android.app.Service;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Environment;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import com.optc.optcdbmobile.BuildConfig;
 import com.optc.optcdbmobile.data.optcdb.API;
 
+import java.io.File;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -24,7 +27,6 @@ import java.util.concurrent.Executors;
 public class UpdateManager {
 
     private final Context mContext;
-    private final UpdateManagerBroadcastReceiver receiver = new UpdateManagerBroadcastReceiver();
     private DownloadManager downloadManager;
     private MutableLiveData<Long> idFile;
 
@@ -34,8 +36,27 @@ public class UpdateManager {
         idFile = new MutableLiveData<>();
         idFile.observe(owner, new Observer<Long>() {
             @Override
-            public void onChanged(@Nullable Long id) {
-                context.registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+            public void onChanged(@Nullable final Long id) {
+                context.registerReceiver(new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
+                            Long receivedId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+                            if (receivedId.equals(id)) {
+                                File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                                String location = new File(downloads, Constants.APP.APP_INSTALL_NAME).getPath();
+
+                                Intent installApk = new Intent(Intent.ACTION_VIEW);
+                                installApk.setDataAndType(Uri.fromFile(new File(location)), Constants.APP.MIME_TYPE_APK);
+                                installApk.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                                context.startActivity(installApk);
+                                context.unregisterReceiver(this);
+
+                            }
+                        }
+                    }
+                }, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
             }
         });
 
@@ -62,7 +83,7 @@ public class UpdateManager {
             Uri downloadUri = Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, updateInfo.second));
 
             DownloadManager.Request downloadRequest = new DownloadManager.Request(downloadUri)
-                    .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, String.format("./%s", Constants.APP.APP_INSTALL_NAME))
+                    .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Constants.APP.APP_INSTALL_NAME)
                     .setMimeType(Constants.APP.MIME_TYPE_APK)
                     .setVisibleInDownloadsUi(true)
                     .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
