@@ -82,6 +82,14 @@ public class UpdateManager {
 
             Uri downloadUri = Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, updateInfo.second));
 
+            File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File apk = new File(downloads, Constants.APP.APP_INSTALL_NAME);
+
+            if (apk.exists()) {
+                boolean isDeleted = apk.delete();
+                Log.i(UpdateManager.class.getSimpleName(), "old APK deleted? " + String.valueOf(isDeleted));
+            }
+
             DownloadManager.Request downloadRequest = new DownloadManager.Request(downloadUri)
                     .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Constants.APP.APP_INSTALL_NAME)
                     .setMimeType(Constants.APP.MIME_TYPE_APK)

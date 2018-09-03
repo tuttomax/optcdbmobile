@@ -21,7 +21,7 @@ public class CrashReporter {
 
 
     public static class ExceptionHandler implements Thread.UncaughtExceptionHandler {
-        public static final String LOG_TAG = ExceptionHandler.class.getSimpleName();
+        private static final String LOG_TAG = ExceptionHandler.class.getSimpleName();
         private final String LINE_SEPARATOR = "\n";
 
         public void uncaughtException(Thread thread, Throwable exception) {
@@ -43,13 +43,5 @@ public class CrashReporter {
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(10);
         }
-    }
-
-    public static void SendEmail(Exception ex) {
-        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", "optcdbmobile@gmail.com", null));
-        intent.putExtra(Intent.EXTRA_SUBJECT, "optcdmbile - Crash Report");
-        intent.putExtra(Intent.EXTRA_TEXT, ex.toString());
-
     }
 }

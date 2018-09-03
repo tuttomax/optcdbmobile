@@ -7,7 +7,7 @@ android {
         applicationId "com.optc.optcdbmobile"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 2
+        versionCode 3
         /*
             VERSIONING:
             name-[main_version].[app_revision]-[database_revision]
@@ -16,7 +16,7 @@ android {
                 app_revision: incremental number caused bu bug in app
                 database_revision: incremental number caused by bag in database that are resolved in app
         */
-        versionName "Chopper-2.0.1"
+        versionName "Chopper-3.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

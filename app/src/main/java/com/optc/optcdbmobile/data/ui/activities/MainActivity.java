@@ -42,7 +42,6 @@ import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.CrashReporter;
 import com.optc.optcdbmobile.data.UpdateManager;
-import com.optc.optcdbmobile.data.WelcomeMessage;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
 import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.CharacterTableFragment;
@@ -111,8 +110,6 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
 
 
         setContentView(R.layout.activity_main);
-
-        WelcomeMessage.Show(this);
 
 
         isFirstLaunch = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.Settings.pref_first_launch, true);
