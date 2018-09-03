@@ -4,6 +4,7 @@ import com.optc.optcdbmobile.data.database.filters.creator.CaptainFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ClassFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ColorFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.FilterCreator;
+import com.optc.optcdbmobile.data.database.filters.creator.TreasureMapFilterCreator;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
 
 import java.util.ArrayDeque;
@@ -62,12 +63,20 @@ public class FilterCollector {
         list.add(creator.get(UnitHelper.DRIVEN_STRING, FilterType.Subtype.Class2));
 
 
+        //TODO Implement regex builder
         //TODO: Implement layout first
         //creator = new RarityFilterCreator(mediator);
         //creator = new CostFilterCreator(mediator);
-        //creator = new TreasureMapFilterCreator(mediator);
+        creator = new TreasureMapFilterCreator(mediator);
+        list.add(creator.getHeader());
+        list.add(creator.get("Show Global TM booster", "", new Integer[]{
+                2001, 2066, 1968, 2010, 2011, 2008, 2009, 918, 1387, 1388, 1389, 1446, 1447, 1448, 1549, 1550, 1551, 1624, 1970, 1972, 1985, 2000, 2007, 2503, 943, 991, 1175, 1536, 1540, 1577, 1579, 1654, 1665, 1873, 1877, 1906, 1908, 1953, 1955, 1957, 1974, 1987, 1989, 1991, 1993, 1804, 1806, 1849, 1851, 1885, 1887, 1937, 1939, 1222, 1628, 1863, 1976, 1978, 654, 1432, 2015, 1469, 1774, 1918, 1920, 1965, 1966, 1980, 1982, 1808, 1853, 1889, 1916, 1941, 1023, 1245, 1247, 1709, 1711, 1983, 2504
+        }));
+        list.add(creator.get("Show Japan TM booster", "", new Integer[]{
+                2207, 2209, 2181, 2201, 2191, 2203, 2205, 2213, 2148, 2175, 2177, 2183, 2185, 2187, 2189, 2193, 2197, 1593, 1985, 2074, 2099, 2113, 1682, 1684, 1686, 1688, 1753, 1755, 1757, 1759, 1761, 575, 603, 1108, 1696, 1879, 2070, 2097, 1141, 1143, 1899, 2163, 713, 797, 946, 1072, 1095, 1097, 1138, 1215, 1254, 1384, 1397, 1469, 1995, 2046, 2087, 2091, 2144, 1504, 2126, 2137, 2215, 2217
+        }));
 
-        //TODO Implement regex builder
+
         //region CAPTAIN FILTERS
         creator = new CaptainFilterCreator(mediator);
         list.add(creator.getHeader());
@@ -118,6 +127,8 @@ public class FilterCollector {
         list.add(creator.get("Exp boosters", "amount of EXP", "amount of EXP"));
         list.add(creator.get("Drop Doublers", "duplicating a drop upon", "duplicating a drop upon"));
         //endregion
+
+
     }
 
 
@@ -129,12 +140,13 @@ public class FilterCollector {
         List<FilterUI> classes1FilterUI = new ArrayList<>();
         List<FilterUI> classes2FilterUI = new ArrayList<>();
         List<FilterUI> captainFilterUI = new ArrayList<>();
+        List<FilterUI> treasureFilterUI = new ArrayList<>();
 
         boolean thereIsColors = false;
         boolean thereIsClasses1 = false;
         boolean thereIsClasses2 = false;
         boolean thereIsCaptain = false;
-
+        boolean thereIsTreasure = false;
 
         StringBuilder finalQuery = new StringBuilder();
         finalQuery.append("SELECT * FROM unit_table WHERE ");
@@ -151,6 +163,8 @@ public class FilterCollector {
                     classes1FilterUI.add(filterUI);
                 } else if (filterUI.getInfo().getType() == FilterType.CLASS && filterUI.getInfo().getSubtype() == FilterType.Subtype.Class2) {
                     classes2FilterUI.add(filterUI);
+                } else if (filterUI.getInfo().getType() == FilterType.TREASURE_MAP) {
+                    treasureFilterUI.add(filterUI);
                 } else selectedFilters.add(filterUI);
             }
         }
@@ -171,6 +185,21 @@ public class FilterCollector {
                 }
             }
         }
+
+        StringBuilder treasureFilter = null;
+        {
+            if (treasureFilterUI.size() > 0) {
+                thereIsTreasure = true;
+                Iterator<FilterUI> treasureFilterIterator = treasureFilterUI.iterator();
+                treasureFilter = new StringBuilder();
+                while (treasureFilterIterator.hasNext()) {
+                    FilterUI filterUI = treasureFilterIterator.next();
+                    treasureFilter.append(filterUI.getInfo().getDatabasePattern());
+                    //nothing to add
+                }
+            }
+        }
+
 
         StringBuilder colorsFilter = null;
         {
@@ -226,16 +255,23 @@ public class FilterCollector {
         if (thereIsCaptain) {
             finalQuery.append(captainFilter.toString());
         }
+
+        if (thereIsTreasure) {
+            if (thereIsCaptain) finalQuery.append(" AND");
+            finalQuery.append(treasureFilter.toString());
+        }
+
         if (thereIsColors) {
-            finalQuery.append(" AND ");
+            if (thereIsTreasure) finalQuery.append(" AND ");
             finalQuery.append(colorsFilter.toString());
         }
+
         if (thereIsClasses1) {
-            finalQuery.append(" AND ");
+            if (thereIsColors) finalQuery.append(" AND ");
             finalQuery.append(classes1Filter.toString());
         }
         if (thereIsClasses2) {
-            finalQuery.append(" AND ");
+            if (thereIsClasses1) finalQuery.append(" AND ");
             finalQuery.append(classes2Filter.toString());
         }
 

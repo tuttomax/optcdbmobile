@@ -30,18 +30,18 @@ public class AvoidCollisionMediator implements FilterMediator {
             if (type == FilterType.DROP) {
                 switch (subtype) {
                     case Farmable:
-                        deselect(FilterType.DROP, FilterType.Subtype.Farmable);
+                        deselect(sender, FilterType.DROP, FilterType.Subtype.Farmable);
                         break;
                     case ServerUnit:
-                        deselect(FilterType.DROP, FilterType.Subtype.ServerUnit);
+                        deselect(sender, FilterType.DROP, FilterType.Subtype.ServerUnit);
                     case RRPool:
-                        deselect(FilterType.DROP, FilterType.Subtype.RRPool);
+                        deselect(sender, FilterType.DROP, FilterType.Subtype.RRPool);
                     case FarmableSocket:
-                        deselect(FilterType.DROP, FilterType.Subtype.FarmableSocket);
+                        deselect(sender, FilterType.DROP, FilterType.Subtype.FarmableSocket);
                         break;
                 }
             } else if (type == FilterType.TREASURE_MAP) {
-                deselect(FilterType.TREASURE_MAP);
+                deselect(sender, FilterType.TREASURE_MAP);
             } else if (type == FilterType.CLASS) {
                 List<Integer> indices = getIndices(sender);
                 if (indices.size() >= 2) {
@@ -62,33 +62,38 @@ public class AvoidCollisionMediator implements FilterMediator {
     }
 
 
-    private void deselect(int type, FilterType.Subtype subtype) {
+    private void deselect(FilterUI me, int type, FilterType.Subtype subtype) {
         for (int index = 0; index < internalList.size(); index++) {
             FilterUI filterUI = internalList.get(index);
-
-            FilterInfo info = filterUI.getInfo();
-
-            int filterType = info.getType();
-            FilterType.Subtype filterSubtype = info.getSubtype();
+            if (filterUI != me) {
 
 
-            if (subtype == null) {
-                if (type == filterType) {
-                    filterUI.setSelected(false, true);
-                    callback.OnChangedAfterInform(index, FilterUI.PAYLOAD_SELECTED);
-                }
-            } else {
-                if (type == filterType && subtype == filterSubtype) {
-                    filterUI.setSelected(false, true);
-                    callback.OnChangedAfterInform(index, FilterUI.PAYLOAD_SELECTED);
+                if (filterUI.isSelected()) {
+                    FilterInfo info = filterUI.getInfo();
+
+                    int filterType = info.getType();
+                    FilterType.Subtype filterSubtype = info.getSubtype();
+
+
+                    if (subtype == null) {
+                        if (type == filterType) {
+                            filterUI.setSelected(false, true);
+                            callback.OnChangedAfterInform(index, FilterUI.PAYLOAD_SELECTED);
+                        }
+                    } else {
+                        if (type == filterType && subtype == filterSubtype) {
+                            filterUI.setSelected(false, true);
+                            callback.OnChangedAfterInform(index, FilterUI.PAYLOAD_SELECTED);
+                        }
+                    }
+
                 }
             }
-
         }
     }
 
-    private void deselect(int type) {
-        deselect(type, null);
+    private void deselect(FilterUI me, int type) {
+        deselect(me, type, null);
     }
 
     private List<Integer> getIndices(FilterUI me) {
