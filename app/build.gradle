@@ -7,16 +7,16 @@ android {
         applicationId "com.optc.optcdbmobile"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 3
+        versionCode 4
         /*
             VERSIONING:
             name-[main_version].[app_revision]-[database_revision]
                 name: one piece character
                 main_version: incremental number
-                app_revision: incremental number caused bu bug in app
+                app_revision: incremental number caused by bug in app
                 database_revision: incremental number caused by bag in database that are resolved in app
         */
-        versionName "Chopper-3.0.0"
+        versionName "Chopper-3.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
