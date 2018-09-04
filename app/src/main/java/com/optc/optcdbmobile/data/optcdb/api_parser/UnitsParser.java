@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UnitsParser extends BaseParser<List<Unit>> {
+    private int id;
+
     @Override
     public List<Unit> parse(Object jsParsed) {
 
@@ -32,7 +34,7 @@ public class UnitsParser extends BaseParser<List<Unit>> {
 
         final List<Unit> list = new ArrayList<>();
 
-        int id = 0;
+        id = 0;
         String[] types;
         String[] classes;
         Float stars;
@@ -52,9 +54,7 @@ public class UnitsParser extends BaseParser<List<Unit>> {
             if (name == null || name.isEmpty()) continue;
 
 
-            if (id == 2244) {
-                id = 2247;
-            }
+            skip(2245, 2246);
 
 
             ++id;
@@ -154,5 +154,15 @@ public class UnitsParser extends BaseParser<List<Unit>> {
         return new String[]{type1, type2};
     }
 
-
+    /**
+     * Skip id for unit when there is null character between valid character
+     *
+     * @param lastValidId
+     * @param lastNullId
+     */
+    private void skip(int lastValidId, int lastNullId) {
+        if (id == lastValidId) {
+            id = lastNullId;
+        }
+    }
 }
