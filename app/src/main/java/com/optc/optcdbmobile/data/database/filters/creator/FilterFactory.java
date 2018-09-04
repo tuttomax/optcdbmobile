@@ -5,9 +5,9 @@ import com.optc.optcdbmobile.data.database.filters.FilterUI;
 
 public interface FilterFactory {
 
-    FilterUI create(int type, FilterType.Subtype subtype, String label, String regex, String databasePattern);
+    FilterUI create(int type, FilterType.Subtype subtype, String label, String databasePattern);
 
-    FilterUI create(int type, String label, String regex, String databasePattern);
+    FilterUI create(int type, String label, String databasePattern);
 
     FilterUI create(int type);
 }

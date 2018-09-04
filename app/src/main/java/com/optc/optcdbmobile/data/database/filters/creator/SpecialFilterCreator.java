@@ -4,28 +4,26 @@ import com.optc.optcdbmobile.data.database.filters.FilterMediator;
 import com.optc.optcdbmobile.data.database.filters.FilterType;
 import com.optc.optcdbmobile.data.database.filters.FilterUI;
 
-public class CaptainFilterCreator extends FilterCreator {
-    public CaptainFilterCreator(FilterMediator mediator) {
+public class SpecialFilterCreator extends FilterCreator {
+    public SpecialFilterCreator(FilterMediator mediator) {
         super(mediator);
     }
 
     @Override
     public FilterUI getHeader() {
-        return create(FilterType.CAPTAIN);
+        return create(FilterType.SPECIAL);
     }
 
     @Override
     public FilterUI get(Object... args) {
         String basePattern = "description GLOB '*%s*'";
-        String databasePattern = null;
+        String specialPattern = null;
 
-        String captainDesc = (String) args[0];
-
-        Object obj = args[1];
-
-        if (obj instanceof String) databasePattern = String.format(basePattern, (String) obj);
-        else if (obj instanceof String[]) {
-            String[] strings = (String[]) obj;
+        String label = (String) args[0];
+        Object databasePattern = args[1];
+        if (databasePattern instanceof String) specialPattern = (String) databasePattern;
+        else if (databasePattern instanceof String[]) {
+            String[] strings = (String[]) databasePattern;
             StringBuilder builder = new StringBuilder();
             builder.append("(");
             for (int index = 0; index < strings.length; index++) {
@@ -36,9 +34,10 @@ public class CaptainFilterCreator extends FilterCreator {
             }
             builder.append(")");
 
-            databasePattern = builder.toString();
+            specialPattern = builder.toString();
         }
-        //return create(FilterType.CAPTAIN, captainDesc, regex, "id IN (SELECT captain_id FROM captain_description_table WHERE " + databasePattern + " )");
-        return create(FilterType.CAPTAIN, captainDesc, databasePattern);
+
+
+        return create(FilterType.SPECIAL, label, specialPattern);
     }
 }

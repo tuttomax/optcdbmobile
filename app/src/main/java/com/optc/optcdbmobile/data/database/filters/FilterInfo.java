@@ -5,7 +5,6 @@ public class FilterInfo {
 
     private final int type;
     private FilterType.Subtype subtype;
-    private String regexPattern;
     private String databasePattern;
 
     public FilterInfo(int type, FilterType.Subtype subtype) {
@@ -27,14 +26,6 @@ public class FilterInfo {
 
     public FilterType.Subtype getSubtype() {
         return subtype;
-    }
-
-    public String getRegexPattern() {
-        return regexPattern;
-    }
-
-    public void setRegexPattern(String regexPattern) {
-        this.regexPattern = regexPattern;
     }
 
     public String getDatabasePattern() {

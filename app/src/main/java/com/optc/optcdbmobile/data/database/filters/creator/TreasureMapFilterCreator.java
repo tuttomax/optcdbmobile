@@ -17,13 +17,12 @@ public class TreasureMapFilterCreator extends FilterCreator {
     @Override
     public FilterUI get(Object... args) {
         String label = (String) args[0];
-        String regex = (String) args[1];
         Integer[] unitList = (Integer[]) args[2];
         StringBuilder allIds = new StringBuilder();
         for (int index = 0; index < unitList.length; index++) {
             allIds.append(String.valueOf(unitList[index]));
             if (index + 1 != unitList.length) allIds.append(",");
         }
-        return create(FilterType.TREASURE_MAP, label, regex, String.format("id IN ( %s )", allIds.toString()));
+        return create(FilterType.TREASURE_MAP, label, String.format("id IN ( %s )", allIds.toString()));
     }
 }

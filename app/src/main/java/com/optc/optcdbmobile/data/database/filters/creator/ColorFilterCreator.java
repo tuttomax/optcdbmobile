@@ -24,7 +24,7 @@ public class ColorFilterCreator extends FilterCreator {
     public FilterUI get(Object... args) {
         int type = FilterType.COLOR;
         String color = (String) args[0];
-        return create(type, color, color,
+        return create(type, color,
                 String.format("type1='%1$s' OR type2='%1$s'", color));
     }
 }

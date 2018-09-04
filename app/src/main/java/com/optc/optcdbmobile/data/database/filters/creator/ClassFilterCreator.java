@@ -18,7 +18,7 @@ public class ClassFilterCreator extends FilterCreator {
     public FilterUI get(Object... args) {
         String stringClass = (String) args[0];
         FilterType.Subtype subtype = (FilterType.Subtype) args[1];
-        return create(FilterType.CLASS, subtype, stringClass, stringClass, String.format("%s='%s'",
+        return create(FilterType.CLASS, subtype, stringClass, String.format("%s='%s'",
                 subtype == FilterType.Subtype.Class1 ? "class1" : "class2", stringClass));
     }
 }

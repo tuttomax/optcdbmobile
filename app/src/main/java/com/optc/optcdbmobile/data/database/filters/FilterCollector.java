@@ -4,6 +4,7 @@ import com.optc.optcdbmobile.data.database.filters.creator.CaptainFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ClassFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ColorFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.FilterCreator;
+import com.optc.optcdbmobile.data.database.filters.creator.SpecialFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.TreasureMapFilterCreator;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
 
@@ -63,9 +64,9 @@ public class FilterCollector {
         list.add(creator.get(UnitHelper.DRIVEN_STRING, FilterType.Subtype.Class2));
 
 
-        //TODO Implement regex builder
-        //TODO: Implement layout first
         //creator = new RarityFilterCreator(mediator);
+
+        //TODO: Custom layout
         //creator = new CostFilterCreator(mediator);
         creator = new TreasureMapFilterCreator(mediator);
         list.add(creator.getHeader());
@@ -81,53 +82,146 @@ public class FilterCollector {
         creator = new CaptainFilterCreator(mediator);
         list.add(creator.getHeader());
         list.add(creator.get("Type-Boosting captains",
-                "of.+(STR|QCK|DEX|PSY|INT).+characters by",
                 "of ??? characters by"));
 
         list.add(creator.get("Class-Boosting captains",
-                "of.+(Fighter|Slasher|Shooter|Striker|Cerebral|Driven|Free Spirit|Powerhouse).+characters by",
                 new String[]{
                         "of [FCP]* characters by",
                         "of S[lht]* characters by",
                         "of Dri* characters by"
                 }));
 
-        list.add(creator.get("Universal ATK boosting captains", "of all characters by", "ATK of all characters by"));
-        list.add(creator.get("ATK boosting captains", "[Bb]oosts ATK", "[Bb]oosts ATK"));
-        list.add(creator.get("HP boosting captains", "[Bb]oosts HP", "[Bb]oosts HP"));
-        list.add(creator.get("RCV boosting captains", "[Bb]oosts RCV", new String[]{
+        list.add(creator.get("Universal ATK boosting captains", "ATK of all characters by"));
+        list.add(creator.get("ATK boosting captains", "[Bb]oosts ATK"));
+        list.add(creator.get("HP boosting captains", "[Bb]oosts HP"));
+        list.add(creator.get("RCV boosting captains", new String[]{
                 "[Bb]oosts RCV",
                 "their RCV"
         }));
-        list.add(creator.get("Special boosting captains", "[Bb]oosts damage of", "boosts damage of"));
-        list.add(creator.get("2x ATK and HP captains", "[Bb]oosts ATK and HP of.+characters by 2x", "[Bb]oosts ATK and HP of*characters by 2x"));
-        list.add(creator.get("2x ATK and RCV captains", "[Bb]oosts ATK and RCV of.+characters by 2x", "[Bb]oosts ATK and RCV of*characters by 2x"));
-        list.add(creator.get("2x ATK captains", "[Bb]oosts ATK of.+characters by 2x", "[Bb]oosts ATK of*characters by 2x"));
-        list.add(creator.get("2.25x ATK captains", "[Bb]oosts ATK of.+characters by 2.25x", "[Bb]oosts ATK of*characters by 2.25x"));
-        list.add(creator.get("2.5x ATK captains", "[Bb]oosts ATK of.+characters by 2.5x", "[Bb]oosts ATK of*characters by 2.5x"));
-        list.add(creator.get("2.75x ATK captains", "[Bb]oosts ATK of.+characters by 2.75x", "[Bb]oosts ATK of*characters by 2.75x"));
-        list.add(creator.get("3x ATK captains", "[Bb]oosts ATK of.+characters by 3x", "[Bb]oosts ATK of*characters by 3x"));
-        list.add(creator.get("3.25x ATK captains", "[Bb]oosts ATK of.+characters by 3.25x", "[Bb]oosts ATK of*characters by 3.25x"));
-        list.add(creator.get("3.5x ATK captains", "[Bb]oosts ATK of.+characters by 3.5x", "[Bb]oosts ATK of*characters by 3.5x"));
-        list.add(creator.get("3.75x ATK captains", "[Bb]oosts ATK of.+characters by 3.75x", "[Bb]oosts ATK of*characters by 3.75x"));
-        list.add(creator.get("4x ATK captains", "[Bb]oosts ATK of.+characters by 4x", "[Bb]oosts ATK of*characters by 4x"));
-        list.add(creator.get("4.25x ATK captains", "[Bb]oosts ATK of.+characters by 4.25x", "[Bb]oosts ATK of*characters by 4.25x"));
-        list.add(creator.get("HP-based ATK captains", "proportionally to the crew's current HP", "proportionally to the crew's current HP"));
-        list.add(creator.get("Positional captains", "after scoring .+ in a row", "after scoring * in a row"));
-        list.add(creator.get("\"Beneficial\" Orb captains", "orbs \"beneficial\"", "\"orbs \\\"beneficial\\\"\""));
-        list.add(creator.get("Chain multipliers", "[Bb]oosts chain multiplier", "[Bb]oosts chain multiplier"));
-        list.add(creator.get("Combo Boost Captains", "after the \\d+th hit", "after the [0-9]*th hit"));
-        list.add(creator.get("Cooldown reducers", "[Rr]educes cooldown of all specials", "[Rr]educes cooldown of all specials"));
-        list.add(creator.get("Damage reducers", "[Rr]educes damage received", "[Rr]educes damage received"));
-        list.add(creator.get("Healers", "[Rr]ecovers", "[Rr]ecovers"));
-        list.add(creator.get("Tankers", "[Rr]educes damage received by \\d% if HP", "[Rr]educes damage received by [0-9]*\\% if HP"));
-        list.add(creator.get("Zombies", "[Pp]rotects from defeat", "[Pp]rotects from defeat"));
-        list.add(creator.get("End of Turn Damage Dealer", "at the end of each turn", "at the end of each turn"));
-        list.add(creator.get("Beli boosters", "amount of Beli", "amount of Beli"));
-        list.add(creator.get("Exp boosters", "amount of EXP", "amount of EXP"));
-        list.add(creator.get("Drop Doublers", "duplicating a drop upon", "duplicating a drop upon"));
+        list.add(creator.get("Special boosting captains", "[Bb]oosts damage of"));
+        list.add(creator.get("2x ATK and HP captains", "[Bb]oosts ATK and HP of*characters by 2x"));
+        list.add(creator.get("2x ATK and RCV captains", "[Bb]oosts ATK and RCV of*characters by 2x"));
+        list.add(creator.get("2x ATK captains", "[Bb]oosts ATK of*characters by 2x"));
+        list.add(creator.get("2.25x ATK captains", "[Bb]oosts ATK of*characters by 2.25x"));
+        list.add(creator.get("2.5x ATK captains", "[Bb]oosts ATK of*characters by 2.5x"));
+        list.add(creator.get("2.75x ATK captains", "[Bb]oosts ATK of*characters by 2.75x"));
+        list.add(creator.get("3x ATK captains", "[Bb]oosts ATK of*characters by 3x"));
+        list.add(creator.get("3.25x ATK captains", "[Bb]oosts ATK of*characters by 3.25x"));
+        list.add(creator.get("3.5x ATK captains", "[Bb]oosts ATK of*characters by 3.5x"));
+        list.add(creator.get("3.75x ATK captains", "[Bb]oosts ATK of*characters by 3.75x"));
+        list.add(creator.get("4x ATK captains", "[Bb]oosts ATK of*characters by 4x"));
+        list.add(creator.get("4.25x ATK captains", "[Bb]oosts ATK of*characters by 4.25x"));
+        list.add(creator.get("HP-based ATK captains", "proportionally to the crew's current HP"));
+        list.add(creator.get("Positional captains", "after scoring * in a row"));
+        list.add(creator.get("\"Beneficial\" Orb captains", "\"orbs \\\"beneficial\\\"\""));
+        list.add(creator.get("Chain multipliers", "[Bb]oosts chain multiplier"));
+        list.add(creator.get("Combo Boost Captains", "after the [0-9]*th hit"));
+        list.add(creator.get("Cooldown reducers", "[Rr]educes cooldown of all specials"));
+        list.add(creator.get("Damage reducers", "[Rr]educes damage received"));
+        list.add(creator.get("Healers", "[Rr]ecovers"));
+        list.add(creator.get("Tankers", "[Rr]educes damage received by [0-9]*\\% if HP"));
+        list.add(creator.get("Zombies", "[Pp]rotects from defeat"));
+        list.add(creator.get("End of Turn Damage Dealer", "at the end of each turn"));
+        list.add(creator.get("Beli boosters", "amount of Beli"));
+        list.add(creator.get("Exp boosters", "amount of EXP"));
+        list.add(creator.get("Drop Doublers", "duplicating a drop upon"));
         //endregion
 
+        //region SPECIAL FILTER
+
+        creator = new SpecialFilterCreator(mediator);
+        list.add(creator.getHeader());
+        list.add(creator.get("Type-boosting specials", "of ??? characters by"));
+        list.add(creator.get("Class-boosting specials", new String[]{
+                "of [FCP]* characters by",
+                "of S[lht]* characters by",
+                "of Dri* characters by"
+        }));
+        list.add(creator.get("Multiple stage specials", "special_id IN (SELECT special_id FROM special_description_table GROUP BY special_id HAVING COUNT(special_id)>1"));
+        list.add(creator.get("Universal ATK boosting", "ATK of all characters"));
+        list.add(creator.get("1.5x ATK specials", "ATK of * characters by 1.5x"));
+        list.add(creator.get("1.75x ATK specials", "ATK of * characters by 1.75x"));
+        list.add(creator.get("2x ATK specials", "ATK of * characters by 2x"));
+        list.add(creator.get("2.25x ATK specials", "ATK of * characters by 2.25x"));
+        list.add(creator.get("Conditional ATK booster", "[bB]oosts ATK against enemies with"));
+        list.add(creator.get("Following-turn ATK booster", "[Ii]f during that turn every unit scores a PERFECT hit, boosts ATK of"));
+        list.add(creator.get("Color affinity booster", "[bB]oosts the Color Affinity of"));
+        list.add(creator.get("Combo boost special", "after [0-9]*th hit in the chain"));
+        list.add(creator.get("RCV boost special", "[Bb]oosts the amount healed by RCV"));
+        list.add(creator.get("Orb lockers", "locks all orbs for"));
+        list.add(creator.get("Orb booster", "[Aa]mplifies the effect of orbs by"));
+        list.add(creator.get("1.5x orb booster special", "[Aa]mplifies the effect of orbs by 1.5x"));
+        list.add(creator.get("1.75x orb booster special", "[Aa]mplifies the effect of orbs by 1.75x"));
+        list.add(creator.get("2x orb booster special", "[Aa]mplifies the effect of orbs by 2x"));
+        list.add(creator.get("2.25x orb booster special", "[Aa]mplifies the effect of orbs by 2.25x"));
+        list.add(creator.get("Orb chance booster", "Boosts chances of getting * orbs "));
+        //list.add(creator.get("Negative to positive orb controllers",""));
+        //list.add(creator.get("Orb controllers",""));
+        //list.add(creator.get("Full board orb controllers",""));
+        list.add(creator.get("[MATCH ALL] Orb controllers", "Changes * orbs into * orbs"));
+        list.add(creator.get("Self-Orb controllers", "changes own orb into"));
+        list.add(creator.get("Orb randomizer", "[Rr]andomizes all orbs"));
+        list.add(creator.get("Orb switchers", "switches orbs between"));
+        list.add(creator.get("Orb matchers", "into matching orbs"));
+        list.add(creator.get("Slot emptiers", "[eE]mpties all slots"));
+        list.add(creator.get("\"Beneficial\" orbs enabler", "orbs \"beneficial\""));
+        list.add(creator.get("Block orb removers", new String[]{
+                "[Cc]hanges*BLOCK",
+                "with*BLOCK"
+        }));
+        list.add(creator.get("Bomb orb removers", new String[]{
+                "[Cc]hanges*BOMB",
+                "with*BOMB"
+        }));
+        list.add(creator.get("Delayer", "delay"));
+        list.add(creator.get("Damage dealers", "damage to "));
+        list.add(creator.get("Single-target damage dealers", "damage to one enemy"));
+        list.add(creator.get("Multi-target damage dealers", "damage to all enemies"));
+        list.add(creator.get("Area of effect damage dealers", "damage to all enemies"));
+        list.add(creator.get("Multi-hit damage dealers", "[Dd]eals [0-9]* hits"));
+        list.add(creator.get("Fixed damage dealers", "fixed damage"));
+        list.add(creator.get("Typeless damage dealers", "typeless damage to"));
+        list.add(creator.get("Typed damage dealers", "in ??? damage to"));
+        list.add(creator.get("Additional damage dealers", "as Additional * Damage"));
+        list.add(creator.get("Instant defeat special", "instantly defeats"));
+        list.add(creator.get("Defense and Barrier Buff  ingnoring damage dealer", "ignore damage negating abilities and barriers"));
+        list.add(creator.get("Healers", "[Rr]ecovers * HP"));
+        list.add(creator.get("Health reducers", "[Rr]educes crew's current HP"));
+        list.add(creator.get("Poisoners", new String[]{
+                "[Ii]nflicts Toxic to all enemies",
+                "[Pp]oisons all enemies"
+        }));
+        list.add(creator.get("Poison removers", "[Rr]emoves * Poison"));
+        list.add(creator.get("Health cutters", "cuts the current HP of"));
+        list.add(creator.get("HP-based damage dealers", "[Dd]eals several times the character's ATK"));
+        list.add(creator.get("Defense reducers", "[Rr]educes the defense of"));
+        list.add(creator.get("Damage reducers", "[Rr]educes damage received by"));
+        list.add(creator.get("Damage nullifiers", "[Rr]educes damage received * by 100%"));
+        list.add(creator.get("Bind reducers", "Bind"));
+        list.add(creator.get("Despair reducers", "Despair"));
+        list.add(creator.get("Silence reducers", "Silence"));
+        list.add(creator.get("Paralysis reducers", "Paralysis"));
+        list.add(creator.get("Blindness reducers", "Blindness"));
+        list.add(creator.get("Crew ATK DOWN reducers", "ATK DOWN"));
+        list.add(creator.get("Crew Increased damage taken reducers", "Increase Damage Taken"));
+        list.add(creator.get("Crew positive Buff reducers", "all positive buffs"));
+        list.add(creator.get("Enemy End of turn Buff reducers", "End of Turn"));
+        list.add(creator.get("Enemy Enrage buff reducers", "Enrage"));
+        list.add(creator.get("Enemy ATK UP buff reducers", "ATK Up"));
+        list.add(creator.get("Enemy Increased defense reducers", "Increased Defense"));
+        list.add(creator.get("Enemy Percent damage reduction reducers", "Percent Damage Reduction"));
+        list.add(creator.get("Enemy Damage Nullification reducers", "Damage Nullification"));
+        list.add(creator.get("Enemy Threshold damage reduction reducers", "Threshold Damage Reduction"));
+        list.add(creator.get("Enemy Barrier reducers", "Barrier"));
+        list.add(creator.get("Enemy Resilence reducers", "Resilience"));
+        list.add(creator.get("Zombies", "[Pp]rotects from defeat"));
+        list.add(creator.get("End of Turn Damage dealer", "at the end of the turn"));
+        list.add(creator.get("Cooldown reducers", "[rR]educes Special Cooldown"));
+        list.add(creator.get("Chain boosters", "to Chain multiplier"));
+        list.add(creator.get("Chain lockers", "[lL]ocks the chain"));
+        list.add(creator.get("Chain Multiplier Limit reducers", "Chain Multiplier Limit"));
+        list.add(creator.get("Chain Coefficient Reduction reducers", "Chain Coefficient Reduction"));
+        //endregion
 
     }
 
@@ -257,7 +351,7 @@ public class FilterCollector {
         }
 
         if (thereIsTreasure) {
-            if (thereIsCaptain) finalQuery.append(" AND");
+            if (thereIsCaptain) finalQuery.append(" AND ");
             finalQuery.append(treasureFilter.toString());
         }
 
