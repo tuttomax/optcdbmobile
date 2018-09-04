@@ -11,7 +11,6 @@ import com.optc.optcdbmobile.data.database.entities.Captain;
 import com.optc.optcdbmobile.data.database.entities.CaptainDescription;
 import com.optc.optcdbmobile.data.database.entities.Evolution;
 import com.optc.optcdbmobile.data.database.entities.Limit;
-import com.optc.optcdbmobile.data.database.entities.Location;
 import com.optc.optcdbmobile.data.database.entities.LocationInformation;
 import com.optc.optcdbmobile.data.database.entities.Potential;
 import com.optc.optcdbmobile.data.database.entities.PotentialDescription;
@@ -36,7 +35,6 @@ public class UnitDialogViewModel extends AndroidViewModel {
     public MutableLiveData<List<Evolution>> evolvesFrom;
     public MutableLiveData<List<LocationInformation>> familyDrops;
     public MutableLiveData<List<LocationInformation>> manualDrops;
-    public MutableLiveData<List<Location>> locations;
 
     public UnitDialogViewModel(@NonNull Application application) {
         super(application);
@@ -47,7 +45,6 @@ public class UnitDialogViewModel extends AndroidViewModel {
         evolvesFrom = new MediatorLiveData<>();
         familyDrops = new MutableLiveData<>();
         manualDrops = new MutableLiveData<>();
-        locations = new MutableLiveData<>();
     }
 
     //region unitHas
