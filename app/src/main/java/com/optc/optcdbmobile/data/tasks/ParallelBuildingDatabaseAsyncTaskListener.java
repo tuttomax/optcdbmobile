@@ -48,28 +48,30 @@ public class ParallelBuildingDatabaseAsyncTaskListener implements AsyncTaskListe
     @Override
     public void onPostExecute(Float returnedValue) {
         dialog.dismiss();
-        if (returnedValue > 0) {
-            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                    .putFloat(Constants.Settings.pref_database_version_key, returnedValue).apply();
-            Snackbar.make(view, "Database building complete", Snackbar.LENGTH_LONG).show();
-            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_check_done_key, true).commit();
-            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_update_available, false).commit();
-        } else {
-            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                    .putFloat(Constants.Settings.pref_database_version_key, -1f).apply();
-            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_check_done_key, false).commit();
-            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_update_available, true).commit();
+        if (returnedValue != null) {
 
-            Snackbar.make(view, "Error building database", Snackbar.LENGTH_INDEFINITE)
-                    .setActionTextColor(Color.RED)
-                    .setAction("REDO", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            OPTCDatabaseRepository.getInstance(view.getContext()).BuildDatabase(context);
-                        }
-                    }).show();
+            if (returnedValue > 0) {
+                PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
+                        .putFloat(Constants.Settings.pref_database_version_key, returnedValue).apply();
+                Snackbar.make(view, "Database building complete", Snackbar.LENGTH_LONG).show();
+                PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_check_done_key, true).commit();
+                PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_update_available, false).commit();
+            } else {
+                PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
+                        .putFloat(Constants.Settings.pref_database_version_key, -1f).apply();
+                PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_check_done_key, false).commit();
+                PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_update_available, true).commit();
+
+                Snackbar.make(view, "Error building database", Snackbar.LENGTH_INDEFINITE)
+                        .setActionTextColor(Color.RED)
+                        .setAction("REDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                OPTCDatabaseRepository.getInstance(view.getContext()).BuildDatabase(context);
+                            }
+                        }).show();
+            }
         }
-
     }
 
     public TaskDelegate getDelegate() {
