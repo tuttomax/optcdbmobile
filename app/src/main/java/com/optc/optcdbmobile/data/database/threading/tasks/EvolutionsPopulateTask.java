@@ -45,9 +45,8 @@ public class EvolutionsPopulateTask extends DatabaseTask {
                 increment();
             }
         } catch (Exception ex) {
-            setError(ex);
-
             ex.printStackTrace();
+            setError(ex);
             Thread.currentThread().interrupt();
 
         }

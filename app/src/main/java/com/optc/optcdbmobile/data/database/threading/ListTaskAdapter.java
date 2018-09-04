@@ -91,7 +91,7 @@ public class ListTaskAdapter extends RecyclerView.Adapter<ListTaskAdapter.TaskVi
                         } else if (task.getState() == Task.COMPLETED) {
                             holder.progressTextView.setVisibility(View.VISIBLE);
                             holder.progressTextView.setText("OK");
-                            holder.progressTextView.setTextColor(Color.GREEN); // primaryLightColor
+                            holder.progressTextView.setTextColor(Color.GREEN);
                         } else if ((task.getState() == Task.RUNNING) || (task.getState() == Task.CREATED)) {
                             holder.progressTextView.setVisibility(View.VISIBLE);
                         }
@@ -209,12 +209,12 @@ public class ListTaskAdapter extends RecyclerView.Adapter<ListTaskAdapter.TaskVi
     }
 
     @Override
-    public void onError(Exception ex) {
+    public void onError(String name, Exception ex) {
         executorService.shutdownNow();
         if (!executorService.isTerminated()) {
             termination();
         }
-        Thread.currentThread().interrupt();
+        throw new RuntimeException("Error inside " + name, ex.getCause());
     }
 
 

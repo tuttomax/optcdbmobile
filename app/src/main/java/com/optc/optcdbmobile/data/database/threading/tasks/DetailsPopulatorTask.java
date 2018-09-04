@@ -23,7 +23,6 @@ import com.optc.optcdbmobile.data.database.threading.TaskCallback;
 import com.optc.optcdbmobile.data.optcdb.entities.Detail;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 public class DetailsPopulatorTask extends DatabaseTask {
     public DetailsPopulatorTask(OPTCDatabase database, TaskCallback callback) {
@@ -61,8 +60,8 @@ public class DetailsPopulatorTask extends DatabaseTask {
             }
 
         } catch (Exception ex) {
-            setError(ex);
             ex.printStackTrace();
+            setError(ex);
             Thread.currentThread().interrupt();
 
         }

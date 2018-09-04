@@ -26,5 +26,5 @@ public interface TaskCallback {
 
     void onMaxChanged(int i, int max);
 
-    void onError(Exception ex);
+    void onError(String name, Exception ex);
 }

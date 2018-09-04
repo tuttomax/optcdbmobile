@@ -30,8 +30,8 @@ public class TagsPopulateTask extends DatabaseTask {
             }
 
         } catch (Exception ex) {
-            setError(ex);
             ex.printStackTrace();
+            setError(ex);
             Thread.currentThread().interrupt();
         }
 
