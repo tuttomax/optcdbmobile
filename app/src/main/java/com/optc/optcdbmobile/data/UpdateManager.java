@@ -1,5 +1,6 @@
 package com.optc.optcdbmobile.data;
 
+import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.Service;
 import android.arch.lifecycle.LifecycleOwner;
@@ -7,24 +8,88 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.util.Pair;
 import android.widget.Toast;
 
+import com.google.gson.annotations.SerializedName;
 import com.optc.optcdbmobile.BuildConfig;
-import com.optc.optcdbmobile.data.optcdb.API;
+import com.optc.optcdbmobile.data.tasks.AsyncTaskListener;
+import com.optc.optcdbmobile.data.tasks.CheckAppLatestRelease;
 
 import java.io.File;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
+import java.util.List;
 
 public class UpdateManager {
+    public void CheckUpdate() {
+        final Boolean updateAvailable;
+        CheckAppLatestRelease checkTask = new CheckAppLatestRelease();
+        checkTask.setListener(new AsyncTaskListener<UpdateInfo>() {
+            @Override
+            public void onPreExecute() {
+
+            }
+
+            @Override
+            public void onPostExecute(UpdateInfo info) {
+                if (info == null) {
+                    Toast.makeText(mContext, "Error downloading app update", Toast.LENGTH_LONG).show();
+                } else {
+
+                    final Long newVersion = Long.parseLong(info.getTag());
+                    final boolean updateAvailable = BuildConfig.VERSION_CODE < newVersion;
+                    if (updateAvailable) {
+                        if (info.getAssets().size() > 0) {
+
+                            if (info.isMessageImportant()) {
+
+                                new AlertDialog.Builder(mContext).setTitle("App update available")
+                                        .setMessage(info.getMessage()).setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                }).show();
+                            }
+
+                            UpdateInfo.Asset asset = info.getAssets().get(0);
+
+                            Log.d(UpdateManager.class.getSimpleName(), "App update available");
+
+                            Toast.makeText(mContext, "Downloading app update...", Toast.LENGTH_LONG).show();
+
+                            Uri downloadUri = Uri.parse(asset.getUrl());
+                            File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                            File apk = new File(downloads, Constants.APP.APP_INSTALL_NAME);
+
+                            if (apk.exists()) {
+                                boolean isDeleted = apk.delete();
+                                Log.i(UpdateManager.class.getSimpleName(), "old APK deleted? " + String.valueOf(isDeleted));
+                            }
+
+                            DownloadManager.Request downloadRequest = new DownloadManager.Request(downloadUri)
+                                    .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Constants.APP.APP_INSTALL_NAME)
+                                    .setMimeType(Constants.APP.MIME_TYPE_APK)
+                                    .setVisibleInDownloadsUi(true)
+                                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
+
+                            idFile.setValue(downloadManager.enqueue(downloadRequest));
+
+                        } else {
+                            Log.e(UpdateManager.class.getSimpleName(), "assets = 0. error parsing json!?");
+                        }
+
+                    }
+                }
+            }
+        });
+        checkTask.execute();
+    }
 
     private final Context mContext;
     private DownloadManager downloadManager;
@@ -62,41 +127,52 @@ public class UpdateManager {
 
     }
 
+    public static class UpdateInfo {
+        private List<Asset> assets;
+        @SerializedName("body")
+        private String message;
+        @SerializedName("tag_name")
+        private String tag;
 
-    public void CheckUpdate() throws ExecutionException, InterruptedException {
-        Pair<Boolean, Integer> updateInfo = Executors.newSingleThreadExecutor().submit(new Callable<Pair<Boolean, Integer>>() {
-            @Override
-            public Pair<Boolean, Integer> call() {
-                Integer currentVersion = BuildConfig.VERSION_CODE;
-                //TODO Implement GITHUB Commit Observer
-                Integer newVersion = Integer.valueOf(API.simple_download(Constants.APP.APP_VERSION_URL));
-                return Pair.create(currentVersion < newVersion, newVersion);
+        public UpdateInfo(List<Asset> assets, String message, String tag) {
+            this.assets = assets;
+            this.message = message;
+            this.tag = tag;
+        }
+
+        public List<Asset> getAssets() {
+            return assets;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public String getTag() {
+            return tag;
+        }
+
+        public boolean isMessageImportant() {
+            return message.contains("IMPORTANT");
+        }
+
+        public static class Asset {
+            private String name;
+            @SerializedName("browser_download_url")
+            private String url;
+
+            public Asset(String name, String url) {
+                this.name = name;
+                this.url = url;
             }
-        }).get();
 
-        if (updateInfo.first) {
-
-            Log.d(UpdateManager.class.getSimpleName(), "App update available");
-
-            Toast.makeText(mContext, "Downloading app update...", Toast.LENGTH_LONG).show();
-
-            Uri downloadUri = Uri.parse(String.format(Constants.APP.APP_DOWNLOAD_URL, updateInfo.second));
-
-            File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            File apk = new File(downloads, Constants.APP.APP_INSTALL_NAME);
-
-            if (apk.exists()) {
-                boolean isDeleted = apk.delete();
-                Log.i(UpdateManager.class.getSimpleName(), "old APK deleted? " + String.valueOf(isDeleted));
+            public String getName() {
+                return name;
             }
 
-            DownloadManager.Request downloadRequest = new DownloadManager.Request(downloadUri)
-                    .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Constants.APP.APP_INSTALL_NAME)
-                    .setMimeType(Constants.APP.MIME_TYPE_APK)
-                    .setVisibleInDownloadsUi(true)
-                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
-
-            idFile.setValue(downloadManager.enqueue(downloadRequest));
+            public String getUrl() {
+                return url;
+            }
         }
     }
 }
