@@ -131,9 +131,9 @@ public class UnitDialog extends DialogFragment {
             starWidget.setCount(stars.intValue());
         }
 
-        socketWidget.setCount(unit.getSocket());
+        socketWidget.setCount(unit.getSocket() == null ? 0 : unit.getSocket());
 
-        unitCost.setText(String.format("Cost:\n%s", unit.getCost()));
+        unitCost.setText(String.format("Cost:\n%s", unit.getCost() == null ? "" : unit.getCost()));
 
 
         ImageView unitImage = root.findViewById(R.id.unit_image);
@@ -158,12 +158,6 @@ public class UnitDialog extends DialogFragment {
         else class2ImageView.
                 setImageDrawable(UnitHelper.getClassDrawable(unit.getClass2(), getResources()));
 
-
-        ViewPager pager = root.findViewById(R.id.view_pager);
-        pager.setAdapter(adapter);
-        TabLayout tabLayout = root.findViewById(R.id.tab_layout);
-        tabLayout.setupWithViewPager(pager);
-
         if (unit.getType2() == null)
             root.setBackgroundColor(UnitHelper.getTypeColor(unit.getType1(), getResources()));
         else {
@@ -178,8 +172,13 @@ public class UnitDialog extends DialogFragment {
             } else {
                 root.setBackgroundDrawable(doubleColorDrawable);
             }
-
         }
+
+        ViewPager pager = root.findViewById(R.id.view_pager);
+        pager.setAdapter(adapter);
+        TabLayout tabLayout = root.findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(pager);
+
 
         return root;
     }
@@ -208,10 +207,9 @@ public class UnitDialog extends DialogFragment {
             fragments = new ArrayList<>();
             titles = new ArrayList<>();
 
-
         }
 
-        public void buildTabs() {
+        void buildTabs() {
 
             add(GeneralFragment.newInstance(unit), "General");
 
@@ -287,11 +285,11 @@ public class UnitDialog extends DialogFragment {
             this.hasEvolutions = hasEvolutions;
         }
 
-        public void setHasFamily(boolean hasFamily) {
+        void setHasFamily(boolean hasFamily) {
             this.hasFamily = hasFamily;
         }
 
-        public void setHasManuals(boolean hasManuals) {
+        void setHasManuals(boolean hasManuals) {
             this.hasManuals = hasManuals;
         }
     }
