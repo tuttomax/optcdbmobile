@@ -92,7 +92,7 @@ public abstract class Task implements Runnable {
 
     public void setError(Exception ex) {
         setState(ERROR);
-        callback.onError(this.getClass().getClass().getSimpleName(), ex);
+        callback.onError(this.getClass().getSimpleName(), ex);
     }
 
 }

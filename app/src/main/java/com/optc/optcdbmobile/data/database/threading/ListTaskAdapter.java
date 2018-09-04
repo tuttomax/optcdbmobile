@@ -237,7 +237,7 @@ public class ListTaskAdapter extends RecyclerView.Adapter<ListTaskAdapter.TaskVi
             boolean allTerminated = executorService.awaitTermination(seconds, TimeUnit.SECONDS);
             if (!allTerminated) {
                 for (Future future : futureList) {
-                    if (!future.isDone() && !future.isCancelled())
+                    if (!future.isDone())
                         future.get();
                 }
             }

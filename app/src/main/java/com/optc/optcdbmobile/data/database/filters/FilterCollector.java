@@ -148,12 +148,12 @@ public class FilterCollector {
         list.add(creator.get("Color affinity booster", "[bB]oosts the Color Affinity of"));
         list.add(creator.get("Combo boost special", "after [0-9]*th hit in the chain"));
         list.add(creator.get("RCV boost special", "[Bb]oosts the amount healed by RCV"));
-        list.add(creator.get("Orb lockers", "locks all orbs for"));
-        list.add(creator.get("Orb booster", "[Aa]mplifies the effect of orbs by"));
-        list.add(creator.get("1.5x orb booster special", "[Aa]mplifies the effect of orbs by 1.5x"));
-        list.add(creator.get("1.75x orb booster special", "[Aa]mplifies the effect of orbs by 1.75x"));
-        list.add(creator.get("2x orb booster special", "[Aa]mplifies the effect of orbs by 2x"));
-        list.add(creator.get("2.25x orb booster special", "[Aa]mplifies the effect of orbs by 2.25x"));
+        list.add(creator.get("Orb lockers", "locks*orbs for"));
+        list.add(creator.get("Orb booster", "[Aa]mplifies the effect of orbs"));
+        list.add(creator.get("1.5x orb booster special", "[Aa]mplifies the effect of orbs*by 1.5x for"));
+        list.add(creator.get("1.75x orb booster special", "[Aa]mplifies the effect of orbs*by 1.75x for"));
+        list.add(creator.get("2x orb booster special", "[Aa]mplifies the effect of orbs by*2x for"));
+        list.add(creator.get("2.25x orb booster special", "[Aa]mplifies the effect of orbs*by 2.25x for"));
         list.add(creator.get("Orb chance booster", "Boosts chances of getting * orbs "));
         //list.add(creator.get("Negative to positive orb controllers",""));
         //list.add(creator.get("Orb controllers",""));
@@ -235,12 +235,14 @@ public class FilterCollector {
         List<FilterUI> classes2FilterUI = new ArrayList<>();
         List<FilterUI> captainFilterUI = new ArrayList<>();
         List<FilterUI> treasureFilterUI = new ArrayList<>();
+        List<FilterUI> specialFilterUI = new ArrayList<>();
 
         boolean thereIsColors = false;
         boolean thereIsClasses1 = false;
         boolean thereIsClasses2 = false;
         boolean thereIsCaptain = false;
         boolean thereIsTreasure = false;
+        boolean thereIsSpecial = false;
 
         StringBuilder finalQuery = new StringBuilder();
         finalQuery.append("SELECT * FROM unit_table WHERE ");
@@ -251,6 +253,8 @@ public class FilterCollector {
             if (filterUI.isSelected()) {
                 if (filterUI.getInfo().getType() == FilterType.CAPTAIN) {
                     captainFilterUI.add(filterUI);
+                } else if (filterUI.getInfo().getType() == FilterType.SPECIAL) {
+                    specialFilterUI.add(filterUI);
                 } else if (filterUI.getInfo().getType() == FilterType.COLOR) {
                     colorsFilterUI.add(filterUI);
                 } else if (filterUI.getInfo().getType() == FilterType.CLASS && filterUI.getInfo().getSubtype() == FilterType.Subtype.Class1) {
@@ -276,6 +280,21 @@ public class FilterCollector {
                     captainFilter.append(filterUI.getInfo().getDatabasePattern());
                     if (captainFilterIterator.hasNext()) captainFilter.append(" AND ");
                     else captainFilter.append(")");
+                }
+            }
+        }
+        StringBuilder specialFilter = null;
+        {
+            if (specialFilterUI.size() > 0) {
+                thereIsSpecial = true;
+                Iterator<FilterUI> specialFilterIterator = specialFilterUI.iterator();
+                specialFilter = new StringBuilder();
+                specialFilter.append("id IN (SELECT special_id FROM special_description_table WHERE ");
+                while (specialFilterIterator.hasNext()) {
+                    FilterUI filterUI = specialFilterIterator.next();
+                    specialFilter.append(filterUI.getInfo().getDatabasePattern());
+                    if (specialFilterIterator.hasNext()) specialFilter.append(" AND ");
+                    else specialFilter.append(")");
                 }
             }
         }
@@ -350,8 +369,13 @@ public class FilterCollector {
             finalQuery.append(captainFilter.toString());
         }
 
+        if (thereIsSpecial) {
+            if (thereIsCaptain) finalQuery.append("AND");
+            finalQuery.append(specialFilter.toString());
+        }
+
         if (thereIsTreasure) {
-            if (thereIsCaptain) finalQuery.append(" AND ");
+            if (thereIsSpecial) finalQuery.append(" AND ");
             finalQuery.append(treasureFilter.toString());
         }
 

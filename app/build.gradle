@@ -16,7 +16,7 @@ android {
                 app_revision: incremental number caused by bug in app
                 database_revision: incremental number caused by bag in database that are resolved in app
         */
-        versionName "Chopper-3.1.0"
+        versionName "Chopper-3.2.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

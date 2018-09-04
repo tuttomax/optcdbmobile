@@ -21,7 +21,8 @@ public class SpecialFilterCreator extends FilterCreator {
 
         String label = (String) args[0];
         Object databasePattern = args[1];
-        if (databasePattern instanceof String) specialPattern = (String) databasePattern;
+        if (databasePattern instanceof String)
+            specialPattern = String.format(basePattern, (String) databasePattern);
         else if (databasePattern instanceof String[]) {
             String[] strings = (String[]) databasePattern;
             StringBuilder builder = new StringBuilder();
