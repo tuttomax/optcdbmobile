@@ -1,5 +1,8 @@
 # optcdbmobile
 Wrapper mobile of http://optc-db.github.io
+
+[Reddit](https://www.reddit.com/r/optcdbmobile)
+
 # Issue
    Create isue here on [github - issues](https://github.com/tuttomax/optcdbmobile/issues) or
    post message on [discord](https://discord.gg/wjUKbsn)
