@@ -52,6 +52,8 @@ public class Skull {
 
     private static final int DOFFY = 9020;
 
+    private static final int ENERU = 9021;
+
     private static final Map<String, Integer> idMap = new HashMap<String, Integer>() {{
         put("skullSTR", STR);
         put("skullQCK", QCK);
@@ -76,7 +78,10 @@ public class Skull {
         put("skullYonji", YONJI);
 
         put("skullDoffy", DOFFY);
+
+        put("skullEneru", ENERU);
     }};
+
 
     private static final Map<Integer, String> idName = new HashMap<Integer, String>() {{
         put(STR, "skullSTR");
@@ -102,6 +107,8 @@ public class Skull {
         put(YONJI, "skullYonji");
 
         put(DOFFY, "skullDoffy");
+
+        put(ENERU, "skullEneru");
     }};
 
     private static final Map<Integer, String> imageUrlMap = new HashMap<Integer, String>() {{
@@ -128,6 +135,9 @@ public class Skull {
         put(YONJI, "https://onepiece-treasurecruise.com/wp-content/uploads/Jerma_skull_f5.png");
 
         put(DOFFY, "https://onepiece-treasurecruise.com/wp-content/uploads/Doflamingo_skull_f.png");
+
+        put(ENERU, "https://onepiece-treasurecruise.com/wp-content/uploads/Eneru_skull_f.png");
+
     }};
 
 
