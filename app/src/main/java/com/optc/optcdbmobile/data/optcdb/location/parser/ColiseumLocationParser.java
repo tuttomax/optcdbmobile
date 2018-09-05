@@ -30,6 +30,7 @@ public class ColiseumLocationParser extends LocationParser {
 
     public ColiseumLocationParser(byte type) {
         super(type);
+
     }
 
     @Override
