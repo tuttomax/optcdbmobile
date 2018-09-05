@@ -68,7 +68,7 @@ public class SingleLinePreference extends Preference {
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
-        holder.setDividerAllowedAbove(true);
+        holder.setDividerAllowedAbove(false);
         holder.setDividerAllowedBelow(true);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

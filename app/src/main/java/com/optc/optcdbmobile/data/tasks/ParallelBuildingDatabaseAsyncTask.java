@@ -18,7 +18,6 @@ package com.optc.optcdbmobile.data.tasks;
 
 import android.os.AsyncTask;
 
-import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.threading.Task;
 import com.optc.optcdbmobile.data.database.threading.TaskCallback;
@@ -32,13 +31,13 @@ import com.optc.optcdbmobile.data.database.threading.tasks.FamiliesPopulateTask;
 import com.optc.optcdbmobile.data.database.threading.tasks.TagsPopulateTask;
 import com.optc.optcdbmobile.data.database.threading.tasks.UnitsPopulateTask;
 
-public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, Float> {
+public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, Boolean> {
 
-    private AsyncTaskListener<Float> listener;
+    private AsyncTaskListener<Boolean> listener;
     private OPTCDatabase database;
     private TaskDelegate delegate;
 
-    public ParallelBuildingDatabaseAsyncTask(AsyncTaskListener<Float> listener) {
+    public ParallelBuildingDatabaseAsyncTask(AsyncTaskListener<Boolean> listener) {
         this.listener = listener;
     }
 
@@ -54,7 +53,7 @@ public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, F
     }
 
     @Override
-    protected Float doInBackground(Void... voids) {
+    protected Boolean doInBackground(Void... voids) {
 
         try {
             database.clearAllTables();
@@ -78,14 +77,14 @@ public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, F
             delegate.awaitTermination(40);
 
         } catch (Exception ex) {
-            return -1f;
+            return false;
         }
 
-        return (Float) com.optc.optcdbmobile.data.optcdb.API.getData(Constants.API.VERSION_TYPE);
+        return true;
     }
 
     @Override
-    protected void onPostExecute(Float returnedValue) {
+    protected void onPostExecute(Boolean returnedValue) {
         if (listener != null) {
             listener.onPostExecute(returnedValue);
         }

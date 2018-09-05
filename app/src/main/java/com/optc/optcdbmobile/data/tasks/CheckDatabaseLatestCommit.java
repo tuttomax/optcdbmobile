@@ -14,10 +14,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class CheckDatabaseLatestCommit extends AsyncTask<Void, Void, CheckDatabaseLatestCommit.Commit> {
-    private AsyncTaskListener<Commit> listener;
+public class CheckDatabaseLatestCommit extends AsyncTask<Void, Void, CheckDatabaseLatestCommit.CommitInfo> {
+    private AsyncTaskListener<CommitInfo> listener;
 
-    public void setListener(AsyncTaskListener<Commit> listener) {
+    public void setListener(AsyncTaskListener<CommitInfo> listener) {
         this.listener = listener;
     }
 
@@ -29,7 +29,7 @@ public class CheckDatabaseLatestCommit extends AsyncTask<Void, Void, CheckDataba
     }
 
     @Override
-    protected Commit doInBackground(Void... voids) {
+    protected CommitInfo doInBackground(Void... voids) {
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(Constants.Database.GITHUB_LATEST_COMMITS).openConnection();
@@ -37,7 +37,7 @@ public class CheckDatabaseLatestCommit extends AsyncTask<Void, Void, CheckDataba
             Gson gson = new Gson();
             JsonArray array = gson.fromJson(new BufferedReader(new InputStreamReader(connection.getInputStream())), JsonArray.class);
             if (array != null && array.size() > 0) {
-                return gson.fromJson(array.get(0), Commit.class);
+                return gson.fromJson(array.get(0), CommitInfo.class);
             } else {
                 Log.e(CheckDatabaseLatestCommit.class.getSimpleName(), "No recent commit");
             }
@@ -54,39 +54,58 @@ public class CheckDatabaseLatestCommit extends AsyncTask<Void, Void, CheckDataba
     }
 
     @Override
-    protected void onPostExecute(Commit commit) {
+    protected void onPostExecute(CommitInfo commit) {
         if (listener != null) {
             listener.onPostExecute(commit);
         }
     }
 
-    public static class Commit {
-        private String message;
-        private Committer committer;
+    public static class CommitInfo {
+        private String sha;
+        private Commit commit;
 
-        public Commit(String message, Committer committer) {
-            this.message = message;
-            this.committer = committer;
+        public CommitInfo(String sha, Commit commit) {
+            this.sha = sha;
+            this.commit = commit;
         }
 
-        public String getMessage() {
-            return message;
+        public String getSha() {
+            return sha;
         }
 
-        public Committer getCommitter() {
-            return committer;
+        public Commit getCommit() {
+            return commit;
         }
 
-        public static class Committer {
-            private String date;
+        public static class Commit {
+            private String message;
+            private Committer committer;
 
-            public Committer(String date) {
-                this.date = date;
+            public Commit(String message, Committer committer) {
+                this.message = message;
+                this.committer = committer;
             }
 
-            public String getDate() {
-                return date;
+            public String getMessage() {
+                return message;
+            }
+
+            public Committer getCommitter() {
+                return committer;
+            }
+
+            public static class Committer {
+                private String date;
+
+                public Committer(String date) {
+                    this.date = date;
+                }
+
+                public String getDate() {
+                    return date;
+                }
             }
         }
+
     }
 }

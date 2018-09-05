@@ -42,7 +42,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (key.equals(getString(R.string.pref_database_version_key))) {
-                model.setDatabaseVersion(sharedPreferences.getFloat(key, -1f));
+                model.setDatabaseVersion(sharedPreferences.getString(key, ""));
             } else if (key.equals(Constants.Settings.pref_update_available)) {
                 model.setUpdateAvailable(sharedPreferences.getBoolean(key, false));
             }
@@ -60,10 +60,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
             }
         });
 
-        model.getDatabaseVersion().observe(this, new Observer<Float>() {
+        model.getDatabaseVersion().observe(this, new Observer<String>() {
             @Override
-            public void onChanged(@Nullable Float newVersion) {
-                findPreference(getString(R.string.pref_database_version_key)).setSummary(String.valueOf(newVersion));
+            public void onChanged(@Nullable String sha) {
+                findPreference(getString(R.string.pref_database_version_key)).setSummary(String.format("Latest commit: %s", sha));
             }
         });
 
@@ -78,7 +78,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
             }
         });
 
-        Float currentVersion = PreferenceManager.getDefaultSharedPreferences(getContext()).getFloat(getString(R.string.pref_database_version_key), -1);
+        String currentVersion = PreferenceManager.getDefaultSharedPreferences(getContext()).getString(getString(R.string.pref_database_version_key), "");
         model.setDatabaseVersion(currentVersion);
 
         model.setAppVersion(String.format("%s [%d]", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
@@ -96,7 +96,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements AsyncT
             }
 
             if (key.equals(getString(R.string.pref_rebuild_database_key))) {
-                OPTCDatabaseRepository.getInstance(getActivity().getApplication()).BuildDatabase(SettingsFragment.this);
+                OPTCDatabaseRepository.getInstance(getActivity().getApplication()).BuildAndSetLatestCommit(this);
                 return true;
             }
         }

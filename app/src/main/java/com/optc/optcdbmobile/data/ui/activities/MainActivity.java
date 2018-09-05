@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
             databaseRepository.BuildDatabase(this);
             PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_first_launch, false).apply();
         } else {
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_check_done_key, false).commit();
             databaseRepository.CheckVersion(this);
         }
 
@@ -181,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
 
     @Override
     public void onBackPressed() {
-
+        //TODO Set checked inside drawer on back key press
         if (drawer.isDrawerOpen(Gravity.START)) drawer.closeDrawer(Gravity.START);
 
         FragmentManager.BackStackEntry entry = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1);

@@ -26,7 +26,7 @@ import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.database.threading.ListTaskDialog;
 import com.optc.optcdbmobile.data.database.threading.TaskDelegate;
 
-public class ParallelBuildingDatabaseAsyncTaskListener implements AsyncTaskListener<Float> {
+public class ParallelBuildingDatabaseAsyncTaskListener implements AsyncTaskListener<Boolean> {
     private AsyncTaskContext context;
     private View view;
 
@@ -41,24 +41,22 @@ public class ParallelBuildingDatabaseAsyncTaskListener implements AsyncTaskListe
     @Override
     public void onPreExecute() {
         PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                .putFloat(Constants.Settings.pref_database_version_key, -1f).apply();
+                .putString(Constants.Settings.pref_database_version_key, "").apply();
         dialog.show(context.getSupportFragmentManager(), ListTaskDialog.TAG);
     }
 
     @Override
-    public void onPostExecute(Float returnedValue) {
+    public void onPostExecute(Boolean noError) {
         dialog.dismiss();
-        if (returnedValue != null) {
+        if (noError != null) {
 
-            if (returnedValue > 0) {
-                PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                        .putFloat(Constants.Settings.pref_database_version_key, returnedValue).apply();
+            if (noError) {
                 Snackbar.make(view, "Database building complete", Snackbar.LENGTH_LONG).show();
                 PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_check_done_key, true).commit();
                 PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_update_available, false).commit();
             } else {
                 PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                        .putFloat(Constants.Settings.pref_database_version_key, -1f).apply();
+                        .putString(Constants.Settings.pref_database_version_key, "").apply();
                 PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_check_done_key, false).commit();
                 PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putBoolean(Constants.Settings.pref_update_available, true).commit();
 

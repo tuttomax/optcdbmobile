@@ -15,7 +15,7 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 
-public class CheckDatabaseLatestCommitTaskListener implements AsyncTaskListener<CheckDatabaseLatestCommit.Commit> {
+public class CheckDatabaseLatestCommitTaskListener implements AsyncTaskListener<CheckDatabaseLatestCommit.CommitInfo> {
     private AsyncTaskContext context;
     private String currentCommitString;
     private boolean autoDownload;
@@ -32,19 +32,35 @@ public class CheckDatabaseLatestCommitTaskListener implements AsyncTaskListener<
     }
 
     @Override
-    public void onPostExecute(final CheckDatabaseLatestCommit.Commit value) {
+    public void onPostExecute(final CheckDatabaseLatestCommit.CommitInfo value) {
         try {
-            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
-                    .putBoolean(Constants.Settings.pref_update_available, true)
-                    .apply();
+
 
             Date currentCommit = currentCommitString.isEmpty() ? null : ISO8601Utils.parse(currentCommitString, new ParsePosition(0));
-            Date newCommit = ISO8601Utils.parse(value.getCommitter().getDate(), new ParsePosition(0));
+            Date newCommit = ISO8601Utils.parse(value.getCommit().getCommitter().getDate(), new ParsePosition(0));
+
             final boolean updateAvailable = (currentCommit == null || currentCommit.before(newCommit));
+
+            PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
+                    .putBoolean(Constants.Settings.pref_update_available, updateAvailable)
+                    .apply();
+
+
             if (updateAvailable) {
+
                 if (autoDownload) {
                     Snackbar.make(context.getView(), "Updating database...", Snackbar.LENGTH_SHORT).show();
                     OPTCDatabaseRepository.getInstance(context.getView().getContext()).BuildDatabase(context);
+
+                    PreferenceManager.getDefaultSharedPreferences(context.getContext())
+                            .edit()
+                            .putString(Constants.Settings.pref_database_version_key, value.getSha())
+                            .apply();
+
+                    PreferenceManager.getDefaultSharedPreferences(context.getContext())
+                            .edit().putString(Constants.Database.latest_commit_key, value.getCommit().getCommitter().getDate())
+                            .apply();
+
                 } else {
                     Snackbar.make(context.getView(), "New database version available", Snackbar.LENGTH_LONG)
                             .setActionTextColor(Color.WHITE)
@@ -53,7 +69,7 @@ public class CheckDatabaseLatestCommitTaskListener implements AsyncTaskListener<
                                 public void onClick(View view) {
                                     new AlertDialog.Builder(context.getContext())
                                             .setTitle("Database update - What's new?")
-                                            .setMessage(value.getMessage())
+                                            .setMessage(value.getCommit().getMessage())
                                             .setNegativeButton("OK", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
@@ -65,6 +81,15 @@ public class CheckDatabaseLatestCommitTaskListener implements AsyncTaskListener<
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     dialog.dismiss();
                                                     OPTCDatabaseRepository.getInstance(context.getView().getContext()).BuildDatabase(context);
+                                                    PreferenceManager.getDefaultSharedPreferences(context.getContext())
+                                                            .edit()
+                                                            .putString(Constants.Settings.pref_database_version_key, value.getSha())
+                                                            .apply();
+
+                                                    PreferenceManager.getDefaultSharedPreferences(context.getContext())
+                                                            .edit().putString(Constants.Database.latest_commit_key, value.getCommit().getCommitter().getDate())
+                                                            .apply();
+
                                                 }
                                             })
                                             .show();
@@ -75,6 +100,7 @@ public class CheckDatabaseLatestCommitTaskListener implements AsyncTaskListener<
         } catch (ParseException e) {
             e.printStackTrace();
         } finally {
+
             PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit()
                     .putBoolean(Constants.Settings.pref_update_available, false)
                     .apply();
