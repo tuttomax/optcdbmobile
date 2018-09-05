@@ -60,7 +60,7 @@ public class UnitsParser extends BaseParser<List<Unit>> {
             }
 
             /*  HACK
-             *  Needed for null characters between valid character wich id should not be skipped
+             *  Needed for null characters between valid character which id should not be skipped
              */
             if (null_count > 0 && null_count < 10) {
                 null_count = 0;
@@ -163,15 +163,5 @@ public class UnitsParser extends BaseParser<List<Unit>> {
         return new String[]{type1, type2};
     }
 
-    /**
-     * Skip id for unit when there is null character between valid character
-     *
-     * @param lastValidId
-     * @param lastNullId
-     */
-    private void skip(int lastValidId, int lastNullId) {
-        if (id == lastValidId) {
-            id = lastNullId;
-        }
-    }
+
 }
