@@ -32,7 +32,7 @@ public class CheckAppLatestRelease extends AsyncTask<Void, Void, UpdateManager.U
 
     @Override
     protected UpdateManager.UpdateInfo doInBackground(Void... voids) {
-        HttpURLConnection connection;
+        HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) new URL(Constants.APP.GITHUB_LATEST_RELEASE).openConnection();
             connection.setRequestMethod("GET");
@@ -44,6 +44,10 @@ public class CheckAppLatestRelease extends AsyncTask<Void, Void, UpdateManager.U
             mex.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
         return null;
     }

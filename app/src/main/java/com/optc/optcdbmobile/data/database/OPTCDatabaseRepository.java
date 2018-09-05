@@ -43,8 +43,8 @@ import com.optc.optcdbmobile.data.database.entities.Special;
 import com.optc.optcdbmobile.data.database.entities.SpecialDescription;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
-import com.optc.optcdbmobile.data.tasks.CheckDatabaseVersionAsyncTask;
-import com.optc.optcdbmobile.data.tasks.CheckDatabaseVersionAsyncTaskListener;
+import com.optc.optcdbmobile.data.tasks.CheckDatabaseLatestCommit;
+import com.optc.optcdbmobile.data.tasks.CheckDatabaseLatestCommitTaskListener;
 import com.optc.optcdbmobile.data.tasks.ParallelBuildingDatabaseAsyncTask;
 import com.optc.optcdbmobile.data.tasks.ParallelBuildingDatabaseAsyncTaskListener;
 
@@ -136,8 +136,9 @@ public class OPTCDatabaseRepository {
         if (sharedPreferences.getBoolean(Constants.Settings.pref_check_done_key, false)) return;
 
         if (thereIsConnection(context.getView())) {
-            CheckDatabaseVersionAsyncTask task = new CheckDatabaseVersionAsyncTask(new CheckDatabaseVersionAsyncTaskListener(context));
-            task.setPreferences(sharedPreferences);
+            CheckDatabaseLatestCommitTaskListener listener = new CheckDatabaseLatestCommitTaskListener(context);
+            CheckDatabaseLatestCommit task = new CheckDatabaseLatestCommit();
+            task.setListener(listener);
             task.execute();
         }
 

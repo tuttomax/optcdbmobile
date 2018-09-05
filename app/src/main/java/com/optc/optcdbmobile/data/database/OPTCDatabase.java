@@ -97,6 +97,7 @@ public abstract class OPTCDatabase extends RoomDatabase {
             synchronized (OPTCDatabase.class) {
                 if (INSTANCE == null)
                     INSTANCE = Room.databaseBuilder(context, OPTCDatabase.class, "optc_database")
+                            .fallbackToDestructiveMigration()
                             .build();
             }
         }

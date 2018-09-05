@@ -7,7 +7,7 @@ android {
         applicationId "com.optc.optcdbmobile"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 4
+        versionCode 5
         /*
             VERSIONING:
             name-[main_version].[app_revision]-[database_revision]
@@ -16,7 +16,7 @@ android {
                 app_revision: incremental number caused by bug in app
                 database_revision: incremental number caused by bag in database that are resolved in app
         */
-        versionName "Chopper-3.2.1"
+        versionName "Chopper-4.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -42,9 +42,8 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:1.1.1-rc1"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1-rc1"
     // Lifecycle components
-    def archLifecycleVersion = "1.1.1"
-    implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
-    annotationProcessor "android.arch.lifecycle:compiler:$archLifecycleVersion"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
     implementation 'org.jsoup:jsoup:1.10.3'
     implementation files('libs/js.jar')
 
@@ -56,5 +55,8 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+
+    implementation 'com.google.code.gson:gson:2.8.5'
+
 
 }

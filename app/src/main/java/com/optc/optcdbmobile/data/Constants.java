@@ -76,10 +76,9 @@ public class Constants {
 
     }
 
-    public class DatabaseVersionTask {
-        public final static byte NO_ACTION = 0;
-        public final static byte ACTION_SHOW_UPDATE = 1;
-        public final static byte ACTION_AUTOMATIC_UPDATE = 2;
+    public static class Database {
+        public final static String GITHUB_LATEST_COMMITS = "https://api.github.com/repos/optc-db/optc-db.github.io/commits";
+        public final static String latest_commit_key = "latest_commit";
 
     }
 }

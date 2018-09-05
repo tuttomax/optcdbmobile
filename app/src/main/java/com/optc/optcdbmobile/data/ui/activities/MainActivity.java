@@ -47,8 +47,6 @@ import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
 import com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.CharacterTableFragment;
 import com.optc.optcdbmobile.data.ui.activities.fragments.Settings.SettingsFragment;
 
-import java.util.concurrent.ExecutionException;
-
 
 public class MainActivity extends AppCompatActivity implements AsyncTaskContext {
 
@@ -58,13 +56,9 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
             if (grantResults.length != 0) {
                 int result = grantResults[0];
                 if (result == PackageManager.PERMISSION_GRANTED) {
-                    try {
-                        new UpdateManager(this, this).CheckUpdate();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
+                    new UpdateManager(this, this).CheckUpdate();
+
                 } else {
                     Snackbar.make(getView(), "Can't download update on Download Public folder", BaseTransientBottomBar.LENGTH_LONG)
                             .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
@@ -99,13 +93,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         } else {
-            try {
-                new UpdateManager(this, this).CheckUpdate();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            new UpdateManager(this, this).CheckUpdate();
         }
 
 

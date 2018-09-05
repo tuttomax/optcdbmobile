@@ -230,6 +230,8 @@ public class API {
 
             // Note the forth argument is 1, which means the JavaScript source has
             // been compressed to only one line using something like YUI
+            //TODO Implement rhino.evaluateString with Reader
+
             rhino.evaluateString(scope, "var window = {" + objName + ":null};" + dump, "JavaScript", 1, null);
             // Get the functionName defined in JavaScriptCode
             Object x = scope.get("window", scope);

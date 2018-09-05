@@ -18,6 +18,10 @@ package com.optc.optcdbmobile.data.optcdb.api_parser;
 
 import com.optc.optcdbmobile.data.optcdb.BaseParser;
 
+/**
+ * @deprecated See {@link com.optc.optcdbmobile.data.tasks.CheckDatabaseLatestCommit}
+ */
+@Deprecated
 public class VersionParser extends BaseParser<Float> {
     @Override
     public Float parse(Object jsParsed) {
