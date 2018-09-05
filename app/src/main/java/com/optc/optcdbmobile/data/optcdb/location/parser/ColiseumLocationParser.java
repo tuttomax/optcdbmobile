@@ -35,24 +35,28 @@ public class ColiseumLocationParser extends LocationParser {
     @Override
     public List<Object> parse(Object jsParsed, int lastUsedId) {
         NativeArray array = (NativeArray) jsParsed;
-        if (array.size() > 1)
-            throw new RuntimeException(String.format("Invalid size:%d. Should be 1", array.size()));
-        int startId = lastUsedId + 1;
         List<Object> list = new ArrayList<>();
 
-        Location location;
-        ColiseumLocation coliseumLocation;
+        int startId = lastUsedId + 1;
 
-        NativeObject obj = (NativeObject) array.get(0);
+        for (int index = 0; index < array.size(); index++) {
+            Location location;
+            ColiseumLocation coliseumLocation;
 
-        location = parseGeneralData(obj, startId);
-        list.add(location);
+            NativeObject obj = (NativeObject) array.get(0);
 
-        String slefty = toType(obj.get("slefty"), String.class);
-        coliseumLocation = new ColiseumLocation(startId, slefty);
-        list.add(coliseumLocation);
+            location = parseGeneralData(obj, startId);
+            list.add(location);
 
-        list.addAll(parseDataDrops(obj, startId));
+            String slefty = toType(obj.get("slefty"), String.class);
+            coliseumLocation = new ColiseumLocation(startId, slefty);
+            list.add(coliseumLocation);
+
+            list.addAll(parseDataDrops(obj, startId));
+
+            startId++;
+        }
+
 
         return list;
     }

@@ -71,8 +71,11 @@ public abstract class LocationParser extends BaseParser<List<Object>> {
                 Object _obj = entry.getValue();
                 NativeArray dropsArray = (NativeArray) _obj;
                 for (int dropsIndex = 0; dropsIndex < dropsArray.size(); dropsIndex++) {
+                    Object unitIdObj = dropsArray.get(dropsIndex);
 
-                    Integer unitId = toType(dropsArray.get(dropsIndex), Integer.class);
+                    if (!(unitIdObj instanceof Double)) continue;
+
+                    Integer unitId = toType(unitIdObj, Integer.class);
 
                     locationDrops = new LocationDrops(
                             startId,

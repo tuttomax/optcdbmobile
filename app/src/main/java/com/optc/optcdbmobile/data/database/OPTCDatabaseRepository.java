@@ -43,6 +43,7 @@ import com.optc.optcdbmobile.data.database.entities.Special;
 import com.optc.optcdbmobile.data.database.entities.SpecialDescription;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 import com.optc.optcdbmobile.data.tasks.AsyncTaskContext;
+import com.optc.optcdbmobile.data.tasks.AsyncTaskListener;
 import com.optc.optcdbmobile.data.tasks.CheckDatabaseLatestCommit;
 import com.optc.optcdbmobile.data.tasks.CheckDatabaseLatestCommitTaskListener;
 import com.optc.optcdbmobile.data.tasks.ParallelBuildingDatabaseAsyncTask;
@@ -120,13 +121,14 @@ public class OPTCDatabaseRepository {
         return false;
     }
 
-    public void BuildDatabase(AsyncTaskContext context) {
+    public void BuildDatabase(final AsyncTaskContext context) {
         if (thereIsValidConnection(context.getView())) {
             ParallelBuildingDatabaseAsyncTaskListener listner = new ParallelBuildingDatabaseAsyncTaskListener(context);
             ParallelBuildingDatabaseAsyncTask databaseTask = new ParallelBuildingDatabaseAsyncTask(listner);
             databaseTask.setDatabase(database);
             databaseTask.setDelegate(listner.getDelegate());
             databaseTask.execute();
+
 
         }
     }
@@ -144,6 +146,25 @@ public class OPTCDatabaseRepository {
 
     }
 
+    public void BuildAndSetLatestCommit(final AsyncTaskContext context) {
+        BuildDatabase(context);
+        final CheckDatabaseLatestCommit update_latest_commit = new CheckDatabaseLatestCommit();
+        update_latest_commit.setListener(new AsyncTaskListener<CheckDatabaseLatestCommit.CommitInfo>() {
+            @Override
+            public void onPreExecute() {
+            }
+
+            @Override
+            public void onPostExecute(CheckDatabaseLatestCommit.CommitInfo value) {
+                PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putString(Constants.Settings.pref_database_version_key, value.getSha()).commit();
+                PreferenceManager.getDefaultSharedPreferences(context.getContext())
+                        .edit().putString(Constants.Database.latest_commit_key, value.getCommit().getCommitter().getDate())
+                        .apply();
+
+            }
+        });
+        update_latest_commit.execute();
+    }
 
     public List<Unit> getUnits() {
         return database.unitDAO().getUnits();
