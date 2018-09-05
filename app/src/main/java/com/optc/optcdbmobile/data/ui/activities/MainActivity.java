@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
 
         databaseRepository = OPTCDatabaseRepository.getInstance(getApplication());
         if (isFirstLaunch) {
-            databaseRepository.BuildDatabase(this);
+            databaseRepository.BuildAndSetLatestCommit(this);
             PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_first_launch, false).apply();
         } else {
             PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Constants.Settings.pref_check_done_key, false).commit();

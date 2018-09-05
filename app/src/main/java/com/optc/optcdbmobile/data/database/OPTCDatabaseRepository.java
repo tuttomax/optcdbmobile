@@ -159,7 +159,7 @@ public class OPTCDatabaseRepository {
                 PreferenceManager.getDefaultSharedPreferences(context.getContext()).edit().putString(Constants.Settings.pref_database_version_key, value.getSha()).commit();
                 PreferenceManager.getDefaultSharedPreferences(context.getContext())
                         .edit().putString(Constants.Database.latest_commit_key, value.getCommit().getCommitter().getDate())
-                        .apply();
+                        .commit();
 
             }
         });
