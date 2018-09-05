@@ -45,19 +45,28 @@ public class UnitsParser extends BaseParser<List<Unit>> {
         //id used for foreign key constraint equals database id
         int reference_id = 0;
 
+        int null_count = 0;
+
         for (NativeArray array : temp) {
             int index = 0;
 
             reference_id++;
             String name = toType(array.get(index++), String.class);
 
-            if (name == null || name.isEmpty()) continue;
 
+            if (name == null || name.isEmpty()) {
+                null_count++;
+                continue;
+            }
 
-            skip(2245, 2246);
+            /*  HACK
+             *  Needed for null characters between valid character wich id should not be skipped
+             */
+            if (null_count > 0 && null_count < 10) {
+                null_count = 0;
+                id += null_count;
+            } else ++id;
 
-
-            ++id;
 
             Object obj = array.get(index++);
             types = parseTypes(obj);
