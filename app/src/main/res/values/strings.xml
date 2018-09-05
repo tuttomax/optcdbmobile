@@ -6,7 +6,7 @@
     <!-- Settings string -->
     <!-- Database -->
     <string name="pref_database_version_key">database_version</string>
-    <string name="pref_database_version_title">Database version</string>
+    <string name="pref_database_version_title">Version</string>
 
 
     <string name="pref_wifi_only_key">wifi_download</string>
@@ -19,7 +19,7 @@
     <string name="pref_auto_download_title">Updates database automatically</string>
     <string name="pref_auto_download_default_value">false</string>
     <string name="pref_database_cat_download">Download</string>
-    <string name="pref_database_cat_version_title">Version</string>
+    <string name="pref_database_cat_version_title">Database</string>
     <string name="pref_rebuild_database_title">Rebuild database</string>
     <string name="pref_rebuild_database_key">rebuild_database</string>
     <string name="pref_character_info_key">info_character</string>

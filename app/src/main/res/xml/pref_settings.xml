@@ -31,16 +31,12 @@
             app:summaryColor="@color/primaryLightTextColor"
             app:titleColor="@color/primaryLightTextColor" />
 
-        <com.optc.optcdbmobile.data.ui.activities.fragments.Settings.SingleLinePreference
-            android:defaultValue="-1"
-            android:enabled="false"
+        <Preference
+            android:defaultValue=""
             android:key="@string/pref_database_version_key"
-            android:persistent="false"
             android:selectable="false"
-            android:title="@string/pref_database_version_title"
-            app:backgroundColor="@color/secondaryDarkColor"
-            app:summaryColor="@color/infoColor"
-            app:titleColor="@color/secondaryDarkTextColor" />
+            android:persistent="true"
+            android:title="@string/pref_database_version_title" />
 
     </PreferenceCategory>
 
