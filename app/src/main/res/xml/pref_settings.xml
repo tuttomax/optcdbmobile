@@ -34,8 +34,8 @@
         <Preference
             android:defaultValue=""
             android:key="@string/pref_database_version_key"
-            android:selectable="false"
             android:persistent="true"
+            android:selectable="false"
             android:title="@string/pref_database_version_title" />
 
     </PreferenceCategory>
@@ -69,14 +69,22 @@
                 android:data="https://github.com/tuttomax/optcdbmobile" />
         </Preference>
 
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="Licenses">
         <Preference
-            android:key="@string/pref_open_source_key"
-            android:persistent="false"
-            android:title="@string/pref_open_source_title" />
-    </PreferenceCategory>
+            android:icon="@drawable/ic_reddit"
+            android:title="Reddit"
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://www.reddit.com/r/optcdbmobile/" />
+    </Preference>
+
+</PreferenceCategory>
+
+<PreferenceCategory android:title="Licenses">
+<Preference
+    android:key="@string/pref_open_source_key"
+    android:persistent="false"
+    android:title="@string/pref_open_source_title" />
+</PreferenceCategory>
 
 
-</PreferenceScreen>
+    </PreferenceScreen>
