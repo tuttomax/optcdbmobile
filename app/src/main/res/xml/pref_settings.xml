@@ -71,20 +71,20 @@
 
         <Preference
             android:icon="@drawable/ic_reddit"
-            android:title="Reddit"
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:data="https://www.reddit.com/r/optcdbmobile/" />
-    </Preference>
+            android:title="Reddit">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://www.reddit.com/r/optcdbmobile/" />
+        </Preference>
 
-</PreferenceCategory>
+    </PreferenceCategory>
 
-<PreferenceCategory android:title="Licenses">
-<Preference
-    android:key="@string/pref_open_source_key"
-    android:persistent="false"
-    android:title="@string/pref_open_source_title" />
-</PreferenceCategory>
+    <PreferenceCategory android:title="Licenses">
+        <Preference
+            android:key="@string/pref_open_source_key"
+            android:persistent="false"
+            android:title="@string/pref_open_source_title" />
+    </PreferenceCategory>
 
 
-    </PreferenceScreen>
+</PreferenceScreen>
