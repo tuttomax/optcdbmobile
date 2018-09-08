@@ -28,7 +28,6 @@ public class UnitHelper {
     public static final String EVOLVER = "Evolver";
 
 
-
     public static final String UNIT_PARCELLABLE = "__UNIT__";
     public static final String UNIT_ID = "__id__";
     private final static Map<String, Integer> colorsId = new HashMap<String, Integer>() {{
@@ -38,6 +37,14 @@ public class UnitHelper {
         put(PSY_STRING, R.color.colorPSY);
         put(INT_STRING, R.color.colorINT);
     }};
+    private final static Map<String, Integer> darkColorsId = new HashMap<String, Integer>() {{
+        put(STR_STRING, R.color.colorDarkSTR);
+        put(QCK_STRING, R.color.colorDarkQCK);
+        put(DEX_STRING, R.color.colorDarkDEX);
+        put(PSY_STRING, R.color.colorDarkPSY);
+        put(INT_STRING, R.color.colorDarkINT);
+    }};
+
     private final static Map<String, Integer> classId = new HashMap<String, Integer>() {{
         put(FIGHTER_STRING, R.drawable.ic_fighter);
         put(SLASHER_STRING, R.drawable.ic_slasher);
@@ -51,12 +58,42 @@ public class UnitHelper {
         put(BOOSTER, R.drawable.ic_booster);
 
     }};
+
+    private final static Map<String, Integer> notesResidMap = new HashMap<String, Integer>() {{
+        put("captainProportional", R.string.captainProportional);
+        put("captainFixed", R.string.captainFixed);
+        put("fixed", R.string.fixed);
+        put("gOrbs", R.string.gOrbs);
+        put("noFixedPerc", R.string.noFixedPerc);
+        put("orb", R.string.orb);
+        put("poison", R.string.poison);
+        put("toxic", R.string.toxic);
+        put("random", R.string.random);
+        put("randomHeal", R.string.randomHeal);
+        put("randomHits", R.string.randomHits);
+        put("specialProportional", R.string.specialProportional);
+        put("stages", R.string.stages);
+        put("silence", R.string.silence);
+        put("rewind", R.string.rewind);
+        put("ignoreBarrier", R.string.ignoreBarrier);
+        put("zombie", R.string.zombie);
+        put("colorAffinity", R.string.colorAffinity);
+        put("instantKill", R.string.instantKill);
+        put("additionalDamage", R.string.additionalDamage);
+        put("beneficial", R.string.beneficial);
+        put("enrage", R.string.enrage);
+
+    }};
+
+
     public static final int THUMB_WIDTH = 96;
     public static final int THUMB_HEIGHT = 96;
 
     public static int getTypeColor(String colorName, Resources res) {
         return ResourcesCompat.getColor(res, colorsId.get(colorName), null);
     }
+
+    private final static String packageName = "com.optc.optcdbmobile";
 
     public static String getStarsToString(Float stars) {
         if (stars == 5.5f) return "5+";
@@ -68,5 +105,13 @@ public class UnitHelper {
         return ResourcesCompat.getDrawable(res, classId.get(name), null);
     }
 
+    public static int getDarkTypeColor(String colorName, Resources res) {
+        return ResourcesCompat.getColor(res, darkColorsId.get(colorName), null);
+    }
+
+    public static String getNote(Resources res, String noteKey) {
+        int id = notesResidMap.get(noteKey);
+        return res.getString(id);
+    }
 
 }

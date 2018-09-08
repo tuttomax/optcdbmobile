@@ -50,7 +50,6 @@ public class SpannableBuilder {
         return this;
     }
 
-
     public SpannableBuilder addSpan(Object what, int flags) {
         builder.setSpan(what, lastStart, lastEnd, flags);
         return this;

@@ -50,6 +50,14 @@ public class AvoidCollisionMediator implements FilterMediator {
                         callback.OnChangedAfterInform(index, FilterUI.PAYLOAD_SELECTED);
                     }
                 }
+            } else if (type == FilterType.LIMIT) {
+                List<Integer> indices = getIndices(sender);
+                if (indices.size() >= 3) {
+                    for (Integer index : indices) {
+                        internalList.get(index).setSelected(false, true);
+                        callback.OnChangedAfterInform(index, FilterUI.PAYLOAD_SELECTED);
+                    }
+                }
             }
 
         }

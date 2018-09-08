@@ -4,6 +4,7 @@ import com.optc.optcdbmobile.data.database.filters.creator.CaptainFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ClassFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ColorFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.FilterCreator;
+import com.optc.optcdbmobile.data.database.filters.creator.LimitBreakFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.SpecialFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.TreasureMapFilterCreator;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
@@ -162,7 +163,10 @@ public class FilterCollector {
         list.add(creator.get("Self-Orb controllers", "changes own orb into"));
         list.add(creator.get("Orb randomizer", "[Rr]andomizes all orbs"));
         list.add(creator.get("Orb switchers", "switches orbs between"));
-        list.add(creator.get("Orb matchers", "into matching orbs"));
+        list.add(creator.get("Orb matchers", new String[]{
+                "into [Mm]atching [Oo]rbs",
+                "orb into matching"
+        }));
         list.add(creator.get("Slot emptiers", "[eE]mpties all slots"));
         list.add(creator.get("\"Beneficial\" orbs enabler", "orbs \"beneficial\""));
         list.add(creator.get("Block orb removers", new String[]{
@@ -221,6 +225,26 @@ public class FilterCollector {
         list.add(creator.get("Chain lockers", "[lL]ocks the chain"));
         list.add(creator.get("Chain Multiplier Limit reducers", "Chain Multiplier Limit"));
         list.add(creator.get("Chain Coefficient Reduction reducers", "Chain Coefficient Reduction"));
+
+        //endregion
+
+        //region LIMIT
+        creator = new LimitBreakFilterCreator(mediator);
+        list.add(creator.getHeader());
+        list.add(creator.get("Enrage Potential Ability", "Enrage"));
+        list.add(creator.get("Reduce No Healing Potential Ability", " Reduce No Healing duration"));
+        list.add(creator.get("Critical Hit Potential Ability", "Critical Hit"));
+        list.add(creator.get("Slot Bind Self-reduction Potential Ability", "Slot Bind Self-reduction"));
+        list.add(creator.get("Barrier Penetration  Potential Ability", "Barrier Penetration"));
+        list.add(creator.get("Pinch Healing Potential Ability", "Pinch Healing"));
+        list.add(creator.get("Cooldown Reduction Potential Ability", "Cooldown Reduction"));
+        list.add(creator.get("Double Special Activation Potential Ability", "Double Special Activation"));
+        list.add(creator.get("STR Damage Reduction Potential Ability", "[STR] Damage Reduction"));
+        list.add(creator.get("DEX Damage Reduction Potential Ability", "[DEX] Damage Reduction"));
+        list.add(creator.get("QCK Damage Reduction Potential Ability", "[QCK] Damage Reduction"));
+        list.add(creator.get("PSY Damage Reduction Potential Ability", "[PSY] Damage Reduction"));
+        list.add(creator.get("INT Damage Reduction Potential Ability", "[INT] Damage Reduction"));
+
         //endregion
 
     }
@@ -236,6 +260,7 @@ public class FilterCollector {
         List<FilterUI> captainFilterUI = new ArrayList<>();
         List<FilterUI> treasureFilterUI = new ArrayList<>();
         List<FilterUI> specialFilterUI = new ArrayList<>();
+        List<FilterUI> limitFilterUI = new ArrayList<>();
 
         boolean thereIsColors = false;
         boolean thereIsClasses1 = false;
@@ -243,6 +268,7 @@ public class FilterCollector {
         boolean thereIsCaptain = false;
         boolean thereIsTreasure = false;
         boolean thereIsSpecial = false;
+        boolean thereIsLimit = false;
 
         StringBuilder finalQuery = new StringBuilder();
         finalQuery.append("SELECT * FROM unit_table WHERE ");
@@ -263,6 +289,8 @@ public class FilterCollector {
                     classes2FilterUI.add(filterUI);
                 } else if (filterUI.getInfo().getType() == FilterType.TREASURE_MAP) {
                     treasureFilterUI.add(filterUI);
+                } else if (filterUI.getInfo().getType() == FilterType.LIMIT) {
+                    limitFilterUI.add(filterUI);
                 } else selectedFilters.add(filterUI);
             }
         }
@@ -296,6 +324,31 @@ public class FilterCollector {
                     if (specialFilterIterator.hasNext()) specialFilter.append(" AND ");
                     else specialFilter.append(")");
                 }
+            }
+        }
+
+        StringBuilder limitFilter = null;
+        {
+            if (limitFilterUI.size() > 0) {
+                thereIsLimit = true;
+                Iterator<FilterUI> limitFilterIterator = limitFilterUI.iterator();
+                limitFilter = new StringBuilder();
+                StringBuilder nameBuilder = new StringBuilder();
+
+                int index = 0;
+                while (limitFilterIterator.hasNext()) {
+                    FilterUI filterUI = limitFilterIterator.next();
+                    nameBuilder.append(filterUI.getInfo().getDatabasePattern());
+                    if (limitFilterIterator.hasNext()) {
+                        nameBuilder.append(" OR ");
+                    }
+                }
+
+                limitFilter.append("id IN (SELECT id FROM potential_table ")
+                        .append(String.format("WHERE (%s) ", nameBuilder.toString()))
+                        .append("GROUP BY id ")
+                        .append(String.format("HAVING COUNT(id)=%d", limitFilterUI.size()))
+                        .append(")");
             }
         }
 
@@ -349,7 +402,7 @@ public class FilterCollector {
         }
         StringBuilder classes2Filter = null;
         {
-            if (classes1FilterUI.size() > 0) {
+            if (classes2FilterUI.size() > 0) {
                 thereIsClasses2 = true;
                 //Create composite class filter
                 Iterator<FilterUI> classFilterIterator = classes2FilterUI.iterator();
@@ -374,22 +427,30 @@ public class FilterCollector {
             finalQuery.append(specialFilter.toString());
         }
 
+        if (thereIsLimit) {
+            if (thereIsSpecial || thereIsCaptain) finalQuery.append("AND");
+            finalQuery.append(limitFilter.toString());
+        }
+
         if (thereIsTreasure) {
-            if (thereIsSpecial) finalQuery.append(" AND ");
+            if (thereIsLimit || thereIsSpecial || thereIsCaptain) finalQuery.append(" AND ");
             finalQuery.append(treasureFilter.toString());
         }
 
         if (thereIsColors) {
-            if (thereIsTreasure) finalQuery.append(" AND ");
+            if (thereIsTreasure || thereIsLimit || thereIsSpecial || thereIsCaptain)
+                finalQuery.append(" AND ");
             finalQuery.append(colorsFilter.toString());
         }
 
         if (thereIsClasses1) {
-            if (thereIsColors) finalQuery.append(" AND ");
+            if (thereIsColors || thereIsTreasure || thereIsLimit || thereIsSpecial || thereIsCaptain)
+                finalQuery.append(" AND ");
             finalQuery.append(classes1Filter.toString());
         }
         if (thereIsClasses2) {
-            if (thereIsClasses1) finalQuery.append(" AND ");
+            if (thereIsClasses1 || thereIsColors || thereIsTreasure || thereIsLimit || thereIsSpecial || thereIsCaptain)
+                finalQuery.append(" AND ");
             finalQuery.append(classes2Filter.toString());
         }
 
