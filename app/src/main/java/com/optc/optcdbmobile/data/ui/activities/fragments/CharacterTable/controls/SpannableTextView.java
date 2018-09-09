@@ -2,6 +2,7 @@ package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.contro
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.Html;
 import android.util.AttributeSet;
 
 import com.optc.optcdbmobile.R;
@@ -43,9 +44,15 @@ public abstract class SpannableTextView extends AppCompatTextView {
 
             if (params.size() > 0) {
                 String noteKey = params.get(0).trim();
+
                 if (!noteKey.isEmpty()) {
                     params.remove(0);
-                    String noteFormatted = String.format(UnitHelper.getNote(getResources(), noteKey), params.toArray());
+                    String fmt = UnitHelper.getNote(getResources(), noteKey);
+                    if ("colorAffinity".equals(noteKey) || ("rewind".equals(noteKey))) {
+                        fmt = Html.fromHtml(fmt).toString();
+                    }
+                    String noteFormatted = String.format(fmt, params.toArray());
+
                     note = note.replace(matcher.group(1), noteFormatted);
                 }
             } else {

@@ -26,42 +26,6 @@
     <string name="pref_character_info_title">Information about character</string>
     <string name="pref_character_info_dialog_title">Panel available :</string>
 
-
-    <!-- General -->
-    <!--
-    <string-array name="pref_character_info_indexes">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-    </string-array>
-    <string-array name="pref_character_info_names">
-        <item>Details</item>
-        <item>Stats</item>
-        <item>Abilities</item>
-        <item>Limit Break</item>
-        <item>Potential Abilities</item>
-        <item>Evolutions</item>
-        <item>Evolvs from</item>
-        <item>Units with the same special</item>
-        <item>Aliases</item>
-        <item>Tags</item>
-    </string-array>
-    <string-array name="pref_character_info_defaults">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>6</item>
-    </string-array>
-    -->
-
     <string name="pref_app_version_key">app_version</string>
     <string name="pref_app_version_title">Version</string>
 
@@ -75,4 +39,31 @@
     <string name="rcv">RCV</string>
     <string name="search_title">Search</string>
     <string name="pref_open_source_title">Open Source</string>
+
+
+    <!-- captain,special notes -->
+    <string name="captainProportional">The exact multiplier used to compute the damage is proportional to the crew\'s remaining HP and is higher the %1$s the HP is. The multiplier is calculated as %2$s.At full health the boost is equal to %3$s, with 1 HP left to %4$s.</string>
+    <string name="captainFixed">The multiplier is %1$s unless %2$s, in which case it is %3$s.</string>
+    <string name="fixed">Fixed damage means it entirely bypasses the enemy\'s defense.</string>
+    <string name="gOrbs">Characters with [G] orbs will deal 1.5x their normal damage. [G] orbs are affected by orb boosters.</string>
+    <string name="orb">Orb amplification only affects matching and opposite orbs and works both ways:matching orbs will deal %1$s more damage and opposite orbs will deal %1$s less damage.</string>
+    <string name="noFixedPerc">Specials that deal fixed damage or cut a percentage of the enemy\'s HP are not affected by this captain ability</string>
+    <string name="poison">Poison deals %1$s character\'s ATK in fixed damage that bypasses defensive buffs at the end of each turn.</string>
+    <string name="toxic">Toxic starts at %1$s character\'s attack and increases by %2$s at the end of every turn until %3$s damage per turn.</string>
+    <string name="random">Estimated random damage range: between %1$s HP and %2$s HP %3$s.</string>
+    <string name="randomHeal">Estimated random recovery range: between %1$s HP and %2$s HP</string>
+    <string name="randomHits">The target of each of the %1$s hits is chosen randomly.</string>
+    <string name="specialProportional">The exact multiplier used to compute the damage is proportional to the crew\'s remaining HP and is higher the %1$s the HP is. The multiplier is calculated as %2$s</string>
+    <string name="stages">The special can be used as soon as the first stage is reached.</string>
+    <string name="silence">This is called \'Special Bind\' in-game and refers to effects that prevent you from activating Special Abilities.</string>
+    <string name="rewind"><![CDATA[Some enemies can increase your cooldown by &#189; turns, this Sailor Ability decreases that by %1$s turn(s).]]></string>
+    <string name="ignoreBarrier">Damage that ignores damage negating abilities and barriers is similar to 6* Law\'s special, but only for this character.</string>
+    <string name="zombie">The protection only works when attacked by one single enemy and will leave the team with at least 1 HP; the effect will not work when attacked by multiples enemies at once.</string>
+    <string name="colorAffinity"><![CDATA[\'Color Affinity\' boosts color type advantages. For example, a STR unit normally deals 2x to a DEX unit and .5x to QCK. With this Color Affinity boost, it will deal 2*%1$sx to DEX and &#189;*%1$sx to QCK.]]></string>
+    <string name="instantKill">The chance for this character to instantly kill any enemy is %1$s. The kills can not be reset by exiting the game, but can change by passing the turn or killing an enemy on that stage.</string>
+    <string name="additionalDamage">Every attacking character gains additional damage if they land a hit no less than Good. Is affected by Conditional ATK boost and Affinity ATK boost</string>
+    <string name="beneficial">\'Beneficial\' orbs grant the same ATK boost as matching orbs and activate any Captain Abilities that are enabled by matching orbs.</string>
+    <string name="enrage">Enrage is activated when your crew took damage from your enemies or map effects in the previous turn or if you reduced your own HP in the same turn</string>
+    <string name="notes_pattern">(#\\{(.*?)\\})</string>
+
 </resources>

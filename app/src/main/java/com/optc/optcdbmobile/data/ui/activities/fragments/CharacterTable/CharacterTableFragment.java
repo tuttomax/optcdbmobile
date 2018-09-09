@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +25,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.database.entities.Unit;
-import com.optc.optcdbmobile.data.database.filters.FilterCollector;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.ui.activities.MainViewModel;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
@@ -183,7 +181,6 @@ public class CharacterTableFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(CharacterTableFragment.class.getSimpleName(), filterCollector.getQuery());
                 fromFilter = true;
                 mainViewModel.getUnitsWithFilter(filterCollector.getQuery());
             }

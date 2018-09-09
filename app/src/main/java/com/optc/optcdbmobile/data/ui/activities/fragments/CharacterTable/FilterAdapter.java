@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.optc.optcdbmobile.R;
-import com.optc.optcdbmobile.data.database.filters.FilterCollector;
 import com.optc.optcdbmobile.data.database.filters.FilterInfo;
 import com.optc.optcdbmobile.data.database.filters.FilterMediator;
 import com.optc.optcdbmobile.data.database.filters.FilterUI;
