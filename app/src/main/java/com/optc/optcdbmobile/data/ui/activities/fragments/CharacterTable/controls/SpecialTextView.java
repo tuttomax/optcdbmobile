@@ -13,7 +13,7 @@ import com.optc.optcdbmobile.data.ui.activities.general.SpannableBuilder;
 
 import java.util.List;
 
-public class SpecialTextView extends android.support.v7.widget.AppCompatTextView {
+public class SpecialTextView extends SpannableTextView {
 
     private Special special;
     private List<SpecialDescription> specialDescriptions;
@@ -51,7 +51,7 @@ public class SpecialTextView extends android.support.v7.widget.AppCompatTextView
                 }
             }
             if (special.getNotes() != null) {
-                builder.append(special.getNotes()).italic().newline();
+                builder.append(getFormattedNotes(special.getNotes())).italic().newline();
             }
         }
         setText(builder.getInternalBuilder(), BufferType.SPANNABLE);

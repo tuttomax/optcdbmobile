@@ -40,6 +40,7 @@ public class SailorTextView extends android.support.v7.widget.AppCompatTextView 
             }
         }
 
+
         setText(builder.getInternalBuilder(), BufferType.SPANNABLE);
     }
 
@@ -53,6 +54,8 @@ public class SailorTextView extends android.support.v7.widget.AppCompatTextView 
                 .background(ResourcesCompat.getColor(getResources(), R.color.secondaryColor, null))
                 .append(content).foreground(Color.WHITE)
                 .newline();
+
+
     }
 
 

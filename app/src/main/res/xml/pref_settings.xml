@@ -43,7 +43,7 @@
     <PreferenceCategory android:title="Application">
 
         <com.optc.optcdbmobile.data.ui.activities.fragments.Settings.SingleLinePreference
-            android:defaultValue="-1"
+            android:defaultValue=""
             android:enabled="false"
             android:key="@string/pref_app_version_key"
             android:persistent="false"

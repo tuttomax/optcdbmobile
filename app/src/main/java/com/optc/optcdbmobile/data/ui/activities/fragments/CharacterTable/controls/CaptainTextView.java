@@ -1,8 +1,6 @@
 package com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 
@@ -13,14 +11,13 @@ import com.optc.optcdbmobile.data.ui.activities.general.SpannableBuilder;
 
 import java.util.List;
 
-public class CaptainTextView extends android.support.v7.widget.AppCompatTextView {
+public class CaptainTextView extends SpannableTextView {
 
     private Captain captain;
     private List<CaptainDescription> captainDescriptions;
 
-    public CaptainTextView(Context context, @Nullable AttributeSet attrs) {
+    public CaptainTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setTextColor(Color.WHITE);
     }
 
     public CaptainTextView setCaptain(Captain captain) {
@@ -45,7 +42,7 @@ public class CaptainTextView extends android.support.v7.widget.AppCompatTextView
             }
 
             if (captain.getNotes() != null) {
-                builder.append(captain.getNotes()).italic();
+                builder.append(getFormattedNotes(captain.getNotes())).italic();
             }
         }
         setText(builder.getInternalBuilder(), BufferType.SPANNABLE);
@@ -60,7 +57,7 @@ public class CaptainTextView extends android.support.v7.widget.AppCompatTextView
 
         builder.append(levelString).background(ResourcesCompat.getColor(getResources(),
                 R.color.secondaryColor, null))
-                .append(descr.getDescription())
+                .append(resolveNewLine(descr.getDescription()))
                 .newline();
     }
 

@@ -1,16 +1,26 @@
 package com.optc.optcdbmobile.data.database.filters;
 
+import android.util.Log;
+
+import com.optc.optcdbmobile.data.database.filters.compiler.CaptainFilterCompiler;
+import com.optc.optcdbmobile.data.database.filters.compiler.Class1FilterCompiler;
+import com.optc.optcdbmobile.data.database.filters.compiler.Class2FilterCompiler;
+import com.optc.optcdbmobile.data.database.filters.compiler.ColorFilterCompiler;
+import com.optc.optcdbmobile.data.database.filters.compiler.FilterCompiler;
+import com.optc.optcdbmobile.data.database.filters.compiler.LimitFilterCompiler;
+import com.optc.optcdbmobile.data.database.filters.compiler.SpecialFilterCompiler;
+import com.optc.optcdbmobile.data.database.filters.compiler.TreasureFilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.creator.CaptainFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ClassFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ColorFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.FilterCreator;
+import com.optc.optcdbmobile.data.database.filters.creator.LimitBreakFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.SpecialFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.TreasureMapFilterCreator;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
 
@@ -162,7 +172,10 @@ public class FilterCollector {
         list.add(creator.get("Self-Orb controllers", "changes own orb into"));
         list.add(creator.get("Orb randomizer", "[Rr]andomizes all orbs"));
         list.add(creator.get("Orb switchers", "switches orbs between"));
-        list.add(creator.get("Orb matchers", "into matching orbs"));
+        list.add(creator.get("Orb matchers", new String[]{
+                "into [Mm]atching [Oo]rbs",
+                "orb into matching"
+        }));
         list.add(creator.get("Slot emptiers", "[eE]mpties all slots"));
         list.add(creator.get("\"Beneficial\" orbs enabler", "orbs \"beneficial\""));
         list.add(creator.get("Block orb removers", new String[]{
@@ -221,6 +234,26 @@ public class FilterCollector {
         list.add(creator.get("Chain lockers", "[lL]ocks the chain"));
         list.add(creator.get("Chain Multiplier Limit reducers", "Chain Multiplier Limit"));
         list.add(creator.get("Chain Coefficient Reduction reducers", "Chain Coefficient Reduction"));
+
+        //endregion
+
+        //region LIMIT
+        creator = new LimitBreakFilterCreator(mediator);
+        list.add(creator.getHeader());
+        list.add(creator.get("Enrage Potential Ability", "Enrage"));
+        list.add(creator.get("Reduce No Healing Potential Ability", " Reduce No Healing duration"));
+        list.add(creator.get("Critical Hit Potential Ability", "Critical Hit"));
+        list.add(creator.get("Slot Bind Self-reduction Potential Ability", "Slot Bind Self-reduction"));
+        list.add(creator.get("Barrier Penetration  Potential Ability", "Barrier Penetration"));
+        list.add(creator.get("Pinch Healing Potential Ability", "Pinch Healing"));
+        list.add(creator.get("Cooldown Reduction Potential Ability", "Cooldown Reduction"));
+        list.add(creator.get("Double Special Activation Potential Ability", "Double Special Activation"));
+        list.add(creator.get("STR Damage Reduction Potential Ability", "[STR] Damage Reduction"));
+        list.add(creator.get("DEX Damage Reduction Potential Ability", "[DEX] Damage Reduction"));
+        list.add(creator.get("QCK Damage Reduction Potential Ability", "[QCK] Damage Reduction"));
+        list.add(creator.get("PSY Damage Reduction Potential Ability", "[PSY] Damage Reduction"));
+        list.add(creator.get("INT Damage Reduction Potential Ability", "[INT] Damage Reduction"));
+
         //endregion
 
     }
@@ -228,26 +261,19 @@ public class FilterCollector {
 
     //TODO Something better than this
     public String getQuery() {
-        Queue<FilterUI> skippedStatment = new ArrayDeque<>();
 
-        List<FilterUI> colorsFilterUI = new ArrayList<>();
-        List<FilterUI> classes1FilterUI = new ArrayList<>();
-        List<FilterUI> classes2FilterUI = new ArrayList<>();
-        List<FilterUI> captainFilterUI = new ArrayList<>();
-        List<FilterUI> treasureFilterUI = new ArrayList<>();
-        List<FilterUI> specialFilterUI = new ArrayList<>();
+        final List<FilterUI> colorsFilterUI = new ArrayList<>();
+        final List<FilterUI> classes1FilterUI = new ArrayList<>();
+        final List<FilterUI> classes2FilterUI = new ArrayList<>();
+        final List<FilterUI> captainFilterUI = new ArrayList<>();
+        final List<FilterUI> treasureFilterUI = new ArrayList<>();
+        final List<FilterUI> specialFilterUI = new ArrayList<>();
+        final List<FilterUI> limitFilterUI = new ArrayList<>();
 
-        boolean thereIsColors = false;
-        boolean thereIsClasses1 = false;
-        boolean thereIsClasses2 = false;
-        boolean thereIsCaptain = false;
-        boolean thereIsTreasure = false;
-        boolean thereIsSpecial = false;
 
         StringBuilder finalQuery = new StringBuilder();
         finalQuery.append("SELECT * FROM unit_table WHERE ");
 
-        //Parse filters in different list
         List<FilterUI> selectedFilters = new ArrayList<>();
         for (FilterUI filterUI : list) {
             if (filterUI.isSelected()) {
@@ -263,134 +289,35 @@ public class FilterCollector {
                     classes2FilterUI.add(filterUI);
                 } else if (filterUI.getInfo().getType() == FilterType.TREASURE_MAP) {
                     treasureFilterUI.add(filterUI);
+                } else if (filterUI.getInfo().getType() == FilterType.LIMIT) {
+                    limitFilterUI.add(filterUI);
                 } else selectedFilters.add(filterUI);
             }
         }
 
-        StringBuilder captainFilter = null;
-        {
-            if (captainFilterUI.size() > 0) {
-                thereIsCaptain = true;
-                //Create composite captain filter
-                Iterator<FilterUI> captainFilterIterator = captainFilterUI.iterator();
-                captainFilter = new StringBuilder();
-                captainFilter.append("id IN (SELECT captain_id FROM captain_description_table WHERE ");
-                while (captainFilterIterator.hasNext()) {
-                    FilterUI filterUI = captainFilterIterator.next();
-                    captainFilter.append(filterUI.getInfo().getDatabasePattern());
-                    if (captainFilterIterator.hasNext()) captainFilter.append(" AND ");
-                    else captainFilter.append(")");
-                }
+        Queue<FilterCompiler> compilers = new ArrayDeque<FilterCompiler>() {{
+
+            add(new CaptainFilterCompiler(captainFilterUI));
+            add(new SpecialFilterCompiler(specialFilterUI));
+            add(new LimitFilterCompiler(limitFilterUI));
+//            add(new SailorFilterCompiler(sailorFilterUI));
+//            add(new DropFilterCompiler(dropFilterUI));
+            add(new TreasureFilterCompiler(treasureFilterUI));
+            add(new ColorFilterCompiler(colorsFilterUI));
+            add(new Class1FilterCompiler(classes1FilterUI));
+            add(new Class2FilterCompiler(classes2FilterUI));
+
+        }};
+
+        int currentFlag = 0x0;
+        while (!compilers.isEmpty()) {
+            FilterCompiler compiler = compilers.remove();
+            if (compiler.canCompile()) {
+                Log.i(FilterCollector.class.getSimpleName(), compiler.getClass().getSimpleName());
+                if (compiler.canConcatenate(currentFlag)) finalQuery.append(" AND ");
+                finalQuery.append(compiler.compile());
+                currentFlag |= compiler.getFlag();
             }
-        }
-        StringBuilder specialFilter = null;
-        {
-            if (specialFilterUI.size() > 0) {
-                thereIsSpecial = true;
-                Iterator<FilterUI> specialFilterIterator = specialFilterUI.iterator();
-                specialFilter = new StringBuilder();
-                specialFilter.append("id IN (SELECT special_id FROM special_description_table WHERE ");
-                while (specialFilterIterator.hasNext()) {
-                    FilterUI filterUI = specialFilterIterator.next();
-                    specialFilter.append(filterUI.getInfo().getDatabasePattern());
-                    if (specialFilterIterator.hasNext()) specialFilter.append(" AND ");
-                    else specialFilter.append(")");
-                }
-            }
-        }
-
-        StringBuilder treasureFilter = null;
-        {
-            if (treasureFilterUI.size() > 0) {
-                thereIsTreasure = true;
-                Iterator<FilterUI> treasureFilterIterator = treasureFilterUI.iterator();
-                treasureFilter = new StringBuilder();
-                while (treasureFilterIterator.hasNext()) {
-                    FilterUI filterUI = treasureFilterIterator.next();
-                    treasureFilter.append(filterUI.getInfo().getDatabasePattern());
-                    //nothing to add
-                }
-            }
-        }
-
-
-        StringBuilder colorsFilter = null;
-        {
-            if (colorsFilterUI.size() > 0) {
-                thereIsColors = true;
-                //Create composite color filter
-                Iterator<FilterUI> colorsFilterIterator = colorsFilterUI.iterator();
-                colorsFilter = new StringBuilder();
-                colorsFilter.append("(");
-                while (colorsFilterIterator.hasNext()) {
-                    FilterUI filter = colorsFilterIterator.next();
-                    colorsFilter.append(filter.getInfo().getDatabasePattern());
-                    if (colorsFilterIterator.hasNext()) colorsFilter.append(" OR ");
-                }
-                colorsFilter.append(")");
-            }
-        }
-
-        StringBuilder classes1Filter = null;
-        {
-            if (classes1FilterUI.size() > 0) {
-                thereIsClasses1 = true;
-                //Create composite class filter
-                Iterator<FilterUI> classFilterIterator = classes1FilterUI.iterator();
-                classes1Filter = new StringBuilder();
-                classes1Filter.append("(");
-                while (classFilterIterator.hasNext()) {
-                    FilterUI filterUI = classFilterIterator.next();
-                    classes1Filter.append(filterUI.getInfo().getDatabasePattern());
-                    if (classFilterIterator.hasNext()) classes1Filter.append(" OR ");
-                }
-                classes1Filter.append(")");
-            }
-        }
-        StringBuilder classes2Filter = null;
-        {
-            if (classes1FilterUI.size() > 0) {
-                thereIsClasses2 = true;
-                //Create composite class filter
-                Iterator<FilterUI> classFilterIterator = classes2FilterUI.iterator();
-                classes2Filter = new StringBuilder();
-                classes2Filter.append("(");
-                while (classFilterIterator.hasNext()) {
-                    FilterUI filterUI = classFilterIterator.next();
-                    classes2Filter.append(filterUI.getInfo().getDatabasePattern());
-                    if (classFilterIterator.hasNext()) classes2Filter.append(" OR ");
-                }
-                classes2Filter.append(")");
-            }
-        }
-
-
-        if (thereIsCaptain) {
-            finalQuery.append(captainFilter.toString());
-        }
-
-        if (thereIsSpecial) {
-            if (thereIsCaptain) finalQuery.append("AND");
-            finalQuery.append(specialFilter.toString());
-        }
-
-        if (thereIsTreasure) {
-            if (thereIsSpecial) finalQuery.append(" AND ");
-            finalQuery.append(treasureFilter.toString());
-        }
-
-        if (thereIsColors) {
-            if (thereIsTreasure) finalQuery.append(" AND ");
-            finalQuery.append(colorsFilter.toString());
-        }
-
-        if (thereIsClasses1) {
-            if (thereIsColors) finalQuery.append(" AND ");
-            finalQuery.append(classes1Filter.toString());
-        }
-        if (thereIsClasses2) {
-            if (thereIsClasses1) finalQuery.append(" AND ");
-            finalQuery.append(classes2Filter.toString());
         }
 
 
