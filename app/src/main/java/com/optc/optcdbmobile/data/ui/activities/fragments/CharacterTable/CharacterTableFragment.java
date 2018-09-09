@@ -25,6 +25,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
 import com.optc.optcdbmobile.data.database.entities.Unit;
+import com.optc.optcdbmobile.data.database.filters.FilterCollector;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.ui.activities.MainViewModel;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
@@ -34,6 +35,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+//TODO: Move search in another activity
 public class CharacterTableFragment extends Fragment {
 
 
@@ -95,7 +98,6 @@ public class CharacterTableFragment extends Fragment {
                         fromFilter = false;
                         mainViewModel.getUnits();
                     }
-                    fromFilter = false;
                 }
             }
         });
@@ -141,6 +143,8 @@ public class CharacterTableFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                mainViewModel.nameSearch.setValue(newText);
+
                 return false;
             }
         });
@@ -182,7 +186,15 @@ public class CharacterTableFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 fromFilter = true;
-                mainViewModel.getUnitsWithFilter(filterCollector.getQuery());
+                String baseFilter = "";
+                if (!mainViewModel.nameSearch.getValue().isEmpty()) {
+                    baseFilter = filterCollector.getQuery();
+                    baseFilter += String.format(" AND (name LIKE '%%%s%%')", mainViewModel.nameSearch.getValue());
+                } else {
+                    baseFilter = filterCollector.getQuery();
+                }
+
+                mainViewModel.getUnitsWithFilter(baseFilter);
             }
         });
 

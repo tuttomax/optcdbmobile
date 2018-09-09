@@ -6,6 +6,7 @@ import com.optc.optcdbmobile.data.database.filters.compiler.Class2FilterCompiler
 import com.optc.optcdbmobile.data.database.filters.compiler.ColorFilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.FilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.LimitFilterCompiler;
+import com.optc.optcdbmobile.data.database.filters.compiler.RarityFilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.SpecialFilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.TreasureFilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.creator.CaptainFilterCreator;
@@ -13,6 +14,7 @@ import com.optc.optcdbmobile.data.database.filters.creator.ClassFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ColorFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.FilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.LimitBreakFilterCreator;
+import com.optc.optcdbmobile.data.database.filters.creator.RarityFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.SpecialFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.TreasureMapFilterCreator;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
@@ -72,7 +74,17 @@ public class FilterCollector {
         list.add(creator.get(UnitHelper.DRIVEN_STRING, FilterType.Subtype.Class2));
 
 
-        //creator = new RarityFilterCreator(mediator);
+        creator = new RarityFilterCreator(mediator);
+        list.add(creator.getHeader());
+        list.add(creator.get("1", 1f));
+        list.add(creator.get("2", 2f));
+        list.add(creator.get("3", 3f));
+        list.add(creator.get("4", 4f));
+        list.add(creator.get("5", 5f));
+        list.add(creator.get("5+", 5.5f));
+        list.add(creator.get("6", 6f));
+        list.add(creator.get("6+", 6.5f));
+
 
         //TODO: Custom layout
         //creator = new CostFilterCreator(mediator);
@@ -265,7 +277,7 @@ public class FilterCollector {
         final List<FilterUI> treasureFilterUI = new ArrayList<>();
         final List<FilterUI> specialFilterUI = new ArrayList<>();
         final List<FilterUI> limitFilterUI = new ArrayList<>();
-
+        final List<FilterUI> rarityFilterUI = new ArrayList<>();
 
         StringBuilder finalQuery = new StringBuilder();
         finalQuery.append("SELECT * FROM unit_table WHERE ");
@@ -287,6 +299,8 @@ public class FilterCollector {
                     treasureFilterUI.add(filterUI);
                 } else if (filterUI.getInfo().getType() == FilterType.LIMIT) {
                     limitFilterUI.add(filterUI);
+                } else if (filterUI.getInfo().getType() == FilterType.RARITY) {
+                    rarityFilterUI.add(filterUI);
                 } else selectedFilters.add(filterUI);
             }
         }
@@ -302,7 +316,7 @@ public class FilterCollector {
             add(new ColorFilterCompiler(colorsFilterUI));
             add(new Class1FilterCompiler(classes1FilterUI));
             add(new Class2FilterCompiler(classes2FilterUI));
-
+            add(new RarityFilterCompiler(rarityFilterUI));
         }};
 
         int currentFlag = 0x0;

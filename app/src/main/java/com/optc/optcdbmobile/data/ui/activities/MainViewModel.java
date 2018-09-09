@@ -35,12 +35,13 @@ public class MainViewModel extends AndroidViewModel {
     private OPTCDatabaseRepository repository;
 
     public MutableLiveData<List<Unit>> units;
+    public MutableLiveData<String> nameSearch;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
 
         repository = OPTCDatabaseRepository.getInstance(application);
-
+        nameSearch = new MutableLiveData<>();
         units = new MutableLiveData<>();
 
     }

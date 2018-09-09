@@ -1,7 +1,5 @@
 package com.optc.optcdbmobile.data.database.filters.compiler;
 
-import android.util.SparseIntArray;
-
 import com.optc.optcdbmobile.data.database.filters.FilterUI;
 
 import java.util.List;
@@ -17,6 +15,8 @@ public abstract class FilterCompiler {
     static final int COLORS_FLAG = 0x40;
     static final int CLASS1_FLAG = 0x80;
     static final int CLASS2_FLAG = 0x100;
+    static final int RARITY_FLAG = 0x200;
+
 
     protected final List<FilterUI> list;
     private int flag;
@@ -41,26 +41,4 @@ public abstract class FilterCompiler {
         return flag;
     }
 
-    static class Helper {
-        private static SparseIntArray orderOfFlag = new SparseIntArray() {{
-            put(1, CAPTAIN_FLAG);
-            put(2, SPECIAL_FLAG);
-            put(3, LIMIT_FLAG);
-            put(4, SAILOR_FLAG);
-            put(5, DROP_FLAG);
-            put(6, TREASURE_FLAG);
-            put(7, COLORS_FLAG);
-            put(8, CLASS1_FLAG);
-            put(9, CLASS2_FLAG);
-        }};
-
-        static int generateFlag(int startFlag) {
-            int index = orderOfFlag.indexOfValue(startFlag);
-            int flag = 0x0;
-            for (int key = 0; key < index; key++) { //exclude startFlag
-                flag |= orderOfFlag.get(key);
-            }
-            return flag;
-        }
-    }
 }
