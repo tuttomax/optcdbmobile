@@ -187,7 +187,8 @@ public class CharacterTableFragment extends Fragment {
             public void onClick(View v) {
                 fromFilter = true;
                 String baseFilter = "";
-                if (!mainViewModel.nameSearch.getValue().isEmpty()) {
+                String name = mainViewModel.nameSearch.getValue();
+                if (name != null && !name.isEmpty()) {
                     baseFilter = filterCollector.getQuery();
                     baseFilter += String.format(" AND (name LIKE '%%%s%%')", mainViewModel.nameSearch.getValue());
                 } else {

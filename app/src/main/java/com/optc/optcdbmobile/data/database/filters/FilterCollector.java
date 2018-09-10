@@ -5,16 +5,18 @@ import com.optc.optcdbmobile.data.database.filters.compiler.Class1FilterCompiler
 import com.optc.optcdbmobile.data.database.filters.compiler.Class2FilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.ColorFilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.FilterCompiler;
-import com.optc.optcdbmobile.data.database.filters.compiler.LimitFilterCompiler;
+import com.optc.optcdbmobile.data.database.filters.compiler.PotentialFilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.RarityFilterCompiler;
+import com.optc.optcdbmobile.data.database.filters.compiler.SailorFilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.SpecialFilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.TreasureFilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.creator.CaptainFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ClassFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ColorFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.FilterCreator;
-import com.optc.optcdbmobile.data.database.filters.creator.LimitBreakFilterCreator;
+import com.optc.optcdbmobile.data.database.filters.creator.PotentialFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.RarityFilterCreator;
+import com.optc.optcdbmobile.data.database.filters.creator.SailorFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.SpecialFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.TreasureMapFilterCreator;
 import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
@@ -247,8 +249,44 @@ public class FilterCollector {
 
         //endregion
 
+
+        //region SAILOR
+        //TODO Create two different creator:
+        //  1. Search sailor inside limit_table
+        //  2. Search sailor inside sailor_description_table
+
+        creator = new SailorFilterCreator(mediator);
+        list.add(creator.getHeader());
+        list.add(creator.get("Type-boosting sailors", "[Bb]oost base ATK of ???"));
+        list.add(creator.get("Class-boosting sailors", new String[]{
+                "[Bb]oost base ATK of [FCP]* characters by",
+                "[Bb]oost base ATK of S[lht]* characters by",
+                "[Bb]oost base ATK of Dri* characters by"
+        }));
+
+        list.add(creator.get("ATK boosting sailors", "[Bb]oost * ATK"));
+        list.add(creator.get("HP boosting sailors", "[Bb]oost * HP"));
+        list.add(creator.get("RCV boosting sailors", "[Bb]oost * RCV"));
+        list.add(creator.get("Paralysis reducers", "Reduces Paralysis"));
+        list.add(creator.get("Blindness reducers", "Reduces Blindness"));
+        list.add(creator.get("Silence reducers", "Reduces Silence"));
+        list.add(creator.get("Special Rewind Restores", "when it is rewinded"));
+        list.add(creator.get("Special Cooldown Rducers on Special Activation", "reduces own cooldown"));
+        list.add(creator.get("Orb retainer", "keep his ??? orb"));
+        list.add(creator.get("Blow Away Resistence", "[Bb]lown [Aa]way"));
+        list.add(creator.get("Additional Damage Dealer", "Additional Typeless Damage"));
+        list.add(creator.get("\"Beneficial\" Orb sailors", "orbs \"beneficial\""));
+        list.add(creator.get("STR Orb Team \"Beneficial\" Orb Sailor", "[Mm]akes STR orbs \"beneficial\" for * characters"));
+        list.add(creator.get("DEX Orb Team \"Beneficial\" Orb Sailor", "[Mm]akes QCK orbs \"beneficial\" for * characters"));
+        list.add(creator.get("QCK Orb Team \"Beneficial\" Orb Sailor", "[Mm]akes DEX orbs \"beneficial\" for * characters"));
+        list.add(creator.get("PSY Orb Team \"Beneficial\" Orb Sailor", "[Mm]akes PSY orbs \"beneficial\" for * characters"));
+        list.add(creator.get("INT Orb Team \"Beneficial\" Orb Sailor", "[Mm]akes INT orbs \"beneficial\" for * characters"));
+        list.add(creator.get("TND Orb Team \"Beneficial\" Orb Sailor", "[Mm]akes TND orbs \"beneficial\" for * characters"));
+        list.add(creator.get("RCV Orb Team \"Beneficial\" Orb Sailor", "[Mm]akes RCV orbs \"beneficial\" for * characters"));
+        //endregion
+
         //region LIMIT
-        creator = new LimitBreakFilterCreator(mediator);
+        creator = new PotentialFilterCreator(mediator);
         list.add(creator.getHeader());
         list.add(creator.get("Enrage Potential Ability", "Enrage"));
         list.add(creator.get("Reduce No Healing Potential Ability", " Reduce No Healing duration"));
@@ -270,53 +308,56 @@ public class FilterCollector {
 
     public String getQuery() {
 
-        final List<FilterUI> colorsFilterUI = new ArrayList<>();
-        final List<FilterUI> classes1FilterUI = new ArrayList<>();
-        final List<FilterUI> classes2FilterUI = new ArrayList<>();
-        final List<FilterUI> captainFilterUI = new ArrayList<>();
-        final List<FilterUI> treasureFilterUI = new ArrayList<>();
-        final List<FilterUI> specialFilterUI = new ArrayList<>();
-        final List<FilterUI> limitFilterUI = new ArrayList<>();
-        final List<FilterUI> rarityFilterUI = new ArrayList<>();
+        final List<FilterUI> colorFilterList = new ArrayList<>();
+        final List<FilterUI> classes1FilterList = new ArrayList<>();
+        final List<FilterUI> classes2FilterList = new ArrayList<>();
+        final List<FilterUI> captainFilterList = new ArrayList<>();
+        final List<FilterUI> treasureFilterList = new ArrayList<>();
+        final List<FilterUI> specialFilterList = new ArrayList<>();
+        final List<FilterUI> limitFilterList = new ArrayList<>();
+        final List<FilterUI> rarityFilterList = new ArrayList<>();
+        final List<FilterUI> sailorFilterList = new ArrayList<>();
+
+        for (FilterUI filter : list) {
+            if (filter.isSelected()) {
+                if (filter.getInfo().getType() == FilterType.CAPTAIN) {
+                    captainFilterList.add(filter);
+                } else if (filter.getInfo().getType() == FilterType.SPECIAL) {
+                    specialFilterList.add(filter);
+                } else if (filter.getInfo().getType() == FilterType.COLOR) {
+                    colorFilterList.add(filter);
+                } else if (filter.getInfo().getType() == FilterType.CLASS && filter.getInfo().getSubtype() == FilterType.Subtype.Class1) {
+                    classes1FilterList.add(filter);
+                } else if (filter.getInfo().getType() == FilterType.CLASS && filter.getInfo().getSubtype() == FilterType.Subtype.Class2) {
+                    classes2FilterList.add(filter);
+                } else if (filter.getInfo().getType() == FilterType.TREASURE_MAP) {
+                    treasureFilterList.add(filter);
+                } else if (filter.getInfo().getType() == FilterType.LIMIT) {
+                    limitFilterList.add(filter);
+                } else if (filter.getInfo().getType() == FilterType.RARITY) {
+                    rarityFilterList.add(filter);
+                } else if (filter.getInfo().getType() == FilterType.SAILOR) {
+                    sailorFilterList.add(filter);
+                }
+            }
+        }
 
         StringBuilder finalQuery = new StringBuilder();
         finalQuery.append("SELECT * FROM unit_table WHERE ");
 
-        List<FilterUI> selectedFilters = new ArrayList<>();
-        for (FilterUI filterUI : list) {
-            if (filterUI.isSelected()) {
-                if (filterUI.getInfo().getType() == FilterType.CAPTAIN) {
-                    captainFilterUI.add(filterUI);
-                } else if (filterUI.getInfo().getType() == FilterType.SPECIAL) {
-                    specialFilterUI.add(filterUI);
-                } else if (filterUI.getInfo().getType() == FilterType.COLOR) {
-                    colorsFilterUI.add(filterUI);
-                } else if (filterUI.getInfo().getType() == FilterType.CLASS && filterUI.getInfo().getSubtype() == FilterType.Subtype.Class1) {
-                    classes1FilterUI.add(filterUI);
-                } else if (filterUI.getInfo().getType() == FilterType.CLASS && filterUI.getInfo().getSubtype() == FilterType.Subtype.Class2) {
-                    classes2FilterUI.add(filterUI);
-                } else if (filterUI.getInfo().getType() == FilterType.TREASURE_MAP) {
-                    treasureFilterUI.add(filterUI);
-                } else if (filterUI.getInfo().getType() == FilterType.LIMIT) {
-                    limitFilterUI.add(filterUI);
-                } else if (filterUI.getInfo().getType() == FilterType.RARITY) {
-                    rarityFilterUI.add(filterUI);
-                } else selectedFilters.add(filterUI);
-            }
-        }
-
         Queue<FilterCompiler> compilers = new ArrayDeque<FilterCompiler>() {{
 
-            add(new CaptainFilterCompiler(captainFilterUI));
-            add(new SpecialFilterCompiler(specialFilterUI));
-            add(new LimitFilterCompiler(limitFilterUI));
-//            add(new SailorFilterCompiler(sailorFilterUI));
-//            add(new DropFilterCompiler(dropFilterUI));
-            add(new TreasureFilterCompiler(treasureFilterUI));
-            add(new ColorFilterCompiler(colorsFilterUI));
-            add(new Class1FilterCompiler(classes1FilterUI));
-            add(new Class2FilterCompiler(classes2FilterUI));
-            add(new RarityFilterCompiler(rarityFilterUI));
+            add(new CaptainFilterCompiler(captainFilterList));
+            add(new SpecialFilterCompiler(specialFilterList));
+            add(new PotentialFilterCompiler(limitFilterList));
+            add(new SailorFilterCompiler(sailorFilterList));
+            //add(new DropFilterCompiler(dropFilterList));
+            //add(new ExclusionFilterCompiler(exclusionFilterList));
+            add(new TreasureFilterCompiler(treasureFilterList));
+            add(new ColorFilterCompiler(colorFilterList));
+            add(new Class1FilterCompiler(classes1FilterList));
+            add(new Class2FilterCompiler(classes2FilterList));
+            add(new RarityFilterCompiler(rarityFilterList));
         }};
 
         int currentFlag = 0x0;

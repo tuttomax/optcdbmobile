@@ -5,8 +5,8 @@ import com.optc.optcdbmobile.data.database.filters.FilterUI;
 import java.util.Iterator;
 import java.util.List;
 
-public class LimitFilterCompiler extends FilterCompiler {
-    public LimitFilterCompiler(List<FilterUI> list) {
+public class PotentialFilterCompiler extends FilterCompiler {
+    public PotentialFilterCompiler(List<FilterUI> list) {
         super(list, LIMIT_FLAG);
     }
 

@@ -4,8 +4,8 @@ import com.optc.optcdbmobile.data.database.filters.FilterMediator;
 import com.optc.optcdbmobile.data.database.filters.FilterType;
 import com.optc.optcdbmobile.data.database.filters.FilterUI;
 
-public class LimitBreakFilterCreator extends FilterCreator {
-    public LimitBreakFilterCreator(FilterMediator mediator) {
+public class PotentialFilterCreator extends FilterCreator {
+    public PotentialFilterCreator(FilterMediator mediator) {
         super(mediator);
     }
 
