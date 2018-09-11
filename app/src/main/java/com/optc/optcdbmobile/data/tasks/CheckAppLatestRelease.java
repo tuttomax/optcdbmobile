@@ -1,7 +1,5 @@
 package com.optc.optcdbmobile.data.tasks;
 
-import android.os.AsyncTask;
-
 import com.google.gson.Gson;
 import com.optc.optcdbmobile.data.Constants;
 import com.optc.optcdbmobile.data.UpdateManager;
@@ -13,22 +11,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class CheckAppLatestRelease extends AsyncTask<Void, Void, UpdateManager.UpdateInfo> {
+public class CheckAppLatestRelease extends BaseAsyncTask<Void, Void, UpdateManager.UpdateInfo> {
 
 
     private long currentRelease;
-    private AsyncTaskListener<UpdateManager.UpdateInfo> listener;
-
-    public void setListener(AsyncTaskListener<UpdateManager.UpdateInfo> listener) {
-        this.listener = listener;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        if (listener != null) {
-            listener.onPreExecute();
-        }
-    }
 
     @Override
     protected UpdateManager.UpdateInfo doInBackground(Void... voids) {
@@ -52,11 +38,5 @@ public class CheckAppLatestRelease extends AsyncTask<Void, Void, UpdateManager.U
         return null;
     }
 
-    @Override
-    protected void onPostExecute(UpdateManager.UpdateInfo result) {
 
-        if (listener != null) {
-            listener.onPostExecute(result);
-        }
-    }
 }

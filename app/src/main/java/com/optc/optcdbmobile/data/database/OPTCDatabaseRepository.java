@@ -124,7 +124,8 @@ public class OPTCDatabaseRepository {
     public void BuildDatabase(final AsyncTaskContext context) {
         if (thereIsValidConnection(context.getView())) {
             ParallelBuildingDatabaseAsyncTaskListener listner = new ParallelBuildingDatabaseAsyncTaskListener(context);
-            ParallelBuildingDatabaseAsyncTask databaseTask = new ParallelBuildingDatabaseAsyncTask(listner);
+            ParallelBuildingDatabaseAsyncTask databaseTask = new ParallelBuildingDatabaseAsyncTask();
+            databaseTask.setListener(listner);
             databaseTask.setDatabase(database);
             databaseTask.setDelegate(listner.getDelegate());
             databaseTask.execute();

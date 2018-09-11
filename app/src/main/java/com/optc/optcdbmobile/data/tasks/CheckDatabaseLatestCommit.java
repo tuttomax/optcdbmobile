@@ -1,6 +1,5 @@
 package com.optc.optcdbmobile.data.tasks;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -14,19 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class CheckDatabaseLatestCommit extends AsyncTask<Void, Void, CheckDatabaseLatestCommit.CommitInfo> {
-    private AsyncTaskListener<CommitInfo> listener;
-
-    public void setListener(AsyncTaskListener<CommitInfo> listener) {
-        this.listener = listener;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        if (listener != null) {
-            listener.onPreExecute();
-        }
-    }
+public class CheckDatabaseLatestCommit extends BaseAsyncTask<Void, Void, CheckDatabaseLatestCommit.CommitInfo> {
 
     @Override
     protected CommitInfo doInBackground(Void... voids) {
@@ -53,12 +40,6 @@ public class CheckDatabaseLatestCommit extends AsyncTask<Void, Void, CheckDataba
         return null;
     }
 
-    @Override
-    protected void onPostExecute(CommitInfo commit) {
-        if (listener != null) {
-            listener.onPostExecute(commit);
-        }
-    }
 
     public static class CommitInfo {
         private String sha;

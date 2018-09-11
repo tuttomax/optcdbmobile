@@ -16,8 +16,6 @@
 
 package com.optc.optcdbmobile.data.tasks;
 
-import android.os.AsyncTask;
-
 import com.optc.optcdbmobile.data.database.OPTCDatabase;
 import com.optc.optcdbmobile.data.database.threading.Task;
 import com.optc.optcdbmobile.data.database.threading.TaskCallback;
@@ -31,26 +29,11 @@ import com.optc.optcdbmobile.data.database.threading.tasks.FamiliesPopulateTask;
 import com.optc.optcdbmobile.data.database.threading.tasks.TagsPopulateTask;
 import com.optc.optcdbmobile.data.database.threading.tasks.UnitsPopulateTask;
 
-public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, Boolean> {
+public class ParallelBuildingDatabaseAsyncTask extends BaseAsyncTask<Void, Void, Boolean> {
 
-    private AsyncTaskListener<Boolean> listener;
     private OPTCDatabase database;
     private TaskDelegate delegate;
 
-    public ParallelBuildingDatabaseAsyncTask(AsyncTaskListener<Boolean> listener) {
-        this.listener = listener;
-    }
-
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        if (listener != null) {
-            listener.onPreExecute();
-        }
-
-
-    }
 
     @Override
     protected Boolean doInBackground(Void... voids) {
@@ -83,12 +66,6 @@ public class ParallelBuildingDatabaseAsyncTask extends AsyncTask<Void, Object, B
         return true;
     }
 
-    @Override
-    protected void onPostExecute(Boolean returnedValue) {
-        if (listener != null) {
-            listener.onPostExecute(returnedValue);
-        }
-    }
 
     public void setDatabase(OPTCDatabase database) {
         this.database = database;

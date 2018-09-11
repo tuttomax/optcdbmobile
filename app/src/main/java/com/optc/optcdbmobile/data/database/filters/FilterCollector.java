@@ -251,9 +251,6 @@ public class FilterCollector {
 
 
         //region SAILOR
-        //TODO Create two different creator:
-        //  1. Search sailor inside limit_table
-        //  2. Search sailor inside sailor_description_table
 
         creator = new SailorFilterCreator(mediator);
         list.add(creator.getHeader());
