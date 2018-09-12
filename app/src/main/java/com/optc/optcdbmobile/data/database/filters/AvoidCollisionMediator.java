@@ -1,7 +1,5 @@
 package com.optc.optcdbmobile.data.database.filters;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +20,7 @@ public class AvoidCollisionMediator implements FilterMediator {
     @Override
     public void inform(FilterUI sender) {
         if (sender.isSelected()) {
-            Log.d(AvoidCollisionMediator.class.getSimpleName(), "Avoiding filter collision");
+
             FilterInfo info = sender.getInfo();
             int type = info.getType();
             FilterType.Subtype subtype = info.getSubtype();

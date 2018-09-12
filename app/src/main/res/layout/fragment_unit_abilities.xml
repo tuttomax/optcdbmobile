@@ -14,21 +14,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.CaptainTextView
+            <com.optc.optcdbmobile.data.ui.fragments.CharacterTable.controls.CaptainTextView
                 android:id="@+id/captain_informative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white" />
 
 
-            <com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.SpecialTextView
+            <com.optc.optcdbmobile.data.ui.fragments.CharacterTable.controls.SpecialTextView
                 android:id="@+id/special_informative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white" />
 
 
-            <com.optc.optcdbmobile.data.ui.activities.fragments.CharacterTable.controls.SailorTextView
+            <com.optc.optcdbmobile.data.ui.fragments.CharacterTable.controls.SailorTextView
                 android:id="@+id/sailor_informative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

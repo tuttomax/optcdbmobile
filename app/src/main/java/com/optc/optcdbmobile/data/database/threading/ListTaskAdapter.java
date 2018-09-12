@@ -243,9 +243,10 @@ public class ListTaskAdapter extends RecyclerView.Adapter<ListTaskAdapter.TaskVi
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
-            executorService.shutdown();
+            termination();
         } catch (ExecutionException e) {
             e.printStackTrace();
+            termination();
         }
     }
 

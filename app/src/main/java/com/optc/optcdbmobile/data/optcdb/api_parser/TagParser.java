@@ -37,13 +37,22 @@ public class TagParser extends BaseParser<List<Tag>> {
 
             NativeObject flagsObj = (NativeObject) entry.getValue();
 
-            Boolean global = toType(flagsObj.get("global"), Boolean.class);
-            Boolean rr = toType(flagsObj.get("rr"), Boolean.class);
-            Boolean lrr = toType(flagsObj.get("lrr"), Boolean.class);
-            Boolean rro = toType(flagsObj.get("rro"), Boolean.class);
-            Boolean promo = toType(flagsObj.get("promo"), Boolean.class);
-            Boolean shop = toType(flagsObj.get("shop"), Boolean.class);
-            Boolean special = toType(flagsObj.get("special"), Boolean.class);
+            Object globalObj = flagsObj.get("global");
+            Object rrObj = flagsObj.get("rr");
+            Object lrrObj = flagsObj.get("lrr");
+            Object rroObj = flagsObj.get("rro");
+            Object promoObj = flagsObj.get("promo");
+            Object shopObj = flagsObj.get("shop");
+            Object specialObj = flagsObj.get("special");
+
+
+            Boolean global = globalObj == null ? Boolean.FALSE : toType(globalObj, Boolean.class);
+            Boolean rr = globalObj == null ? Boolean.FALSE : toType(rrObj, Boolean.class);
+            Boolean lrr = globalObj == null ? Boolean.FALSE : toType(lrrObj, Boolean.class);
+            Boolean rro = globalObj == null ? Boolean.FALSE : toType(rroObj, Boolean.class);
+            Boolean promo = globalObj == null ? Boolean.FALSE : toType(promoObj, Boolean.class);
+            Boolean shop = globalObj == null ? Boolean.FALSE : toType(shopObj, Boolean.class);
+            Boolean special = globalObj == null ? Boolean.FALSE : toType(specialObj, Boolean.class);
 
             list.add(new Tag(unitId, global, rro, rr, lrr, promo, shop, special));
         }

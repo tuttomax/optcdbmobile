@@ -4,6 +4,7 @@ import com.optc.optcdbmobile.data.database.filters.compiler.CaptainFilterCompile
 import com.optc.optcdbmobile.data.database.filters.compiler.Class1FilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.Class2FilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.ColorFilterCompiler;
+import com.optc.optcdbmobile.data.database.filters.compiler.DropFilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.FilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.PotentialFilterCompiler;
 import com.optc.optcdbmobile.data.database.filters.compiler.RarityFilterCompiler;
@@ -13,13 +14,14 @@ import com.optc.optcdbmobile.data.database.filters.compiler.TreasureFilterCompil
 import com.optc.optcdbmobile.data.database.filters.creator.CaptainFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ClassFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.ColorFilterCreator;
+import com.optc.optcdbmobile.data.database.filters.creator.DropFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.FilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.PotentialFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.RarityFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.SailorFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.SpecialFilterCreator;
 import com.optc.optcdbmobile.data.database.filters.creator.TreasureMapFilterCreator;
-import com.optc.optcdbmobile.data.ui.activities.general.UnitHelper;
+import com.optc.optcdbmobile.data.ui.general.UnitHelper;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -87,9 +89,21 @@ public class FilterCollector {
         list.add(creator.get("6", 6f));
         list.add(creator.get("6+", 6.5f));
 
+        creator = new DropFilterCreator(mediator);
+        list.add(creator.getHeader());
+        //list.add(creator.get("Farmable", FilterType.Subtype.Farmable, ""));
+        //list.add(creator.get("Non Farmable", FilterType.Subtype.Farmable, ""));
+        list.add(creator.get("Global Units", FilterType.Subtype.ServerUnit, "global=1"));
+        list.add(creator.get("Japan Units", FilterType.Subtype.ServerUnit, "global IS NULL or global=0"));
+        list.add(creator.get("In RR Pool", FilterType.Subtype.RRPool, "(rr=1 OR lrr=1)"));
+        list.add(creator.get("Not In RR Pool", FilterType.Subtype.RRPool, "(rr=0 OR rr IS NULL OR lrr=0 OR lrr IS NULL)"));
+        //list.add(creator.get("Farmable Socket", FilterType.Subtype.FarmableSocket, ""));
+        //list.add(creator.get("Non Farmable Socket", FilterType.Subtype.FarmableSocket, ""));
 
         //TODO: Custom layout
         //creator = new CostFilterCreator(mediator);
+
+
         creator = new TreasureMapFilterCreator(mediator);
         list.add(creator.getHeader());
         list.add(creator.get("Show Global TM booster", "", new Integer[]{
@@ -314,6 +328,8 @@ public class FilterCollector {
         final List<FilterUI> limitFilterList = new ArrayList<>();
         final List<FilterUI> rarityFilterList = new ArrayList<>();
         final List<FilterUI> sailorFilterList = new ArrayList<>();
+        final List<FilterUI> dropFilterList = new ArrayList<>();
+
 
         for (FilterUI filter : list) {
             if (filter.isSelected()) {
@@ -335,6 +351,8 @@ public class FilterCollector {
                     rarityFilterList.add(filter);
                 } else if (filter.getInfo().getType() == FilterType.SAILOR) {
                     sailorFilterList.add(filter);
+                } else if (filter.getInfo().getType() == FilterType.DROP) {
+                    dropFilterList.add(filter);
                 }
             }
         }
@@ -348,7 +366,7 @@ public class FilterCollector {
             add(new SpecialFilterCompiler(specialFilterList));
             add(new PotentialFilterCompiler(limitFilterList));
             add(new SailorFilterCompiler(sailorFilterList));
-            //add(new DropFilterCompiler(dropFilterList));
+            add(new DropFilterCompiler(dropFilterList));
             //add(new ExclusionFilterCompiler(exclusionFilterList));
             add(new TreasureFilterCompiler(treasureFilterList));
             add(new ColorFilterCompiler(colorFilterList));

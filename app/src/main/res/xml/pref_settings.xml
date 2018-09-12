@@ -20,7 +20,7 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_database_cat_version_title">
-        <com.optc.optcdbmobile.data.ui.activities.fragments.Settings.SingleLinePreference
+        <com.optc.optcdbmobile.data.ui.fragments.Settings.SingleLinePreference
 
 
             android:icon="@drawable/ic_sync"
@@ -42,7 +42,7 @@
 
     <PreferenceCategory android:title="Application">
 
-        <com.optc.optcdbmobile.data.ui.activities.fragments.Settings.SingleLinePreference
+        <com.optc.optcdbmobile.data.ui.fragments.Settings.SingleLinePreference
             android:defaultValue=""
             android:enabled="false"
             android:key="@string/pref_app_version_key"

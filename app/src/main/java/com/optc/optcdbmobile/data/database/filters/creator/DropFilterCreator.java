@@ -18,9 +18,8 @@ public class DropFilterCreator extends FilterCreator {
     public FilterUI get(Object... args) {
         String label = (String) args[0];
         FilterType.Subtype subtype = (FilterType.Subtype) args[1];
-        String databasePattern = (String) args[2];
-
-        return create(FilterType.DROP, label, databasePattern);
+        String pattern = (String) args[2];
+        return create(FilterType.DROP, subtype, label, pattern);
 
     }
 }

@@ -34,6 +34,7 @@ public class AliasPopulateTask extends DatabaseTask {
             setError(ex);
             Thread.currentThread().interrupt();
         }
+
         setState(COMPLETED);
     }
 }
