@@ -89,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
 
         CrashReporter.install(this);
 
+        setContentView(R.layout.activity_main);
+
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
@@ -97,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
         }
 
 
-        setContentView(R.layout.activity_main);
 
 
         isFirstLaunch = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.Settings.pref_first_launch, true);

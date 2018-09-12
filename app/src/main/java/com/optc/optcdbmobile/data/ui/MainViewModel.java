@@ -21,6 +21,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import com.optc.optcdbmobile.data.base.database.InteractWithUserTable;
 import com.optc.optcdbmobile.data.database.OPTCDatabaseRepository;
 import com.optc.optcdbmobile.data.database.entities.Unit;
 
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainViewModel extends AndroidViewModel {
+public class MainViewModel extends AndroidViewModel implements InteractWithUserTable {
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(3);
 
