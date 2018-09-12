@@ -28,6 +28,13 @@
             </intent-filter>
         </activity>
 
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.optc.optcdbmobile.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+
     </application>
 
 </manifest>

@@ -14,6 +14,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,6 +27,42 @@ import java.io.File;
 import java.util.List;
 
 public class UpdateManager {
+    public UpdateManager(final Context context, LifecycleOwner owner) {
+        mContext = context;
+        downloadManager = (DownloadManager) context.getSystemService(Service.DOWNLOAD_SERVICE);
+        idFile = new MutableLiveData<>();
+        idFile.observe(owner, new Observer<Long>() {
+            @Override
+            public void onChanged(@Nullable final Long id) {
+                context.registerReceiver(new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
+                            Long receivedId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+                            if (receivedId.equals(id)) {
+                                File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                                File apkLocation = new File(downloads, Constants.APP.APP_INSTALL_NAME);
+                                Uri uriLocation = FileProvider.getUriForFile(context, "com.optc.optcdbmobile.fileprovider", apkLocation);
+                                Intent installApk = new Intent(Intent.ACTION_VIEW);
+                                installApk.setDataAndType(uriLocation, Constants.APP.MIME_TYPE_APK);
+                                installApk.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                                context.startActivity(installApk);
+                                context.unregisterReceiver(this);
+
+                            }
+                        }
+                    }
+                }, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+            }
+        });
+
+    }
+
+    private final Context mContext;
+    private DownloadManager downloadManager;
+    private MutableLiveData<Long> idFile;
+
     public void CheckUpdate() {
         final Boolean updateAvailable;
         CheckAppLatestRelease checkTask = new CheckAppLatestRelease();
@@ -44,24 +81,21 @@ public class UpdateManager {
                     final Long newVersion = Long.parseLong(info.getTag());
                     final boolean updateAvailable = BuildConfig.VERSION_CODE < newVersion;
                     if (updateAvailable) {
+
+                        Toast.makeText(mContext, "Downloading app update...", Toast.LENGTH_LONG).show();
+
                         if (info.getAssets().size() > 0) {
 
-                            if (info.isMessageImportant()) {
-
-                                new AlertDialog.Builder(mContext).setTitle("App update available")
-                                        .setMessage(info.getMessage()).setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                }).show();
-                            }
+                            new AlertDialog.Builder(mContext).setTitle("App update available")
+                                    .setMessage(info.getMessage()).setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }).show();
 
                             UpdateInfo.Asset asset = info.getAssets().get(0);
 
-                            Log.d(UpdateManager.class.getSimpleName(), "App update available");
-
-                            Toast.makeText(mContext, "Downloading app update...", Toast.LENGTH_LONG).show();
 
                             Uri downloadUri = Uri.parse(asset.getUrl());
                             File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
@@ -91,42 +125,6 @@ public class UpdateManager {
         checkTask.execute();
     }
 
-    private final Context mContext;
-    private DownloadManager downloadManager;
-    private MutableLiveData<Long> idFile;
-
-    public UpdateManager(final Context context, LifecycleOwner owner) {
-        mContext = context;
-        downloadManager = (DownloadManager) context.getSystemService(Service.DOWNLOAD_SERVICE);
-        idFile = new MutableLiveData<>();
-        idFile.observe(owner, new Observer<Long>() {
-            @Override
-            public void onChanged(@Nullable final Long id) {
-                context.registerReceiver(new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction())) {
-                            Long receivedId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                            if (receivedId.equals(id)) {
-                                File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                                String location = new File(downloads, Constants.APP.APP_INSTALL_NAME).getPath();
-
-                                Intent installApk = new Intent(Intent.ACTION_VIEW);
-                                installApk.setDataAndType(Uri.fromFile(new File(location)), Constants.APP.MIME_TYPE_APK);
-                                installApk.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                                context.startActivity(installApk);
-                                context.unregisterReceiver(this);
-
-                            }
-                        }
-                    }
-                }, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-            }
-        });
-
-    }
-
     public static class UpdateInfo {
         private List<Asset> assets;
         @SerializedName("body")
@@ -150,10 +148,6 @@ public class UpdateManager {
 
         public String getTag() {
             return tag;
-        }
-
-        public boolean isMessageImportant() {
-            return message.contains("IMPORTANT");
         }
 
         public static class Asset {
