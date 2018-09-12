@@ -74,6 +74,7 @@ public class CharacterTableFragment extends Fragment {
     private int scrollPosition = 0;
     private boolean hasChanged = false;
     private boolean firstLaunch;
+    private DrawerLayout drawer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,7 +120,6 @@ public class CharacterTableFragment extends Fragment {
         filterItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                DrawerLayout drawer = (CharacterTableFragment.this.getActivity().findViewById(R.id.drawer_layout));
                 if (drawer.isDrawerOpen(Gravity.END)) {
                     drawer.closeDrawer(Gravity.END);
                 } else drawer.openDrawer(Gravity.END);
@@ -196,6 +196,7 @@ public class CharacterTableFragment extends Fragment {
         filterRecyclerView = root.findViewById(R.id.filter_recyclerview);
         filterRecyclerView.setHasFixedSize(false);
 
+        drawer = root.findViewById(R.id.drawer_layout_frag_character_table);
 
         AppCompatButton submitButton = root.findViewById(R.id.submit_query);
         submitButton.setOnClickListener(new View.OnClickListener() {
