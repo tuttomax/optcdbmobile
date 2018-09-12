@@ -27,6 +27,9 @@ import java.io.File;
 import java.util.List;
 
 public class UpdateManager {
+    private final Context mContext;
+    private DownloadManager downloadManager;
+    private MutableLiveData<Long> idFile;
     public UpdateManager(final Context context, LifecycleOwner owner) {
         mContext = context;
         downloadManager = (DownloadManager) context.getSystemService(Service.DOWNLOAD_SERVICE);
@@ -58,10 +61,6 @@ public class UpdateManager {
         });
 
     }
-
-    private final Context mContext;
-    private DownloadManager downloadManager;
-    private MutableLiveData<Long> idFile;
 
     public void CheckUpdate() {
         final Boolean updateAvailable;
