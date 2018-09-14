@@ -17,10 +17,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.optc.optcdbmobile.R;
+import com.optc.optcdbmobile.data.GlideApp;
 import com.optc.optcdbmobile.data.optcdb.API;
 import com.optc.optcdbmobile.data.ui.fragments.CharacterTable.controls.DoubleColorDrawable;
 import com.optc.optcdbmobile.data.ui.fragments.CharacterTable.controls.RepeatableDrawableWidget;
@@ -137,15 +136,14 @@ public class UnitDialog extends DialogFragment {
 
 
         ImageView unitImage = root.findViewById(R.id.unit_image);
-        Glide
+        GlideApp
                 .with(this)
                 .load(API.getBigImage(unit.getDatabaseId()))
-                .apply(new RequestOptions()
-                        .override(580)
-                        .centerInside()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(R.drawable.ic_no_bigimage)
-                        .error(R.drawable.ic_no_bigimage))
+                .override(UnitHelper.dpToPx(320, getContext()))
+                .centerInside()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.ic_no_bigimage)
+                .error(R.drawable.ic_no_bigimage)
                 .into(unitImage);
 
 
@@ -178,7 +176,6 @@ public class UnitDialog extends DialogFragment {
         pager.setAdapter(adapter);
         TabLayout tabLayout = root.findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(pager);
-
 
         return root;
     }

@@ -13,21 +13,15 @@
     <color name="secondaryTextColor">#ffffff</color>
     <color name="secondaryLightTextColor">@color/secondaryTextColor</color>
     <color name="secondaryDarkTextColor">@color/secondaryTextColor</color>
-    <!-- color used for highlight information -->
+
     <color name="infoColor">#ffd64f</color>
 
     <color name="colorSTR">#e53935</color>
     <color name="colorQCK">#3f51b5</color>
     <color name="colorDEX">#43a047</color>
-    <color name="colorPSY">#fdd835</color>
+    <color name="colorPSY">#fbc02d</color>
     <color name="colorINT">#9c27b0</color>
 
-    <color name="colorDarkSTR">#b32b29</color>
-    <color name="colorDarkQCK">#36469c</color>
-    <color name="colorDarkDEX">#39873d</color>
-    <color name="colorDarkPSY">#e3c230</color>
-    <color name="colorDarkINT">#9c27b0</color>
-
-
     <color name="starColor">#ffff8d</color>
+
 </resources>

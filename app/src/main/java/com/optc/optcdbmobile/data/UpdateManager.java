@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
@@ -30,6 +31,7 @@ public class UpdateManager {
     private final Context mContext;
     private DownloadManager downloadManager;
     private MutableLiveData<Long> idFile;
+
     public UpdateManager(final Context context, LifecycleOwner owner) {
         mContext = context;
         downloadManager = (DownloadManager) context.getSystemService(Service.DOWNLOAD_SERVICE);
@@ -45,14 +47,25 @@ public class UpdateManager {
                             if (receivedId.equals(id)) {
                                 File downloads = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                                 File apkLocation = new File(downloads, Constants.APP.APP_INSTALL_NAME);
-                                Uri uriLocation = FileProvider.getUriForFile(context, "com.optc.optcdbmobile.fileprovider", apkLocation);
-                                Intent installApk = new Intent(Intent.ACTION_VIEW);
+
+                                Intent installApk = null;
+                                Uri uriLocation = null;
+                                if (Build.VERSION.SDK_INT > 23) {
+
+                                    uriLocation = FileProvider.getUriForFile(context, "com.optc.optcdbmobile.fileprovider", apkLocation);
+                                    installApk = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+                                } else {
+                                    uriLocation = Uri.fromFile(apkLocation);
+                                    installApk = new Intent(Intent.ACTION_VIEW);
+
+                                }
                                 installApk.setDataAndType(uriLocation, Constants.APP.MIME_TYPE_APK);
-                                installApk.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                                installApk.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                                 context.startActivity(installApk);
-                                context.unregisterReceiver(this);
 
+                                context.unregisterReceiver(this);
                             }
                         }
                     }

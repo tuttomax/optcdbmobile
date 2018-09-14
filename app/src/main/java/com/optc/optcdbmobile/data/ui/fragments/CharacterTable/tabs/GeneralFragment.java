@@ -14,8 +14,6 @@ import com.optc.optcdbmobile.data.ui.general.UnitHelper;
 import com.optc.optcdbmobile.data.ui.general.UnitParcelable;
 
 
-//TODO Move Class and socket inside UnitDialog in order to show them inside the image
-
 public class GeneralFragment extends Fragment {
 
     private UnitParcelable unit;

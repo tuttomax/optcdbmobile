@@ -1,8 +1,10 @@
 package com.optc.optcdbmobile.data.ui.general;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.DisplayMetrics;
 
 import com.optc.optcdbmobile.R;
 
@@ -37,13 +39,7 @@ public class UnitHelper {
         put(PSY_STRING, R.color.colorPSY);
         put(INT_STRING, R.color.colorINT);
     }};
-    private final static Map<String, Integer> darkColorsId = new HashMap<String, Integer>() {{
-        put(STR_STRING, R.color.colorDarkSTR);
-        put(QCK_STRING, R.color.colorDarkQCK);
-        put(DEX_STRING, R.color.colorDarkDEX);
-        put(PSY_STRING, R.color.colorDarkPSY);
-        put(INT_STRING, R.color.colorDarkINT);
-    }};
+
 
     private final static Map<String, Integer> classId = new HashMap<String, Integer>() {{
         put(FIGHTER_STRING, R.drawable.ic_fighter);
@@ -89,11 +85,21 @@ public class UnitHelper {
     public static final int THUMB_WIDTH = 96;
     public static final int THUMB_HEIGHT = 96;
 
+    public static final int BIG_THUMB_WIDTH = 1120;
+
+    public static int pxToDp(int px, Context context) {
+        return px /
+                (context.getResources().getDisplayMetrics().densityDpi /
+                        DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    public static int dpToPx(int dp, Context context) {
+        return dp * (context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
     public static int getTypeColor(String colorName, Resources res) {
         return ResourcesCompat.getColor(res, colorsId.get(colorName), null);
     }
-
-    private final static String packageName = "com.optc.optcdbmobile";
 
     public static String getStarsToString(Float stars) {
         if (stars == 5.5f) return "5+";
@@ -105,9 +111,6 @@ public class UnitHelper {
         return ResourcesCompat.getDrawable(res, classId.get(name), null);
     }
 
-    public static int getDarkTypeColor(String colorName, Resources res) {
-        return ResourcesCompat.getColor(res, darkColorsId.get(colorName), null);
-    }
 
     public static String getNote(Resources res, String noteKey) {
         int id = notesResidMap.get(noteKey);

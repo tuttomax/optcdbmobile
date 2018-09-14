@@ -93,13 +93,10 @@ public class MainActivity extends AppCompatActivity implements AsyncTaskContext 
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         } else {
             new UpdateManager(this, this).CheckUpdate();
         }
-
-
 
 
         isFirstLaunch = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.Settings.pref_first_launch, true);
